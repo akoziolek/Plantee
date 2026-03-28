@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Plantee</string>
+    <string name="title_activity_routines">RoutinesActivity</string>
 </resources>

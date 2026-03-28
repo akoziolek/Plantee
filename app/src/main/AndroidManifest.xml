@@ -12,6 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Plantee">
         <activity
+            android:name=".ui.screens.routines.RoutinesActivity"
+            android:exported="true"
+            android:label="@string/title_activity_routines"
+            android:theme="@style/Theme.Plantee">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
