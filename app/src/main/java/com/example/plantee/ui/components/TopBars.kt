@@ -1,0 +1,128 @@
+package com.example.plantee.ui.components
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.BookmarkBorder
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.NotificationsNone
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.plantee.ui.theme.PlanteeTheme
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun BaseTopBar(
+    title: @Composable () -> Unit,
+    navigationIcon: @Composable () -> Unit = {},
+    actions: @Composable RowScope.() -> Unit = {},
+    scrollBehavior: TopAppBarScrollBehavior? = null
+) {
+    TopAppBar(
+        title = title,
+        navigationIcon = navigationIcon,
+        actions = actions,
+        scrollBehavior = scrollBehavior,
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            titleContentColor = MaterialTheme.colorScheme.onSurface,
+            navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+            actionIconContentColor = MaterialTheme.colorScheme.onSurface
+        )
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BackTopBar(
+    title: String,
+    onBackClick: () -> Unit,
+    actions: @Composable RowScope.() -> Unit = {}
+) {
+    BaseTopBar(
+        title = { Text(title, style = MaterialTheme.typography.titleLarge) },
+        navigationIcon = {
+            IconButton(onClick = onBackClick) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, "Go back")
+            }
+        },
+        actions = actions
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MainTopBar(
+    title: String,
+    actions: @Composable RowScope.() -> Unit = {}
+) {
+    // TO DO - JAK POPRAWNIE BOLD ZROBIC?
+    BaseTopBar(
+        title = { Text(title, style = MaterialTheme.typography.headlineSmall.copy(
+            fontWeight = FontWeight.ExtraBold
+        ))},
+        actions = actions
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SearchBar() {
+    // TO DO
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
+@Composable
+fun TopBarsPreview() {
+    PlanteeTheme() {
+        Column() {
+            BackTopBar("Add a plant", onBackClick = {  })
+            BackTopBar("Edit a plant", onBackClick = {  })
+            BackTopBar("Diagnose a plant", onBackClick = {  })
+            BackTopBar("Diagnosis", onBackClick = {  })
+            BackTopBar("Add a routine", onBackClick = {  })
+            BackTopBar("Edit a routine", onBackClick = {  })
+
+            BackTopBar("Routine", onBackClick = {  }, actions = {
+                IconButton(onClick = { /* action 1 */ }) {
+                    Icon(Icons.Default.BookmarkBorder, "Add to favourites")
+                }
+                IconButton(onClick = { /* action 2 */ }) {
+                    Icon(Icons.Default.MoreVert, "See more")
+                }
+            })
+            BackTopBar("Plant details", onBackClick = {  }, actions = {
+                IconButton(onClick = { /* action 1 */ }) {
+                    Icon(Icons.Default.BookmarkBorder, "Add to favourites")
+                }
+                IconButton(onClick = { /* action 2 */ }) {
+                    Icon(Icons.Default.MoreVert, "See more")
+                }
+            })
+
+            BackTopBar("Add a plant", onBackClick = {  })
+            MainTopBar("Plantee", actions = {
+                IconButton(onClick = { /* action 1 */ }) {
+                    Icon(Icons.Default.NotificationsNone, "Notifications")
+                }
+                IconButton(onClick = { /* action 2 */ }) {
+                    Icon(Icons.Default.Settings, "Settings")
+                }
+            })
+        }
+
+    }
+
+}
