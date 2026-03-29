@@ -11,16 +11,15 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
-import androidx.compose.material3.Typography
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 
 @Immutable
 data class ExtendedColorScheme(
     val darkNeutral: ColorFamily,
     val neutralVariant2: ColorFamily,
     val accentDark: ColorFamily,
+    val dimNeutral: ColorFamily
 )
 
 private val lightScheme = lightColorScheme(
@@ -270,6 +269,12 @@ val extendedLight = ExtendedColorScheme(
         accentDarkContainerLight,
         onAccentDarkContainerLight,
     ),
+    dimNeutral = ColorFamily(
+        dimNeutralLight,
+        onDimNeutralLightLight,
+        dimNeutralLightContainerLight,
+        onDimNeutralLightContainerLight
+    )
 )
 
 val extendedDark = ExtendedColorScheme(
@@ -291,6 +296,12 @@ val extendedDark = ExtendedColorScheme(
         accentDarkContainerDark,
         onAccentDarkContainerDark,
     ),
+    dimNeutral = ColorFamily(
+        dimNeutralLight,
+        onDimNeutralLightLight,
+        dimNeutralLightContainerLight,
+        onDimNeutralLightContainerLight
+    )
 )
 
 val extendedLightMediumContrast = ExtendedColorScheme(
@@ -312,6 +323,12 @@ val extendedLightMediumContrast = ExtendedColorScheme(
         accentDarkContainerLightMediumContrast,
         onAccentDarkContainerLightMediumContrast,
     ),
+    dimNeutral = ColorFamily(
+        dimNeutralLight,
+        onDimNeutralLightLight,
+        dimNeutralLightContainerLight,
+        onDimNeutralLightContainerLight
+    )
 )
 
 val extendedLightHighContrast = ExtendedColorScheme(
@@ -333,6 +350,12 @@ val extendedLightHighContrast = ExtendedColorScheme(
         accentDarkContainerLightHighContrast,
         onAccentDarkContainerLightHighContrast,
     ),
+    dimNeutral = ColorFamily(
+        dimNeutralLight,
+        onDimNeutralLightLight,
+        dimNeutralLightContainerLight,
+        onDimNeutralLightContainerLight
+    )
 )
 
 val extendedDarkMediumContrast = ExtendedColorScheme(
@@ -354,6 +377,12 @@ val extendedDarkMediumContrast = ExtendedColorScheme(
         accentDarkContainerDarkMediumContrast,
         onAccentDarkContainerDarkMediumContrast,
     ),
+    dimNeutral = ColorFamily(
+        dimNeutralLight,
+        onDimNeutralLightLight,
+        dimNeutralLightContainerLight,
+        onDimNeutralLightContainerLight
+    )
 )
 
 val extendedDarkHighContrast = ExtendedColorScheme(
@@ -375,6 +404,12 @@ val extendedDarkHighContrast = ExtendedColorScheme(
         accentDarkContainerDarkHighContrast,
         onAccentDarkContainerDarkHighContrast,
     ),
+    dimNeutral = ColorFamily(
+        dimNeutralLight,
+        onDimNeutralLightLight,
+        dimNeutralLightContainerLight,
+        onDimNeutralLightContainerLight
+    )
 )
 
 @Immutable
