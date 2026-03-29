@@ -57,15 +57,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.plantee.ui.components.SectionHeader
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.theme.extendedLight
 import com.example.plantee.ui.theme.surfaceVariantLight
-
-sealed class NavItem(val title: String, val icon: ImageVector, val route: String) {
-    object Home : NavItem("Home", Icons.Default.Home, "home")
-    object Plants : NavItem("Plants", Icons.Default.LocalFlorist, "plants")
-    object Routines : NavItem("Routines", Icons.Default.CalendarMonth, "routines")
-}
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoutinesScreen() {
@@ -203,16 +198,6 @@ fun RoutinesScreen() {
 }
 
 @Composable
-fun SectionHeader(title: String) {
-    Text(
-        text = title,
-        style = MaterialTheme.typography.titleLarge,
-        color = MaterialTheme.colorScheme.onSurface,
-        modifier = Modifier.padding(8.dp)
-    )
-}
-
-@Composable
 fun FilterBar() {
     Row(
         modifier = Modifier
@@ -245,6 +230,12 @@ fun FilterBar() {
             )
         }
     }
+}
+
+sealed class NavItem(val title: String, val icon: ImageVector, val route: String) {
+    object Home : NavItem("Home", Icons.Default.Home, "home")
+    object Plants : NavItem("Plants", Icons.Default.LocalFlorist, "plants")
+    object Routines : NavItem("Routines", Icons.Default.CalendarMonth, "routines")
 }
 
 @Preview(showBackground = true)
