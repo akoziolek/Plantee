@@ -28,7 +28,10 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -62,8 +65,11 @@ import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.plantee.ui.components.DaysOfWeek
 import com.example.plantee.ui.components.InputTextField
+import com.example.plantee.ui.components.PlantListItem
 import com.example.plantee.ui.components.SectionHeader
+import com.example.plantee.ui.components.SimpleSearchBar
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.theme.extendedLight
 
@@ -77,10 +83,11 @@ sealed class NavItem(val title: String, val icon: ImageVector, val route: String
 @Composable
 fun RoutineAddScreen() {
     val items = listOf(NavItem.Home, NavItem.Plants, NavItem.Routines)
-    val daysOfWeek = listOf("M", "T", "W", "T", "F", "S", "S")
     val selectedDays = listOf(0, 2, 3, 6)
     var nameText by remember { mutableStateOf("") }
     var descText by remember { mutableStateOf("") }
+    val state = rememberSearchBarState()
+    var query by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
@@ -132,7 +139,19 @@ fun RoutineAddScreen() {
                     )
                 }
             }
-        }
+        },
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                onClick = { },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                elevation = FloatingActionButtonDefaults.elevation(8.dp),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Text(text = "Save routine")
+            }
+        },
+        floatingActionButtonPosition = FabPosition.End
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -164,21 +183,10 @@ fun RoutineAddScreen() {
             // --- DAYS OF THE WEEK ---
             item {
                 SectionHeader("Weekdays")
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    daysOfWeek.forEachIndexed { index, day ->
-                        val isSelected = selectedDays.contains(index)
-
-                        FilterChip(
-                            selected = isSelected,
-                            onClick = { },
-                            label = { Text(day) },
-                            shape = CircleShape
-                        )
-                    }
-                }
+                DaysOfWeek(
+                    selectedDays = selectedDays,
+                    onDayClick = { }
+                )
             }
 
             // --- CHOOSE PLANTS ---
@@ -187,40 +195,11 @@ fun RoutineAddScreen() {
             }
 
             item {
-                val state = rememberSearchBarState()
-                var query by remember { mutableStateOf("") }
-
-                SearchBar(
+                SimpleSearchBar(
+                    query = query,
+                    onQueryChange = { query = it },
                     state = state,
-                    inputField = {
-                        TextField(
-                            value = query,
-                            onValueChange = { query = it },
-                            placeholder = { Text("Search for a routine") },
-                            trailingIcon = {
-                                Icon(
-                                    Icons.Default.Search,
-                                    contentDescription = null
-                                )
-                            },
-                            singleLine = true,
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = TextFieldDefaults.colors(
-                                focusedContainerColor = Color.Transparent,
-                                unfocusedContainerColor = Color.Transparent,
-                                disabledContainerColor = Color.Transparent
-                            )
-                        )
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .safeDrawingPadding(),
-                    colors = SearchBarDefaults.colors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
-                    ),
-                    shape = SearchBarDefaults.inputFieldShape,
-                    tonalElevation = SearchBarDefaults.TonalElevation,
-                    shadowElevation = SearchBarDefaults.ShadowElevation,
+                    placeholder = "Search for a plant"
                 )
             }
 
@@ -229,36 +208,10 @@ fun RoutineAddScreen() {
             }
 
             items(5) { index ->
-                ListItem(
-                    headlineContent = { Text("Plant no. $index") },
-                    supportingContent = {
-                        Text(
-                            "Longer description duis aute irure dolor in reprehenderit in voluptate velit of plant no. $index",
-                            maxLines = 2, overflow = TextOverflow.Visible) },
-                    leadingContent = {
-                        Box(
-                            modifier = Modifier
-                                .size(100.dp)
-                                .aspectRatio(1f)
-                                .clip(RoundedCornerShape(16.dp))
-                                .background(MaterialTheme.colorScheme.outlineVariant),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Image,
-                                contentDescription = null,
-                                modifier = Modifier.size(40.dp),
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(MaterialTheme.colorScheme.surfaceVariant),
-                    colors = ListItemDefaults.colors(
-                        containerColor = Color.Transparent
-                    )
+                PlantListItem(
+                    title = "Plant no. $index",
+                    description =  "Longer description duis aute irure dolor in reprehenderit in voluptate velit of plant no. $index",
+                    onClick = { }
                 )
             }
         }
