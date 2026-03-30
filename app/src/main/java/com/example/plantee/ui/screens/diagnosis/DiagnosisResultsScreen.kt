@@ -1,4 +1,4 @@
-package com.example.plantee.ui.screens.plant_forms
+package com.example.plantee.ui.screens.diagnosis
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,24 +19,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
+import com.example.plantee.ui.components.base.InfoSection
 import com.example.plantee.ui.components.base.LabeledSwitch
 import com.example.plantee.ui.components.base.PrimaryButtonFullWidth
-import com.example.plantee.ui.components.shared.PlantFormFields
 import com.example.plantee.ui.theme.PlanteeTheme
 
-
+// TODO create a diagnosis details screen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddPlantScreen() {
+fun DiagnosisDetailsScreen() {
     Scaffold(
         topBar = {
             BackTopBar(
-                title = stringResource(R.string.plant_add_title),
+                title = stringResource(R.string.diagnosis_results_title),
                 onBackClick = {})
         },
         bottomBar = {
             PrimaryButtonFullWidth(
-                text = stringResource(R.string.plant_add_btn_add),
+                text = stringResource(R.string.diagnosis_results_btn_finish),
                 onClick = {},
                 modifier = Modifier.padding(10.dp)
             )
@@ -44,10 +44,10 @@ fun AddPlantScreen() {
     ) {innerPadding ->
         Column(
             modifier = Modifier
+                .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
-                .padding(top = innerPadding.calculateTopPadding())
         ) {
-            // TODO real images
+            // TODO real images - remember about the extra button on top
             Box(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.outlineVariant)
@@ -58,22 +58,30 @@ fun AddPlantScreen() {
             Column(
                 modifier = Modifier
                     .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                PlantFormFields(
-                    nameValue = "Plant1",
-                    onNameChange = {},
-                    speciesValue = "Philodendron",
-                    onSpeciesChange = {},
-                    descriptionValue = "Nice",
-                    onDescriptionChange = {}
+                InfoSection(
+                    headerText = stringResource(R.string.diagnosis_results_label_description),
+                    bodyText = "This often indicates low humidity or underwatering. We recommend increasing misting and checking the soil moisture."
+                )
+                InfoSection(
+                    headerText = stringResource(R.string.diagnosis_results_label_proposed_routines),
+                    bodyText = stringResource(R.string.diagnosis_results_text_proposed_routines)
                 )
 
+                // TODO paste the routines component
+                Box(
+                    modifier = Modifier
+                        .background(MaterialTheme.colorScheme.outlineVariant)
+                        .height(120.dp)
+                        .fillMaxWidth()
+                ) { }
+
+                // FIXME weird two lined label?
                 LabeledSwitch(
-                    label = "Create first entry",
+                    label = "Remove this plant from associated routines",
                     checked = true,
-                    onCheckedChange = {},
-                    modifier = Modifier.padding(horizontal = 6.dp)
+                    onCheckedChange = {}
                 )
             }
         }
@@ -82,8 +90,8 @@ fun AddPlantScreen() {
 
 @Preview
 @Composable
-fun AddPlantPreview() {
+fun DiagnosisDetailsPreview() {
     PlanteeTheme() {
-        AddPlantScreen()
+        DiagnosisDetailsScreen()
     }
 }

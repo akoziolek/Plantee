@@ -97,7 +97,7 @@ fun TopBarsPreview() {
             BackTopBar(stringResource(R.string.plant_add_title), onBackClick = { })
             BackTopBar(stringResource(R.string.plant_edit_title), onBackClick = { })
             BackTopBar(stringResource(R.string.diagnosis_form_title), onBackClick = { })
-            BackTopBar(stringResource(R.string.diagnosis_details_title), onBackClick = { })
+            BackTopBar(stringResource(R.string.diagnosis_results_title), onBackClick = { })
             BackTopBar(stringResource(R.string.routines_add_title), onBackClick = { })
             BackTopBar(stringResource(R.string.routines_edit_title), onBackClick = { })
 
