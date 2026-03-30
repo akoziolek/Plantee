@@ -22,6 +22,7 @@ import com.example.plantee.ui.components.base.BackTopBar
 import com.example.plantee.ui.components.base.InfoSection
 import com.example.plantee.ui.components.base.LabeledSwitch
 import com.example.plantee.ui.components.base.PrimaryButtonFullWidth
+import com.example.plantee.ui.components.base.RoutinesListItem
 import com.example.plantee.ui.theme.PlanteeTheme
 
 // TODO create a diagnosis details screen
@@ -69,13 +70,8 @@ fun DiagnosisDetailsScreen() {
                     bodyText = stringResource(R.string.diagnosis_results_text_proposed_routines)
                 )
 
-                // TODO paste the routines component
-                Box(
-                    modifier = Modifier
-                        .background(MaterialTheme.colorScheme.outlineVariant)
-                        .height(120.dp)
-                        .fillMaxWidth()
-                ) { }
+                // TODO paste the routines list component
+                RoutinesListItem("Weekend watering", "Use small amount of water", onCheckedChange = {})
 
                 // FIXME weird two lined label?
                 LabeledSwitch(
