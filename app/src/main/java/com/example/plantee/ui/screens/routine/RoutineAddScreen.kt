@@ -1,4 +1,4 @@
-package com.example.plantee.ui.screens.routine_add
+package com.example.plantee.ui.screens.routine
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -100,7 +100,10 @@ fun RoutineAddScreen() {
                     query = query,
                     onQueryChange = { query = it },
                     state = state,
-                    placeholder = "Search for a plant"
+                    placeholder = "Search for a plant",
+                    onExpandedChange = { },
+                    expanded = false,
+                    onSearch = { }
                 )
             }
 

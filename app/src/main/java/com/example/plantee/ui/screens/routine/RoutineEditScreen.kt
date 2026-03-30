@@ -1,4 +1,4 @@
-package com.example.plantee.ui.screens.routine_edit
+package com.example.plantee.ui.screens.routine
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastCbrt
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
 import com.example.plantee.ui.components.base.DaysOfWeek
@@ -100,7 +101,10 @@ fun RoutineEditScreen() {
                     query = query,
                     onQueryChange = { query = it },
                     state = state,
-                    placeholder = "Search for a plant"
+                    placeholder = "Search for a plant",
+                    expanded = false,
+                    onExpandedChange = { },
+                    onSearch = { }
                 )
             }
 

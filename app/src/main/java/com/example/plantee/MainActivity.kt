@@ -7,7 +7,7 @@
 //import androidx.compose.runtime.Composable
 //import androidx.compose.ui.tooling.preview.Preview
 //import com.example.plantee.ui.screens.plant.AddPlantScreen
-//import com.example.plantee.ui.screens.routines.RoutinesScreen
+//import com.example.plantee.ui.screens.routine.RoutinesScreen
 //import com.example.plantee.ui.theme.PlanteeTheme
 //
 //class MainActivity : ComponentActivity() {

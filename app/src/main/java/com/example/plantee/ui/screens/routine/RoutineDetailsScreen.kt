@@ -1,4 +1,4 @@
-package com.example.plantee.ui.screens.routine_details
+package com.example.plantee.ui.screens.routine
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
