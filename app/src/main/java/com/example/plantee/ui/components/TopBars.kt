@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.plantee.ui.theme.PlanteeTheme
+import com.example.plantee.ui.theme.titleLargeBold
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,7 +52,7 @@ fun BackTopBar(
     actions: @Composable RowScope.() -> Unit = {}
 ) {
     BaseTopBar(
-        title = { Text(title, style = MaterialTheme.typography.titleLarge) },
+        title = { Text(title, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Normal)) },
         navigationIcon = {
             IconButton(onClick = onBackClick) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, "Go back")
@@ -67,11 +68,8 @@ fun MainTopBar(
     title: String,
     actions: @Composable RowScope.() -> Unit = {}
 ) {
-    // TO DO - JAK POPRAWNIE BOLD ZROBIC?
     BaseTopBar(
-        title = { Text(title, style = MaterialTheme.typography.headlineSmall.copy(
-            fontWeight = FontWeight.ExtraBold
-        ))},
+        title = { Text(title, style = MaterialTheme.typography.titleLargeBold)},
         actions = actions
     )
 }
@@ -86,8 +84,8 @@ fun SearchBar() {
 @Preview(showBackground = true)
 @Composable
 fun TopBarsPreview() {
-    PlanteeTheme() {
-        Column() {
+    PlanteeTheme {
+        Column {
             BackTopBar("Add a plant", onBackClick = {  })
             BackTopBar("Edit a plant", onBackClick = {  })
             BackTopBar("Diagnose a plant", onBackClick = {  })
