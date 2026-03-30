@@ -2,27 +2,48 @@ package com.example.plantee.ui.components.base
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.BookmarkBorder
+import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.LocalFlorist
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.NotificationsNone
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
+import androidx.compose.material3.SearchBarState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.plantee.R
 import com.example.plantee.ui.theme.PlanteeTheme
+import com.example.plantee.ui.theme.extendedLight
 import com.example.plantee.ui.theme.titleLargeBold
+import kotlin.collections.listOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -81,10 +102,89 @@ fun MainTopBar(
     )
 }
 
+//FIXME components params to match M3 component params
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar() {
-    // TO DO
+fun SimpleSearchBar(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    state: SearchBarState,
+    modifier: Modifier = Modifier,
+    placeholder: String = "Search"
+) {
+    SearchBar(
+        state = state,
+        inputField = {
+            TextField(
+                value = query,
+                onValueChange = onQueryChange,
+                placeholder = { Text(placeholder) },
+                trailingIcon = {
+                    Icon(
+                        Icons.Default.Search,
+                        contentDescription = null
+                    )
+                },
+                singleLine = true,
+                modifier = modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                )
+            )
+        },
+        modifier = modifier
+            .fillMaxWidth()
+            .safeDrawingPadding(),
+        colors = SearchBarDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+        ),
+        shape = SearchBarDefaults.inputFieldShape,
+        tonalElevation = SearchBarDefaults.TonalElevation,
+        shadowElevation = SearchBarDefaults.ShadowElevation,
+    )
+}
+
+sealed class NavItem(val title: String, val icon: ImageVector, val route: String) {
+    object Home : NavItem("Home", Icons.Default.Home, "home")
+    object Plants : NavItem("Plants", Icons.Default.LocalFlorist, "plants")
+    object Routines : NavItem("Routines", Icons.Default.CalendarMonth, "routines")
+}
+
+@Composable
+fun NavBar(
+    items: List<NavItem>
+) {
+    NavigationBar(
+        containerColor = extendedLight.dimNeutral.colorContainer,
+        tonalElevation = 3.dp
+    ) {
+        items.forEachIndexed { index, item ->
+            NavigationBarItem(
+                selected = false,
+                onClick = {  },
+                label = {
+                    Text(
+                        text = item.title,
+                        style = MaterialTheme.typography.labelMedium
+                    )
+                },
+                icon = {
+                    Icon(item.icon, contentDescription = item.title)
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    indicatorColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.30f),
+                    selectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    selectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -126,6 +226,15 @@ fun TopBarsPreview() {
                     Icon(Icons.Default.Settings, "Settings")
                 }
             })
+
+            SimpleSearchBar(
+                query = "Our favourite plant",
+                onQueryChange = {  },
+                state = rememberSearchBarState(),
+                placeholder = "Search for a plant"
+            )
+
+            NavBar(items = listOf(NavItem.Home, NavItem.Plants, NavItem.Routines))
         }
 
     }

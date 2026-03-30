@@ -8,18 +8,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowRight
 import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.LocalFlorist
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -34,15 +28,8 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SearchBar
-import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -54,13 +41,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.plantee.ui.components.SectionHeader
+import com.example.plantee.ui.components.base.NavBar
+import com.example.plantee.ui.components.base.NavItem
+import com.example.plantee.ui.components.base.SectionHeader
+import com.example.plantee.ui.components.base.SimpleSearchBar
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.theme.extendedLight
 import com.example.plantee.ui.theme.surfaceVariantLight
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoutinesScreen() {
@@ -71,63 +61,15 @@ fun RoutinesScreen() {
 
     Scaffold(
         topBar = {
-            SearchBar(
+            SimpleSearchBar(
+                query = query,
+                onQueryChange = { query = it },
                 state = state,
-                inputField = {
-                    TextField(
-                        value = query,
-                        onValueChange = { query = it },
-                        placeholder = { Text("Search for a routine") },
-                        trailingIcon     = {Icon(Icons.Default.Search, contentDescription = null)},
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = TextFieldDefaults.colors(
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent,
-                            disabledContainerColor = Color.Transparent
-                        )
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .safeDrawingPadding(),
-                colors = SearchBarDefaults.colors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
-                ),
-                shape = SearchBarDefaults.inputFieldShape,
-                tonalElevation = SearchBarDefaults.TonalElevation,
-                shadowElevation = SearchBarDefaults.ShadowElevation,
+                placeholder = "Search for a routine"
             )
         },
         bottomBar = {
-            NavigationBar(
-                containerColor = extendedLight.dimNeutral.colorContainer,
-                tonalElevation = 3.dp
-            ) {
-                items.forEachIndexed { index, item ->
-                  NavigationBarItem(
-                      selected = selectedItem == index,
-                      onClick = {  },
-                      label = {
-                          Text(
-                              text = item.title,
-                              style = MaterialTheme.typography.labelMedium
-                          )
-                      },
-                      icon = {
-                          Icon(item.icon, contentDescription = item.title)
-                      },
-                      colors = NavigationBarItemDefaults.colors(
-                          indicatorColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.30f),
-                          selectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                          selectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                          unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                          unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
-                      )
-                  )
-                }
-            }
+            NavBar(items)
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
@@ -230,12 +172,6 @@ fun FilterBar() {
             )
         }
     }
-}
-
-sealed class NavItem(val title: String, val icon: ImageVector, val route: String) {
-    object Home : NavItem("Home", Icons.Default.Home, "home")
-    object Plants : NavItem("Plants", Icons.Default.LocalFlorist, "plants")
-    object Routines : NavItem("Routines", Icons.Default.CalendarMonth, "routines")
 }
 
 @Preview(showBackground = true)

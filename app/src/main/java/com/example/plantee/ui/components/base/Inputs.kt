@@ -2,15 +2,19 @@ package com.example.plantee.ui.components.base
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -86,6 +90,31 @@ fun InputSlider(
     }
 }
 
+@Composable
+fun DaysOfWeek(
+    selectedDays: List<Int>,
+    onDayClick: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val daysOfWeek = listOf("M", "T", "W", "T", "F", "S", "S")
+
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        daysOfWeek.forEachIndexed { index, day ->
+            val isSelected = selectedDays.contains(index)
+
+            FilterChip(
+                selected = isSelected,
+                onClick = { onDayClick(index) },
+                label = { Text(day) },
+                shape = CircleShape
+            )
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun InputsPreview() {
@@ -120,6 +149,10 @@ fun InputsPreview() {
                 title = "Sun Level",
                 value = 10f,
                 {}
+            )
+            DaysOfWeek(
+                selectedDays = listOf(0, 3, 5),
+                onDayClick = { }
             )
         }
     }
