@@ -52,7 +52,12 @@ fun BackTopBar(
     actions: @Composable RowScope.() -> Unit = {}
 ) {
     BaseTopBar(
-        title = { Text(title, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Normal)) },
+        title = {
+            Text(
+                title,
+                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Normal)
+            )
+        },
         navigationIcon = {
             IconButton(onClick = onBackClick) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, "Go back")
@@ -69,7 +74,7 @@ fun MainTopBar(
     actions: @Composable RowScope.() -> Unit = {}
 ) {
     BaseTopBar(
-        title = { Text(title, style = MaterialTheme.typography.titleLargeBold)},
+        title = { Text(title, style = MaterialTheme.typography.titleLargeBold) },
         actions = actions
     )
 }
@@ -86,14 +91,14 @@ fun SearchBar() {
 fun TopBarsPreview() {
     PlanteeTheme {
         Column {
-            BackTopBar("Add a plant", onBackClick = {  })
-            BackTopBar("Edit a plant", onBackClick = {  })
-            BackTopBar("Diagnose a plant", onBackClick = {  })
-            BackTopBar("Diagnosis", onBackClick = {  })
-            BackTopBar("Add a routine", onBackClick = {  })
-            BackTopBar("Edit a routine", onBackClick = {  })
+            BackTopBar("Add a plant", onBackClick = { })
+            BackTopBar("Edit a plant", onBackClick = { })
+            BackTopBar("Diagnose a plant", onBackClick = { })
+            BackTopBar("Diagnosis", onBackClick = { })
+            BackTopBar("Add a routine", onBackClick = { })
+            BackTopBar("Edit a routine", onBackClick = { })
 
-            BackTopBar("Routine", onBackClick = {  }, actions = {
+            BackTopBar("Routine", onBackClick = { }, actions = {
                 IconButton(onClick = { /* action 1 */ }) {
                     Icon(Icons.Default.BookmarkBorder, "Add to favourites")
                 }
@@ -101,7 +106,7 @@ fun TopBarsPreview() {
                     Icon(Icons.Default.MoreVert, "See more")
                 }
             })
-            BackTopBar("Plant details", onBackClick = {  }, actions = {
+            BackTopBar("Plant details", onBackClick = { }, actions = {
                 IconButton(onClick = { /* action 1 */ }) {
                     Icon(Icons.Default.BookmarkBorder, "Add to favourites")
                 }
@@ -110,7 +115,7 @@ fun TopBarsPreview() {
                 }
             })
 
-            BackTopBar("Add a plant", onBackClick = {  })
+            BackTopBar("Add a plant", onBackClick = { })
             MainTopBar("Plantee", actions = {
                 IconButton(onClick = { /* action 1 */ }) {
                     Icon(Icons.Default.NotificationsNone, "Notifications")

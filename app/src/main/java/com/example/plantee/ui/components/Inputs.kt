@@ -52,12 +52,12 @@ fun InputTextField(
 @Preview(showBackground = true)
 @Composable
 fun InputsPreview() {
-    Column (
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
-    ){
+    ) {
         InputTextField(
             title = "Name",
             value = "My new Plant",
