@@ -31,7 +31,7 @@ fun PrimaryButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier.defaultMinSize(minHeight = 58.dp),
+        modifier = modifier.defaultMinSize(minHeight = 56.dp),
         enabled = enabled,
         shape = PrimaryButtonShape,
         colors = ButtonDefaults.buttonColors(
@@ -81,6 +81,7 @@ fun PrimaryFloatingButton(
         )
     }
 }
+
 
 @Composable
 @Preview(showBackground = true)

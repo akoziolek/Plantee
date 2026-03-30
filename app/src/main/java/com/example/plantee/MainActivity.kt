@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.plantee.ui.screens.plant_forms.AddPlantScreen
 import com.example.plantee.ui.screens.routines.RoutinesScreen
 import com.example.plantee.ui.theme.PlanteeTheme
 
@@ -20,7 +21,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PlanteeTheme {
-                RoutinesScreen()
+                AddPlantScreen()
             }
         }
     }

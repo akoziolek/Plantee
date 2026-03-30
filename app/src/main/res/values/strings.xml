@@ -24,4 +24,5 @@
     <string name="entry_nav_add">Add entry</string>
     <string name="routine_nav_add">Add routine</string>
     <string name="routine_btn_save">Save routine</string>
+    <string name="cd_plant_photo">Photo for the added plant</string>
 </resources>
