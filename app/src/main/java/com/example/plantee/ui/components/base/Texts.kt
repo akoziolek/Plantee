@@ -1,11 +1,15 @@
 package com.example.plantee.ui.components.base
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ModifierInfo
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.example.plantee.ui.theme.titleLargeBold
 
 @Composable
@@ -19,6 +23,35 @@ fun SectionHeader(
         color = MaterialTheme.colorScheme.onSurface,
         modifier = modifier
     )
+}
+
+@Composable
+fun SectionBodyText(
+    text: String,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.bodyLarge,
+        color = MaterialTheme.colorScheme.onSurface,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun InfoSection(
+    headerText: String,
+    bodyText: String,
+    modifier: Modifier = Modifier,
+    spacing: Dp = 8.dp
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(spacing)
+    ) {
+        SectionHeader(title = headerText, modifier = modifier)
+        SectionBodyText(text = bodyText, modifier = modifier)
+    }
 }
 
 @Composable
@@ -40,5 +73,6 @@ fun TextsPreview() {
     Column {
         SectionHeader(title = "Some title")
         InputSupportingText(text = "Some supporting text")
+        SectionBodyText(text = "some text")
     }
 }

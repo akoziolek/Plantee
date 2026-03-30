@@ -91,7 +91,7 @@ fun ButtonsPreview() {
             PrimaryButtonFullWidth(text = stringResource(R.string.plant_add_btn_add), onClick = {})
             PrimaryButtonFullWidth(text = stringResource(R.string.plant_edit_btn_save), onClick = {})
             PrimaryButtonFullWidth(text = stringResource(R.string.plant_diagnosis_btn_diagnose), onClick = {})
-            PrimaryButtonFullWidth(text = stringResource(R.string.plant_diagnosis_btn_finish), onClick = {})
+            PrimaryButtonFullWidth(text = stringResource(R.string.diagnosis_results_btn_finish), onClick = {})
             PrimaryFloatingButton(text = stringResource(R.string.plant_nav_add), onClick = {})
             PrimaryFloatingButton(text = stringResource(R.string.entry_nav_add), onClick = {})
             PrimaryFloatingButton(text = stringResource(R.string.routine_nav_add), onClick = {})

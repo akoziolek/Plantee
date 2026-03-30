@@ -1,9 +1,10 @@
-package com.example.plantee.ui.screens.plant_forms
+package com.example.plantee.ui.screens.plant
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,24 +20,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
-import com.example.plantee.ui.components.base.LabeledSwitch
 import com.example.plantee.ui.components.base.PrimaryButtonFullWidth
 import com.example.plantee.ui.components.shared.PlantFormFields
 import com.example.plantee.ui.theme.PlanteeTheme
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddPlantScreen() {
+fun EditPlantScreen() {
     Scaffold(
         topBar = {
             BackTopBar(
-                title = stringResource(R.string.plant_add_title),
+                title = stringResource(R.string.plant_edit_title),
                 onBackClick = {})
         },
         bottomBar = {
             PrimaryButtonFullWidth(
-                text = stringResource(R.string.plant_add_btn_add),
+                text = stringResource(R.string.plant_edit_btn_save),
                 onClick = {},
                 modifier = Modifier.padding(10.dp)
             )
@@ -44,10 +43,10 @@ fun AddPlantScreen() {
     ) {innerPadding ->
         Column(
             modifier = Modifier
+                .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
-                .padding(top = innerPadding.calculateTopPadding())
         ) {
-            // TODO real images
+            // TODO real images - remember about the extra button on top
             Box(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.outlineVariant)
@@ -68,13 +67,6 @@ fun AddPlantScreen() {
                     descriptionValue = "Nice",
                     onDescriptionChange = {}
                 )
-
-                LabeledSwitch(
-                    label = "Create first entry",
-                    checked = true,
-                    onCheckedChange = {},
-                    modifier = Modifier.padding(horizontal = 6.dp)
-                )
             }
         }
     }
@@ -82,8 +74,8 @@ fun AddPlantScreen() {
 
 @Preview
 @Composable
-fun AddPlantPreview() {
+fun EditEditPlantPreview() {
     PlanteeTheme() {
-        AddPlantScreen()
+        EditPlantScreen()
     }
 }

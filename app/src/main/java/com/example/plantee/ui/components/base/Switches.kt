@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.plantee.ui.theme.PlanteeTheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -46,7 +47,10 @@ fun LabeledSwitch(
     ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.weight(1f),
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis
         )
 
         Switch(
