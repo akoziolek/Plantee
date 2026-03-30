@@ -1,4 +1,4 @@
-package com.example.plantee.ui.components
+package com.example.plantee.ui.components.base
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme

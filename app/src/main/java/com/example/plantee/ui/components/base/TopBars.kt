@@ -1,4 +1,4 @@
-package com.example.plantee.ui.components
+package com.example.plantee.ui.components.base
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
@@ -17,8 +17,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.plantee.R
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.theme.titleLargeBold
 
@@ -91,14 +93,15 @@ fun SearchBar() {
 fun TopBarsPreview() {
     PlanteeTheme {
         Column {
-            BackTopBar("Add a plant", onBackClick = { })
-            BackTopBar("Edit a plant", onBackClick = { })
-            BackTopBar("Diagnose a plant", onBackClick = { })
-            BackTopBar("Diagnosis", onBackClick = { })
-            BackTopBar("Add a routine", onBackClick = { })
-            BackTopBar("Edit a routine", onBackClick = { })
+            //TODO move CONTENT DESCRIPTIONS to strings.xml??
+            BackTopBar(stringResource(R.string.plant_add_title), onBackClick = { })
+            BackTopBar(stringResource(R.string.plant_edit_title), onBackClick = { })
+            BackTopBar(stringResource(R.string.diagnosis_form_title), onBackClick = { })
+            BackTopBar(stringResource(R.string.diagnosis_details_title), onBackClick = { })
+            BackTopBar(stringResource(R.string.routines_add_title), onBackClick = { })
+            BackTopBar(stringResource(R.string.routines_edit_title), onBackClick = { })
 
-            BackTopBar("Routine", onBackClick = { }, actions = {
+            BackTopBar(stringResource(R.string.routines_details_title), onBackClick = { }, actions = {
                 IconButton(onClick = { /* action 1 */ }) {
                     Icon(Icons.Default.BookmarkBorder, "Add to favourites")
                 }
@@ -106,7 +109,7 @@ fun TopBarsPreview() {
                     Icon(Icons.Default.MoreVert, "See more")
                 }
             })
-            BackTopBar("Plant details", onBackClick = { }, actions = {
+            BackTopBar(stringResource(R.string.plant_details_title), onBackClick = { }, actions = {
                 IconButton(onClick = { /* action 1 */ }) {
                     Icon(Icons.Default.BookmarkBorder, "Add to favourites")
                 }
@@ -115,8 +118,7 @@ fun TopBarsPreview() {
                 }
             })
 
-            BackTopBar("Add a plant", onBackClick = { })
-            MainTopBar("Plantee", actions = {
+            MainTopBar(stringResource(R.string.home_title), actions = {
                 IconButton(onClick = { /* action 1 */ }) {
                     Icon(Icons.Default.NotificationsNone, "Notifications")
                 }
