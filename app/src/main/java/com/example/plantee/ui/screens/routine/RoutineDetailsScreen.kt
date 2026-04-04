@@ -22,10 +22,12 @@ import androidx.compose.ui.unit.dp
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
 import com.example.plantee.ui.components.base.DaysOfWeek
+import com.example.plantee.ui.components.base.InfoSection
 import com.example.plantee.ui.components.base.NavBar
 import com.example.plantee.ui.components.base.NavItem
 import com.example.plantee.ui.components.base.PlantListItem
 import com.example.plantee.ui.components.base.SectionHeader
+import com.example.plantee.ui.components.shared.plantListItems
 import com.example.plantee.ui.theme.PlanteeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,7 +38,7 @@ fun RoutineDetailsScreen() {
 
     Scaffold(
         topBar = {
-            BackTopBar(stringResource(R.string.routines_details_title), onBackClick = { }, actions = {
+            BackTopBar(stringResource(R.string.routine_details_title), onBackClick = { }, actions = {
                 IconButton(onClick = { /* action 1 */ }) {
                     Icon(Icons.Default.BookmarkBorder, "Add to favourites")
                 }
@@ -56,10 +58,11 @@ fun RoutineDetailsScreen() {
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            // TODO bigger spacing between sections?
             // --- TITLE ---
             item {
                 Text(
-                    text = "Routine name",
+                    text = stringResource(R.string.routine_details_label_name),
                     style = MaterialTheme.typography.displayMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -67,18 +70,14 @@ fun RoutineDetailsScreen() {
 
             // --- DESCRIPTION ---
             item {
-                SectionHeader("Description")
-                Text(
-                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sollicitudin libero nec velit commodo, ac imperdiet diam egestas.".trimIndent(),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(8.dp)
+                InfoSection(
+                    headerText = stringResource(R.string.routine_details_label_description),
+                    bodyText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sollicitudin libero nec velit commodo, ac imperdiet diam egestas.",
                 )
             }
 
             // --- DAYS OF THE WEEK ---
             item {
-                SectionHeader("Weekdays")
                 DaysOfWeek(
                     selectedDays = selectedDays,
                     onDayClick = { }
@@ -87,16 +86,13 @@ fun RoutineDetailsScreen() {
 
             // --- PLANTS ---
             item {
-                SectionHeader("Plants")
+                SectionHeader(stringResource(R.string.routine_details_label_plants))
             }
 
-            items(5) { index ->
-                PlantListItem(
-                    title = "Plant no. $index",
-                    description =  "Longer description duis aute irure dolor in reprehenderit in voluptate velit of plant no. $index",
-                    onClick = { }
-                )
-            }
+            plantListItems(
+                plants = List(6) {"Plant no. $it"},
+                onPlantClick = {}
+            )
         }
     }
 }

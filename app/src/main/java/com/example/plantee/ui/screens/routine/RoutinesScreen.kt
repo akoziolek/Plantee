@@ -9,20 +9,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowRight
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,17 +19,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.plantee.R
 import com.example.plantee.ui.components.base.FilterBar
 import com.example.plantee.ui.components.base.NavBar
 import com.example.plantee.ui.components.base.NavItem
+import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.base.SectionHeader
 import com.example.plantee.ui.components.base.SimpleSearchBar
+import com.example.plantee.ui.components.shared.routinesSection
+import com.example.plantee.ui.components.shared.todayRoutinesSection
 import com.example.plantee.ui.theme.PlanteeTheme
-import com.example.plantee.ui.theme.extendedLight
-import com.example.plantee.ui.theme.surfaceVariantLight
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,80 +48,48 @@ fun RoutinesScreen() {
                 query = query,
                 onQueryChange = { query = it },
                 state = state,
-                placeholder = "Search for a routine",
+                placeholder = stringResource(R.string.routines_search_bar_placeholder),
                 expanded = false,
                 onExpandedChange = { },
                 onSearch = { },
-                modifier = Modifier.fillMaxWidth().safeDrawingPadding().padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .safeDrawingPadding()
+                    .padding(horizontal = 16.dp),
             )
         },
         bottomBar = {
             NavBar(items)
         },
         floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = { },
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-                elevation = FloatingActionButtonDefaults.elevation(8.dp),
-                shape = RoundedCornerShape(16.dp)
-            ) {
-                Text(text = "Add routine")
-            }
-        },
-        floatingActionButtonPosition = FabPosition.End
+            PrimaryFloatingButton(text = stringResource(R.string.routines_btn_add), onClick = {})
+        }
     ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
+            modifier = Modifier.fillMaxSize().padding(innerPadding),
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // --- FOR TODAY ---
             item {
-                SectionHeader("For today")
+                SectionHeader(stringResource(R.string.routines_label_for_today))
             }
-            items(2) { index ->
-                ListItem(
-                    headlineContent = { Text("Routine no. $index") },
-                    supportingContent = { Text("Description for routine no. $index") },
-                    leadingContent = {
-                        Checkbox(checked = false, onCheckedChange = { })
-                    },
-                    trailingContent = {
-                        Icon(Icons.AutoMirrored.Filled.ArrowRight, contentDescription = null)
-                    },
-                    colors = ListItemDefaults.colors(
-                        containerColor = extendedLight.darkNeutral.colorContainer.copy(alpha = 0.45f)
-                    )
-                )
-            }
+            // ewentualnie bardziej odsunac od gory
+            todayRoutinesSection(
+                routines = List(2) { "Routine $it" },
+                onItemClick = { /* ... */ }
+            )
 
-            // --- SPACING ---
             item { Spacer(modifier = Modifier.height(24.dp)) }
 
-            // --- ALL ROUTINES ---
             item {
-                SectionHeader("All routines")
-                FilterBar()
-            }
-            items(6) { index ->
-                ListItem(
-                    headlineContent = { Text("Routine no. $index") },
-                    supportingContent = { Text("Description for routine no. $index") },
-                    trailingContent = {
-                        Icon(Icons.AutoMirrored.Filled.ArrowRight, contentDescription = null)
-                    },
-                    colors = ListItemDefaults.colors(
-                        containerColor = surfaceVariantLight
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(8.dp))
-                )
+                SectionHeader(stringResource(R.string.routines_label_all))
+                FilterBar({}, {})
             }
 
+            routinesSection(
+                routines = List(6) { "Routine $it" },
+                onRoutineClick = {}
+            )
         }
     }
 }

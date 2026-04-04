@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Plantee</string>
-    <string name="title_activity_routines">RoutinesActivity</string>
     <string name="plant_form_label_plant">Name</string>
     <string name="plant_form_label_species">Species</string>
     <string name="plant_form_label_description">Description*</string>
@@ -11,11 +10,11 @@
     <string name="plant_form_support_plant">How do you want to name your plant</string>
     <string name="plant_add_title">Add a plant</string>
     <string name="plant_edit_title">Edit a plant</string>
-    <string name="routines_add_title">Add a routine</string>
-    <string name="routines_edit_title">Edit a routine</string>
+    <string name="routine_add_title">Add a routine</string>
+    <string name="routine_edit_title">Edit a routine</string>
     <string name="diagnosis_results_title">Diagnosis</string>
     <string name="diagnosis_form_title">Diagnose a plant</string>
-    <string name="routines_details_title">Routine</string>
+    <string name="routine_details_title">Routine</string>
     <string name="plant_details_title">Plant details</string>
     <string name="home_title">Plantee</string>
     <string name="plant_diagnosis_btn_diagnose">Diagnose</string>
@@ -23,7 +22,7 @@
     <string name="plant_nav_add">Add plant</string>
     <string name="entry_nav_add">Add entry</string>
     <string name="routine_nav_add">Add routine</string>
-    <string name="routine_btn_save">Save routine</string>
+    <string name="routine_edit_btn_save">Save routine</string>
     <string name="cd_plant_photo">Photo for the added plant</string>
     <string name="plant_form_text_description">Provide more details about your plant to receive a custom care diagnosis.</string>
     <string name="diagnosis_results_text_proposed_routines">Based on your plant’s condition, we suggest adding new routines. Check the box to save them.</string>
@@ -33,4 +32,25 @@
     <string name="plant_form_label_moisture">Moisture Level</string>
     <string name="diagnosis_results_label_remove_from_routines">Remove this plant from associated routines</string>
     <string name="cd_view_routine">View routine details</string>
+    <string name="plant_add_switch_label">Create first entry</string>
+    <string name="routines_search_bar_placeholder">Search for a routine</string>
+    <string name="routines_btn_add">Add routine</string>
+    <string name="routines_label_all">All routines</string>
+    <string name="routines_label_for_today">For today</string>
+    <string name="filter_label">Filter\n</string>
+    <string name="routine_edit_label_name">Name</string>
+    <string name="routine_edit_label_description">Description</string>
+    <string name="input_label_weekdays">Weekdays</string>
+    <string name="routine_edit_label_plant_choice">Choose plants</string>
+    <string name="routine_edit_support_name">How do you want to name your routine?</string>
+    <string name="routine_edit_support_description">Give a short description of the routine</string>
+    <string name="routine_details_label_plants">Plants</string>
+    <string name="routine_details_label_description">Description</string>
+    <string name="routine_details_label_name">Routine name</string>
+    <string name="routine_add_btn_save">Save routine\n</string>
+    <string name="routine_add_label_name">Name</string>
+    <string name="routine_add_support_name">How do you want to name your routine?</string>
+    <string name="routine_add_label_description">Description</string>
+    <string name="routine_add_support_description">Give a short description of the routine</string>
+    <string name="routine_add_label_plant_choice">Choose plants</string>
 </resources>

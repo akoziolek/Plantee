@@ -70,7 +70,7 @@ fun AddPlantScreen() {
                 )
 
                 LabeledSwitch(
-                    label = "Create first entry",
+                    label = stringResource(R.string.plant_add_switch_label),
                     checked = true,
                     onCheckedChange = {},
                     modifier = Modifier.padding(horizontal = 6.dp)

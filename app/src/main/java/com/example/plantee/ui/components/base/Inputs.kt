@@ -16,15 +16,12 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.plantee.R
 import com.example.plantee.ui.theme.PlanteeTheme
 
 @Composable
@@ -93,24 +90,29 @@ fun InputSlider(
 @Composable
 fun DaysOfWeek(
     selectedDays: List<Int>,
-    onDayClick: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    title: String = stringResource(R.string.input_label_weekdays),
+    onDayClick: (Int) -> Unit
+
 ) {
     val daysOfWeek = listOf("M", "T", "W", "T", "F", "S", "S")
 
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        daysOfWeek.forEachIndexed { index, day ->
-            val isSelected = selectedDays.contains(index)
+    Column {
+        SectionHeader(title = title)
+        Row(
+            modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            daysOfWeek.forEachIndexed { index, day ->
+                val isSelected = selectedDays.contains(index)
 
-            FilterChip(
-                selected = isSelected,
-                onClick = { onDayClick(index) },
-                label = { Text(day) },
-                shape = CircleShape
-            )
+                FilterChip(
+                    selected = isSelected,
+                    onClick = { onDayClick(index) },
+                    label = { Text(day) },
+                    shape = CircleShape
+                )
+            }
         }
     }
 }

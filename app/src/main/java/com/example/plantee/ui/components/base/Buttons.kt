@@ -95,7 +95,7 @@ fun ButtonsPreview() {
             PrimaryFloatingButton(text = stringResource(R.string.plant_nav_add), onClick = {})
             PrimaryFloatingButton(text = stringResource(R.string.entry_nav_add), onClick = {})
             PrimaryFloatingButton(text = stringResource(R.string.routine_nav_add), onClick = {})
-            PrimaryFloatingButton(text = stringResource(R.string.routine_btn_save), onClick = {})
+            PrimaryFloatingButton(text = stringResource(R.string.routine_edit_btn_save), onClick = {})
         }
     }
 }

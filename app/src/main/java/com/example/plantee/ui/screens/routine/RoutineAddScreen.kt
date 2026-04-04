@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
@@ -24,12 +23,11 @@ import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
 import com.example.plantee.ui.components.base.DaysOfWeek
 import com.example.plantee.ui.components.base.InputTextField
-import com.example.plantee.ui.components.base.NavBar
 import com.example.plantee.ui.components.base.NavItem
-import com.example.plantee.ui.components.base.PlantListItem
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.base.SectionHeader
 import com.example.plantee.ui.components.base.SimpleSearchBar
+import com.example.plantee.ui.components.shared.plantListItems
 import com.example.plantee.ui.theme.PlanteeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,15 +42,11 @@ fun RoutineAddScreen() {
 
     Scaffold(
         topBar = {
-            BackTopBar(stringResource(R.string.routines_add_title), onBackClick = { })
-        },
-        bottomBar = {
-            NavBar(items)
+            BackTopBar(stringResource(R.string.routine_add_title), onBackClick = { })
         },
         floatingActionButton = {
-            PrimaryFloatingButton(text = stringResource(R.string.routine_btn_save), onClick = {})
-        },
-        floatingActionButtonPosition = FabPosition.End
+            PrimaryFloatingButton(text = stringResource(R.string.routine_add_btn_save), onClick = {})
+        }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -64,26 +58,25 @@ fun RoutineAddScreen() {
             // --- NAME ---
             item {
                 InputTextField(
-                    title = "Name",
+                    title = stringResource(R.string.routine_add_label_name),
                     value = nameText,
                     onValueChange = { nameText = it },
-                    supportingText = "How do you want to name your routine?"
+                    supportingText = stringResource(R.string.routine_add_support_name)
                 )
             }
 
             // --- DESCRIPTION ---
             item {
                 InputTextField(
-                    title = "Description",
+                    title = stringResource(R.string.routine_add_label_description),
                     value = descText,
                     onValueChange = { descText = it },
-                    supportingText = "Give a short description of the routine"
+                    supportingText = stringResource(R.string.routine_add_support_description)
                 )
             }
 
             // --- DAYS OF THE WEEK ---
             item {
-                SectionHeader(title = "Weekdays")
                 DaysOfWeek(
                     selectedDays = selectedDays,
                     onDayClick = { }
@@ -92,7 +85,7 @@ fun RoutineAddScreen() {
 
             // --- CHOOSE PLANTS ---
             item {
-                SectionHeader("Choose plants")
+                SectionHeader(stringResource(R.string.routine_add_label_plant_choice))
             }
 
             item {
@@ -100,7 +93,7 @@ fun RoutineAddScreen() {
                     query = query,
                     onQueryChange = { query = it },
                     state = state,
-                    placeholder = "Search for a plant",
+                    placeholder = stringResource(R.string.routines_search_bar_placeholder),
                     onExpandedChange = { },
                     expanded = false,
                     onSearch = { }
@@ -111,13 +104,10 @@ fun RoutineAddScreen() {
                 Spacer(modifier = Modifier.height(4.dp))
             }
 
-            items(5) { index ->
-                PlantListItem(
-                    title = "Plant no. $index",
-                    description = "Longer description duis aute irure dolor in reprehenderit in voluptate velit of plant no. $index",
-                    onClick = { }
-                )
-            }
+            plantListItems(
+                plants = List(6) {"Plant no. $it"},
+                onPlantClick = {}
+            )
         }
     }
 }

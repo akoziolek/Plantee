@@ -1,13 +1,16 @@
 package com.example.plantee.ui.components.base
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -37,6 +40,7 @@ import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.SearchBarDefaults.InputField
 import androidx.compose.material3.SearchBarState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -188,37 +192,48 @@ fun NavBar(
         }
     }
 }
-
 @Composable
-fun FilterBar() {
+fun FilterBar(
+    onFilterClick: () -> Unit,
+    onViewModeClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
+        modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Button(
-            onClick = { },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Transparent,
+        TextButton(
+            onClick = onFilterClick,
+            colors = ButtonDefaults.textButtonColors(
                 contentColor = MaterialTheme.colorScheme.primary
-            )
-        ) {
-            Icon(Icons.Default.SwapVert, contentDescription = null)
-            Spacer(Modifier.width(8.dp))
-            Text("Filter")
-        }
-        FilledIconButton(
-            onClick = { },
-            colors = IconButtonDefaults.filledIconButtonColors(
-                containerColor = Color.Transparent,
-                contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+            ),
+            contentPadding = PaddingValues(
+                start = 0.dp,
+                top = 8.dp,
+                end = 12.dp,
+                bottom = 8.dp
             )
         ) {
             Icon(
+                imageVector = Icons.Default.SwapVert,
+                contentDescription = null,
+            )
+            Spacer(Modifier.width(4.dp))
+            Text(
+                // FIXME layout breaks when using R.string, idk why
+                text = "Filter",
+                style = MaterialTheme.typography.labelLarge
+            )
+        }
+
+        IconButton(
+            onClick = onViewModeClick,
+        ) {
+            Icon(
                 Icons.AutoMirrored.Filled.List,
-                contentDescription = null
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -235,10 +250,10 @@ fun TopBarsPreview() {
             BackTopBar(stringResource(R.string.plant_edit_title), onBackClick = { })
             BackTopBar(stringResource(R.string.diagnosis_form_title), onBackClick = { })
             BackTopBar(stringResource(R.string.diagnosis_results_title), onBackClick = { })
-            BackTopBar(stringResource(R.string.routines_add_title), onBackClick = { })
-            BackTopBar(stringResource(R.string.routines_edit_title), onBackClick = { })
+            BackTopBar(stringResource(R.string.routine_add_title), onBackClick = { })
+            BackTopBar(stringResource(R.string.routine_edit_title), onBackClick = { })
 
-            BackTopBar(stringResource(R.string.routines_details_title), onBackClick = { }, actions = {
+            BackTopBar(stringResource(R.string.routine_details_title), onBackClick = { }, actions = {
                 IconButton(onClick = { /* action 1 */ }) {
                     Icon(Icons.Default.BookmarkBorder, "Add to favourites")
                 }
@@ -273,8 +288,9 @@ fun TopBarsPreview() {
                 expanded = false,
                 onExpandedChange = { }
             )
-
+            FilterBar({}, {})
             NavBar(items = listOf(NavItem.Home, NavItem.Plants, NavItem.Routines))
+
         }
 
     }
