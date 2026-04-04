@@ -20,27 +20,24 @@ import androidx.compose.ui.unit.dp
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
 import com.example.plantee.ui.components.base.InfoSection
-import com.example.plantee.ui.components.base.LabeledSwitch
-import com.example.plantee.ui.components.base.PrimaryButtonFullWidth
+import com.example.plantee.ui.components.base.NavBar
+import com.example.plantee.ui.components.base.NavItem
 import com.example.plantee.ui.components.base.RoutinesListItem
 import com.example.plantee.ui.theme.PlanteeTheme
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DiagnosisResultsScreen() {
+fun DiagnosisDetailsScreen() {
+    val items = listOf(NavItem.Home, NavItem.Plants, NavItem.Routines)
     Scaffold(
         topBar = {
             BackTopBar(
-                title = stringResource(R.string.diagnosis_results_title),
+                title = stringResource(R.string.diagnosis_details_title),
                 onBackClick = {})
         },
         bottomBar = {
-            PrimaryButtonFullWidth(
-                text = stringResource(R.string.diagnosis_results_btn_finish),
-                onClick = {},
-                modifier = Modifier.padding(10.dp)
-            )
+            // FIXME bezsensu w kazdym komponencie trzymac liste itemkow dla nav bara
+            NavBar(items)
         }
     ) {innerPadding ->
         Column(
@@ -62,23 +59,20 @@ fun DiagnosisResultsScreen() {
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 InfoSection(
-                    headerText = stringResource(R.string.diagnosis_results_label_description),
+                    headerText = stringResource(R.string.diagnosis_details_label_description),
                     bodyText = "This often indicates low humidity or underwatering. We recommend increasing misting and checking the soil moisture."
                 )
                 InfoSection(
-                    headerText = stringResource(R.string.diagnosis_results_label_proposed_routines),
-                    bodyText = stringResource(R.string.diagnosis_results_text_proposed_routines)
+                    headerText = stringResource(R.string.diagnosis_details_label_routines),
+                    bodyText = stringResource(R.string.diagnosis_details_text_routines)
                 )
 
                 // TODO paste the routines list component
-                RoutinesListItem("Weekend watering", "Use small amount of water", onCheckedChange = {})
-
-                // FIXME weird two lined label?
-                LabeledSwitch(
-                    label = stringResource(R.string.diagnosis_results_label_remove_from_routines),
-                    checked = true,
-                    onCheckedChange = {}
+                RoutinesListItem(
+                    "Weekend watering",
+                    "Use small amount of water"
                 )
+
             }
         }
     }
@@ -86,8 +80,8 @@ fun DiagnosisResultsScreen() {
 
 @Preview
 @Composable
-fun DiagnosisResultsPreview() {
+fun DiagnosisDetailsPreview() {
     PlanteeTheme() {
-        DiagnosisResultsScreen()
+        DiagnosisDetailsScreen()
     }
 }

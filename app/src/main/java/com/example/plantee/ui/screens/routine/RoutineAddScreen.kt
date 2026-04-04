@@ -44,6 +44,7 @@ fun RoutineAddScreen() {
         topBar = {
             BackTopBar(stringResource(R.string.routine_add_title), onBackClick = { })
         },
+        // FIXME weird text placement
         floatingActionButton = {
             PrimaryFloatingButton(text = stringResource(R.string.routine_add_btn_save), onClick = {})
         }

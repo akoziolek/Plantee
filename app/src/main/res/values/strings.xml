@@ -12,7 +12,7 @@
     <string name="plant_edit_title">Edit a plant</string>
     <string name="routine_add_title">Add a routine</string>
     <string name="routine_edit_title">Edit a routine</string>
-    <string name="diagnosis_results_title">Diagnosis</string>
+    <string name="diagnosis_results_title">Diagnosis results</string>
     <string name="diagnosis_form_title">Diagnose a plant</string>
     <string name="routine_details_title">Routine</string>
     <string name="plant_details_title">Plant details</string>
@@ -53,4 +53,8 @@
     <string name="routine_add_label_description">Description</string>
     <string name="routine_add_support_description">Give a short description of the routine</string>
     <string name="routine_add_label_plant_choice">Choose plants</string>
+    <string name="diagnosis_details_title">Diagnosis</string>
+    <string name="diagnosis_details_label_description">Description</string>
+    <string name="diagnosis_details_label_routines">Connected routines</string>
+    <string name="diagnosis_details_text_routines">Based on your plant’s condition, we suggest adding new routines. Check the box to save them.</string>
 </resources>
