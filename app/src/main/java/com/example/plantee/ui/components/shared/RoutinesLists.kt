@@ -2,6 +2,7 @@ package com.example.plantee.ui.components.shared
 
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.Modifier
 import com.example.plantee.ui.components.base.RoutinesListItem
 
 fun LazyListScope.todayRoutinesSection(
@@ -22,13 +23,15 @@ fun LazyListScope.todayRoutinesSection(
 
 fun LazyListScope.routinesSection(
     routines: List<String>,
-    onRoutineClick: () -> Unit
+    onRoutineClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     items(routines.size) { index ->
         RoutinesListItem(
             headlineText = routines[index],
             supportingText = "Description for routine no. $index",
-            onClick = onRoutineClick
+            onClick = onRoutineClick,
+            modifier = modifier
         )
     }
 }

@@ -71,9 +71,8 @@ fun DiagnosisResultsScreen() {
                 )
 
                 // TODO paste the routines list component
-                RoutinesListItem("Weekend watering", "Use small amount of water", onCheckedChange = {})
+                RoutinesListItem("Weekend watering", supportingText = "Use small amount of water", onCheckedChange = {})
 
-                // FIXME weird two lined label?
                 LabeledSwitch(
                     label = stringResource(R.string.diagnosis_results_label_remove_from_routines),
                     checked = true,

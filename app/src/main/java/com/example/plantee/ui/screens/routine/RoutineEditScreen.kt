@@ -93,7 +93,7 @@ fun RoutineEditScreen() {
                     query = query,
                     onQueryChange = { query = it },
                     state = state,
-                    placeholder = stringResource(R.string.routines_search_bar_placeholder),
+                    placeholder = stringResource(R.string.plants_search_bar_placeholder),
                     expanded = false,
                     onExpandedChange = { },
                     onSearch = { }

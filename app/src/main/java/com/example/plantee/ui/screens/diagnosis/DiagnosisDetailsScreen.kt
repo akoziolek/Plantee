@@ -69,8 +69,8 @@ fun DiagnosisDetailsScreen() {
 
                 // TODO paste the routines list component
                 RoutinesListItem(
-                    "Weekend watering",
-                    "Use small amount of water"
+                    headlineText = "Weekend watering",
+                    supportingText = "Use small amount of water"
                 )
 
             }

@@ -47,7 +47,7 @@
     <string name="routine_details_label_plants">Plants</string>
     <string name="routine_details_label_description">Description</string>
     <string name="routine_details_label_name">Routine name</string>
-    <string name="routine_add_btn_save">Save routine\n</string>
+    <string name="routine_add_btn_save">Save routine</string>
     <string name="routine_add_label_name">Name</string>
     <string name="routine_add_support_name">How do you want to name your routine?</string>
     <string name="routine_add_label_description">Description</string>
@@ -57,4 +57,15 @@
     <string name="diagnosis_details_label_description">Description</string>
     <string name="diagnosis_details_label_routines">Connected routines</string>
     <string name="diagnosis_details_text_routines">Based on your plant’s condition, we suggest adding new routines. Check the box to save them.</string>
+    <string name="plants_search_bar_placeholder">Search for a plant</string>
+    <string name="plants_btn_add">Add plant</string>
+    <string name="home_btn_add">Add plant</string>
+    <string name="home_label_today_routines">Routines for today</string>
+    <string name="home_label_your_plants">Your plants</string>
+    <string name="home_label_filter_plants">Name</string>
+    <string name="plants_label_your_plants">Your plants</string>
+    <string name="plants_label_filter_plants">Name</string>
+    <string name="plant_details_label_description">Description</string>
+    <string name="plant_details_label_routines">Connected routines</string>
+    <string name="plant_details_btn_diagnose">Diagnose</string>
 </resources>

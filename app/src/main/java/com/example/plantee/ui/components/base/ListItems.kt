@@ -37,6 +37,7 @@ import com.example.plantee.ui.theme.PlanteeTheme
 @Composable
 fun RoutinesListItem(
     headlineText: String,
+    modifier: Modifier = Modifier,
     supportingText: String = "",
     checked: Boolean = false,
     onCheckedChange: ((Boolean) -> Unit)? = null,
@@ -68,7 +69,7 @@ fun RoutinesListItem(
         colors = ListItemDefaults.colors(
             containerColor = containerColor
         ),
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .heightIn(min = 72.dp)
             .clip(RoundedCornerShape(8.dp))
@@ -125,18 +126,75 @@ fun PlantListItem(
                     overflow = TextOverflow.Ellipsis
                 )
             }
+            // TODO saved icon
         }
     }
 }
 
-@Preview
+@Composable
+fun DiagnosisListItem(
+    headlineText: String,
+    modifier: Modifier = Modifier,
+    supportingText: String = "",
+    onClick: () -> Unit = {}
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .heightIn(min = 60.dp)
+            .clickable { onClick() },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .size(60.dp)
+                .background(MaterialTheme.colorScheme.outlineVariant),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Default.Image,
+                contentDescription = null,
+                modifier = Modifier.size(40.dp),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = headlineText,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            if (supportingText.isNotEmpty()) {
+                Text(
+                    text = supportingText,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1
+                )
+            }
+        }
+
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.ArrowRight,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+@Preview(showBackground = true)
 @Composable
 fun ListItemsPreview() {
     PlanteeTheme() {
         Column() {
-            RoutinesListItem("Weekend watering", "Use small amount of water")
+            RoutinesListItem("Weekend watering", supportingText = "Use small amount of water")
             RoutinesListItem("Weekend watering")
-            RoutinesListItem("Weekend watering", "Use small amount of water", onCheckedChange = {})
+            RoutinesListItem("Weekend watering", supportingText = "Use small amount of water", onCheckedChange = {})
             PlantListItem(
                 title = "Spider lily",
                 description =  "Longer description duis aute irure dolor in reprehenderit in voluptate velit.",
@@ -151,6 +209,11 @@ fun ListItemsPreview() {
                 title = "Spider lily",
                 description =  "Longer description duis aute.",
                 onClick = { }
+            )
+
+            DiagnosisListItem(
+                headlineText = "28.03.2026",
+                supportingText = "Supporting line text lorem ipsum dolor sit amet, consectetur."
             )
         }
 
