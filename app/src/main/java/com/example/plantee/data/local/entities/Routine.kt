@@ -12,5 +12,7 @@ data class Routine (
     val description: String? = null,
     @ColumnInfo(name = "start_date") val startDate: LocalDate? = null,
     @ColumnInfo(name = "end_date") val endDate: LocalDate? = null,
-    @ColumnInfo(name = "active_days") val activeDays: Int? = null
+    @ColumnInfo(name = "active_days") val activeDays: Int? = null,
+    @ColumnInfo(name = "lastly_done_at") val lastlyDoneAt: LocalDate? = null
+
 )
