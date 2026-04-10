@@ -9,7 +9,6 @@ import com.example.plantee.data.local.converters.DateConverter
 import com.example.plantee.data.local.dao.DiagnosisDao
 import com.example.plantee.data.local.dao.DiagnosisMediaDao
 import com.example.plantee.data.local.dao.MediaDao
-import com.example.plantee.data.local.dao.PlantMediaDao
 import com.example.plantee.data.local.dao.PlantRoutinesDao
 import com.example.plantee.data.local.dao.PlantsDao
 import com.example.plantee.data.local.dao.RoutineSourcesDao
@@ -19,7 +18,6 @@ import com.example.plantee.data.local.entities.DiagnosisMedia
 import com.example.plantee.data.local.entities.Media
 import com.example.plantee.data.local.entities.Plant
 import com.example.plantee.data.local.entities.PlantRoutine
-import com.example.plantee.data.local.entities.PlantsMedia
 import com.example.plantee.data.local.entities.Routine
 import com.example.plantee.data.local.entities.RoutineSource
 
@@ -30,7 +28,6 @@ import com.example.plantee.data.local.entities.RoutineSource
         Media::class,
         Plant::class,
         PlantRoutine::class,
-        PlantsMedia::class,
         Routine::class,
         RoutineSource::class
     ],
@@ -43,7 +40,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun mediaDao(): MediaDao
     abstract fun plantsDao(): PlantsDao
     abstract fun plantRoutinesDao(): PlantRoutinesDao
-    abstract fun plantMediaDao(): PlantMediaDao
     abstract fun routinesDao(): RoutinesDao
     abstract fun routineSourcesDao(): RoutineSourcesDao
 
