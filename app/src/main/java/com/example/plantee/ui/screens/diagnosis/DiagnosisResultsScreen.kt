@@ -28,17 +28,20 @@ import com.example.plantee.ui.theme.PlanteeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DiagnosisResultsScreen() {
+fun DiagnosisResultsScreen(
+    onFinishClick: () -> Unit,
+    onBackClick: () -> Unit
+) {
     Scaffold(
         topBar = {
             BackTopBar(
                 title = stringResource(R.string.diagnosis_results_title),
-                onBackClick = {})
+                onBackClick = onBackClick)
         },
         bottomBar = {
             PrimaryButtonFullWidth(
                 text = stringResource(R.string.diagnosis_results_btn_finish),
-                onClick = {},
+                onClick = onFinishClick,
                 modifier = Modifier.padding(10.dp)
             )
         }
@@ -87,6 +90,9 @@ fun DiagnosisResultsScreen() {
 @Composable
 fun DiagnosisResultsPreview() {
     PlanteeTheme() {
-        DiagnosisResultsScreen()
+        DiagnosisResultsScreen(
+            onFinishClick = {},
+            onBackClick = {}
+        )
     }
 }

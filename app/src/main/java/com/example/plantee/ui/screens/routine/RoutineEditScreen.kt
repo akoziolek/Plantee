@@ -23,7 +23,6 @@ import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
 import com.example.plantee.ui.components.base.DaysOfWeek
 import com.example.plantee.ui.components.base.InputTextField
-import com.example.plantee.ui.components.base.NavItem
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.base.SectionHeader
 import com.example.plantee.ui.components.base.SimpleSearchBar
@@ -32,8 +31,10 @@ import com.example.plantee.ui.theme.PlanteeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RoutineEditScreen() {
-    val items = listOf(NavItem.Home, NavItem.Plants, NavItem.Routines)
+fun RoutineEditScreen(
+    onSaveRoutineClick: () -> Unit,
+    onBackClick: () -> Unit
+) {
     val selectedDays = listOf(0, 2, 3, 6)
     var nameText by remember { mutableStateOf("Routine name") }
     var descText by remember { mutableStateOf("Routine description") }
@@ -42,10 +43,10 @@ fun RoutineEditScreen() {
 
     Scaffold(
         topBar = {
-            BackTopBar(stringResource(R.string.routine_edit_title), onBackClick = { })
+            BackTopBar(stringResource(R.string.routine_edit_title), onBackClick = onBackClick)
         },
         floatingActionButton = {
-            PrimaryFloatingButton(text = stringResource(R.string.routine_edit_btn_save), onClick = {})
+            PrimaryFloatingButton(text = stringResource(R.string.routine_edit_btn_save), onClick = onSaveRoutineClick)
         }
     ) { innerPadding ->
         LazyColumn(
@@ -118,6 +119,9 @@ fun RoutineEditScreen() {
 @Composable
 fun RoutineEditPreview() {
     PlanteeTheme {
-        RoutineEditScreen()
+        RoutineEditScreen(
+            onSaveRoutineClick = {},
+            onBackClick = {}
+        )
     }
 }

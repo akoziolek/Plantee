@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.MoreVert
@@ -28,27 +26,27 @@ import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
 import com.example.plantee.ui.components.base.InfoSection
 import com.example.plantee.ui.components.base.NavBar
-import com.example.plantee.ui.components.base.NavItem
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.shared.LinkHeader
 import com.example.plantee.ui.components.shared.diagnosisListItems
 import com.example.plantee.ui.components.shared.routinesSection
 import com.example.plantee.ui.theme.PlanteeTheme
-import com.example.plantee.ui.theme.onDimNeutralLightLight
-
-// TODO remove
-object NavigationProvider {
-    val bottomNavItems = listOf(NavItem.Home, NavItem.Plants, NavItem.Routines)
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PlantDetailsScreen() {
+fun PlantDetailsScreen(
+    onDiagnoseClick: () -> Unit,
+    onConnectedRoutinesClick: () -> Unit,
+    onDiagnosesClick: () -> Unit,
+    onRoutineClick: (Int) -> Unit,
+    onBackClick: () -> Unit,
+    onDiagnosisClick: (Int) -> Unit
+) {
     Scaffold(
         topBar = {
             BackTopBar(
                 title = stringResource(R.string.plant_details_title),
-                onBackClick = { },
+                onBackClick = onBackClick,
                 actions = {
                     IconButton(onClick = { /* action 1 */ }) {
                         Icon(Icons.Default.BookmarkBorder, contentDescription = "Add to favourites")
@@ -59,13 +57,10 @@ fun PlantDetailsScreen() {
                 }
             )
         },
-        bottomBar = {
-            NavBar(NavigationProvider.bottomNavItems)
-        },
         floatingActionButton = {
             PrimaryFloatingButton(
                 text = stringResource(R.string.plant_details_btn_diagnose),
-                onClick = {}
+                onClick = onDiagnoseClick
             )
         }
     ) { innerPadding ->
@@ -97,28 +92,28 @@ fun PlantDetailsScreen() {
                     )
                     LinkHeader(
                         title = stringResource(R.string.plant_details_label_routines),
-                        onClick = {}
+                        onClick = onConnectedRoutinesClick
                     )
                 }
             }
 
             routinesSection(
                 routines = List(2) { "Routine $it" },
-                onRoutineClick = {},
+                onRoutineClick = onRoutineClick,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
 
             item {
                 LinkHeader(
                     title = "Health journal",
-                    onClick = {},
+                    onClick = onDiagnosesClick,
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
             }
 
             diagnosisListItems(
                 diagnosis = List(2) {"2$it.01.2026"},
-                onDiagnosisClick = {},
+                onDiagnosisClick = onDiagnosisClick,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
         }
@@ -128,6 +123,13 @@ fun PlantDetailsScreen() {
 @Composable
 fun PlantDetailsPreview() {
     PlanteeTheme() {
-        PlantDetailsScreen()
+        PlantDetailsScreen(
+            onDiagnoseClick = {},
+            onConnectedRoutinesClick = {},
+            onDiagnosesClick = {},
+            onBackClick = {},
+            onRoutineClick = {},
+            onDiagnosisClick = {}
+        )
     }
 }

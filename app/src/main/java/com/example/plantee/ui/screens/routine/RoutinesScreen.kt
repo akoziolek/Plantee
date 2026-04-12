@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.FilterBar
 import com.example.plantee.ui.components.base.NavBar
-import com.example.plantee.ui.components.base.NavItem
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.base.SectionHeader
 import com.example.plantee.ui.components.base.SimpleSearchBar
@@ -36,11 +35,13 @@ import com.example.plantee.ui.theme.PlanteeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RoutinesScreen() {
+fun RoutinesScreen(
+    onRoutineClick: (Int) -> Unit,
+    onRoutineAddClick: () -> Unit
+) {
     val state = rememberSearchBarState()
     var query by remember { mutableStateOf("") }
     var selectedItem by remember { mutableIntStateOf(2) }
-    val items = listOf(NavItem.Home, NavItem.Plants, NavItem.Routines)
 
     Scaffold(
         topBar = {
@@ -58,11 +59,8 @@ fun RoutinesScreen() {
                     .padding(horizontal = 16.dp),
             )
         },
-        bottomBar = {
-            NavBar(items)
-        },
         floatingActionButton = {
-            PrimaryFloatingButton(text = stringResource(R.string.routines_btn_add), onClick = {})
+            PrimaryFloatingButton(text = stringResource(R.string.routines_btn_add), onClick = onRoutineAddClick )
         }
     ) { innerPadding ->
         LazyColumn(
@@ -76,7 +74,7 @@ fun RoutinesScreen() {
             // ewentualnie bardziej odsunac od gory
             todayRoutinesSection(
                 routines = List(2) { "Routine $it" },
-                onItemClick = { /* ... */ }
+                onItemClick = onRoutineClick
             )
 
             item { Spacer(modifier = Modifier.height(24.dp)) }
@@ -88,7 +86,7 @@ fun RoutinesScreen() {
 
             routinesSection(
                 routines = List(6) { "Routine $it" },
-                onRoutineClick = {}
+                onRoutineClick = onRoutineClick
             )
         }
     }
@@ -98,6 +96,9 @@ fun RoutinesScreen() {
 @Composable
 fun RoutinesPreview() {
     PlanteeTheme {
-        RoutinesScreen()
+        RoutinesScreen(
+            onRoutineAddClick = { println("Kliknięto dodaj rutynę") },
+            onRoutineClick = { id -> println("Kliknięto rutynę $id") }
+        )
     }
 }

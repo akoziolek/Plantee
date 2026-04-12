@@ -27,17 +27,20 @@ import com.example.plantee.ui.theme.PlanteeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddPlantScreen() {
+fun PlantAddScreen(
+    onAddPlantClick: () -> Unit,
+    onBackClick: () -> Unit
+) {
     Scaffold(
         topBar = {
             BackTopBar(
                 title = stringResource(R.string.plant_add_title),
-                onBackClick = {})
+                onBackClick = onBackClick)
         },
         bottomBar = {
             PrimaryButtonFullWidth(
                 text = stringResource(R.string.plant_add_btn_add),
-                onClick = {},
+                onClick = onAddPlantClick,
                 modifier = Modifier.padding(10.dp)
             )
         }
@@ -82,8 +85,11 @@ fun AddPlantScreen() {
 
 @Preview
 @Composable
-fun AddPlantPreview() {
+fun PlantAddPreview() {
     PlanteeTheme() {
-        AddPlantScreen()
+        PlantAddScreen(
+            onAddPlantClick = {},
+            onBackClick = {}
+        )
     }
 }

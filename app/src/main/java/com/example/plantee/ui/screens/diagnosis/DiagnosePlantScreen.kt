@@ -31,7 +31,10 @@ import com.example.plantee.ui.theme.PlanteeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DiagnosePlantScreen() {
+fun DiagnosePlantScreen(
+    onDiagnoseClick: () -> Unit,
+    onBackClick: () -> Unit
+) {
     var waterAmount by remember { mutableFloatStateOf(20f) }
     var lightIntensity by remember { mutableFloatStateOf(40f) }
 
@@ -39,13 +42,13 @@ fun DiagnosePlantScreen() {
         topBar = {
             BackTopBar(
                 title = stringResource(R.string.diagnosis_form_title),
-                onBackClick = {})
+                onBackClick = onBackClick)
         },
         bottomBar = {
             // FIXME bigger font?
             PrimaryButtonFullWidth(
                 text = stringResource(R.string.plant_diagnosis_btn_diagnose),
-                onClick = {},
+                onClick = onDiagnoseClick,
                 modifier = Modifier.padding(10.dp)
             )
         }
@@ -101,6 +104,9 @@ fun DiagnosePlantScreen() {
 @Composable
 fun DiagnosePlantPreview() {
     PlanteeTheme() {
-        DiagnosePlantScreen()
+        DiagnosePlantScreen(
+            onDiagnoseClick = {},
+            onBackClick = {}
+        )
     }
 }

@@ -21,23 +21,20 @@ import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
 import com.example.plantee.ui.components.base.InfoSection
 import com.example.plantee.ui.components.base.NavBar
-import com.example.plantee.ui.components.base.NavItem
 import com.example.plantee.ui.components.base.RoutinesListItem
 import com.example.plantee.ui.theme.PlanteeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DiagnosisDetailsScreen() {
-    val items = listOf(NavItem.Home, NavItem.Plants, NavItem.Routines)
+fun DiagnosisDetailsScreen(
+    onRoutineClicked: (Int) -> Unit,
+    onBackClick: () -> Unit
+) {
     Scaffold(
         topBar = {
             BackTopBar(
                 title = stringResource(R.string.diagnosis_details_title),
-                onBackClick = {})
-        },
-        bottomBar = {
-            // FIXME bezsensu w kazdym komponencie trzymac liste itemkow dla nav bara
-            NavBar(items)
+                onBackClick = onBackClick)
         }
     ) {innerPadding ->
         Column(
@@ -70,7 +67,8 @@ fun DiagnosisDetailsScreen() {
                 // TODO paste the routines list component
                 RoutinesListItem(
                     headlineText = "Weekend watering",
-                    supportingText = "Use small amount of water"
+                    supportingText = "Use small amount of water",
+                    onClick = {}
                 )
 
             }
@@ -82,6 +80,9 @@ fun DiagnosisDetailsScreen() {
 @Composable
 fun DiagnosisDetailsPreview() {
     PlanteeTheme() {
-        DiagnosisDetailsScreen()
+        DiagnosisDetailsScreen(
+            onBackClick = {},
+            onRoutineClicked = {}
+        )
     }
 }

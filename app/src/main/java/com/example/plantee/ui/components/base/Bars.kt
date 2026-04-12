@@ -1,5 +1,6 @@
 package com.example.plantee.ui.components.base
 
+import android.net.http.SslCertificate.saveState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -46,6 +47,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -54,7 +56,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.plantee.R
+import com.example.plantee.navigation.Screen
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.theme.extendedLight
 import com.example.plantee.ui.theme.titleLargeBold
@@ -154,24 +162,41 @@ fun SimpleSearchBar(
     )
 }
 
-sealed class NavItem(val title: String, val icon: ImageVector, val route: String) {
-    object Home : NavItem("Home", Icons.Default.Home, "home")
-    object Plants : NavItem("Plants", Icons.Default.LocalFlorist, "plants")
-    object Routines : NavItem("Routines", Icons.Default.CalendarMonth, "routines")
+sealed class NavItem(val title: String, val icon: ImageVector, val screen: Screen) {
+    object Home : NavItem(title = "Home", Icons.Default.Home, screen = Screen.Home)
+    object Plants : NavItem(title = "Plants", Icons.Default.LocalFlorist, screen = Screen.Plants)
+    object Routines : NavItem(title = "Routines", Icons.Default.CalendarMonth, screen = Screen.Routines)
 }
-
 @Composable
-fun NavBar(
-    items: List<NavItem>
-) {
+fun NavBar(navController: NavController) {
+    val items = listOf(NavItem.Home, NavItem.Plants, NavItem.Routines)
+
+    // 1. Pobieramy aktualny stan nawigacji
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+
     NavigationBar(
         containerColor = extendedLight.dimNeutral.colorContainer,
         tonalElevation = 3.dp
     ) {
-        items.forEachIndexed { index, item ->
+        items.forEach { item ->
+            // 2. Sprawdzamy czy ten element to nasz aktualny ekran
+            val isSelected = currentDestination?.hierarchy?.any {
+                it.hasRoute(item.screen::class)
+            } == true
+
             NavigationBarItem(
-                selected = false,
-                onClick = {  },
+                selected = isSelected,
+                onClick = {
+                    navController.navigate(item.screen) {
+                        // Te 3 linijki to standard do przełączania głównych zakładek bez dublowania historii
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
                 label = {
                     Text(
                         text = item.title,
@@ -192,6 +217,7 @@ fun NavBar(
         }
     }
 }
+
 @Composable
 fun FilterBar(
     onFilterClick: () -> Unit,
@@ -289,7 +315,7 @@ fun TopBarsPreview() {
                 onExpandedChange = { }
             )
             FilterBar({}, {})
-            NavBar(items = listOf(NavItem.Home, NavItem.Plants, NavItem.Routines))
+            //NavBar()
 
         }
 

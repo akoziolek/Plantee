@@ -18,12 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.MainTopBar
 import com.example.plantee.ui.components.base.NavBar
-import com.example.plantee.ui.components.base.NavItem
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.shared.FilterSectionHeader
 import com.example.plantee.ui.components.shared.LinkHeader
@@ -39,10 +33,15 @@ import com.example.plantee.ui.components.shared.plantListItems
 import com.example.plantee.ui.components.shared.todayRoutinesSection
 import com.example.plantee.ui.theme.PlanteeTheme
 
+// TODO connect navigation callbacks with viewmodels
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
-    val items = listOf(NavItem.Home, NavItem.Plants, NavItem.Routines)
+fun HomeScreen(
+    onRoutineClick: (Int) -> Unit,
+    onPlantClick: (Int) -> Unit,
+    onAddPlantClick: () -> Unit,
+    onRoutinesClick: () -> Unit
+) {
 
     Scaffold(
         topBar = {
@@ -56,11 +55,8 @@ fun HomeScreen() {
             })
         },
         floatingActionButton = {
-            PrimaryFloatingButton(text = stringResource(R.string.home_btn_add), onClick = {})
-        },
-        bottomBar = {
-            NavBar(items)
-        },
+            PrimaryFloatingButton(text = stringResource(R.string.home_btn_add), onClick = onAddPlantClick)
+        }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -81,13 +77,13 @@ fun HomeScreen() {
             item{
                 LinkHeader(
                     title = stringResource(R.string.home_label_today_routines),
-                    onClick = {}
+                    onClick = onRoutinesClick
                 )
             }
 
             todayRoutinesSection(
                 routines = List(3) { "Routine $it" },
-                onItemClick = {}
+                onItemClick = onRoutineClick
             )
 
             item {
@@ -103,7 +99,7 @@ fun HomeScreen() {
 
             plantListItems(
                 plants = List(10) {"Plant no. $it"},
-                onPlantClick = {}
+                onPlantClick = onPlantClick
             )
         }
     }
@@ -115,6 +111,11 @@ fun HomeScreen() {
 @Composable
 fun HomeScreenPreview() {
     PlanteeTheme {
-        HomeScreen()
+        HomeScreen(
+            onRoutineClick = { id -> println("Kliknięto rutynę $id") },
+            onPlantClick = { id -> println("Kliknięto planta $id") },
+            onAddPlantClick = { println("Kliknięto dodaj planta") },
+            onRoutinesClick = { println("Kliknięto lista rutyn") }
+        )
     }
 }

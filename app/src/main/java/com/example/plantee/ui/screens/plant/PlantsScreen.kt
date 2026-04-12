@@ -2,10 +2,8 @@ package com.example.plantee.ui.screens.plant
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,7 +21,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.NavBar
-import com.example.plantee.ui.components.base.NavItem
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.base.SimpleSearchBar
 import com.example.plantee.ui.components.shared.FilterSectionHeader
@@ -32,8 +29,9 @@ import com.example.plantee.ui.theme.PlanteeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PlantsScreen() {
-    val items = listOf(NavItem.Home, NavItem.Plants, NavItem.Routines)
+fun PlantsScreen(
+    onAddPlantClick: () -> Unit
+) {
     val state = rememberSearchBarState()
     var query by remember { mutableStateOf("") }
 
@@ -54,10 +52,7 @@ fun PlantsScreen() {
             )
         },
         floatingActionButton = {
-            PrimaryFloatingButton(text = stringResource(R.string.plants_btn_add), onClick = {})
-        },
-        bottomBar = {
-            NavBar(items)
+            PrimaryFloatingButton(text = stringResource(R.string.plants_btn_add), onClick = onAddPlantClick)
         },
     ) { innerPadding ->
         LazyColumn(
@@ -88,6 +83,8 @@ fun PlantsScreen() {
 @Composable
 fun PlantsPreview() {
     PlanteeTheme {
-        PlantsScreen()
+        PlantsScreen(
+            onAddPlantClick = { println("Kliknięto dodaj planta") }
+        )
     }
 }

@@ -24,21 +24,21 @@ import com.example.plantee.ui.components.base.BackTopBar
 import com.example.plantee.ui.components.base.DaysOfWeek
 import com.example.plantee.ui.components.base.InfoSection
 import com.example.plantee.ui.components.base.NavBar
-import com.example.plantee.ui.components.base.NavItem
-import com.example.plantee.ui.components.base.PlantListItem
 import com.example.plantee.ui.components.base.SectionHeader
 import com.example.plantee.ui.components.shared.plantListItems
 import com.example.plantee.ui.theme.PlanteeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RoutineDetailsScreen() {
-    val items = listOf(NavItem.Home, NavItem.Plants, NavItem.Routines)
+fun RoutineDetailsScreen(
+    onPlantClick: (Int) -> Unit,
+    onBackClick: () -> Unit
+) {
     val selectedDays = listOf(0, 2, 3, 6)
 
     Scaffold(
         topBar = {
-            BackTopBar(stringResource(R.string.routine_details_title), onBackClick = { }, actions = {
+            BackTopBar(stringResource(R.string.routine_details_title), onBackClick = onBackClick, actions = {
                 IconButton(onClick = { /* action 1 */ }) {
                     Icon(Icons.Default.BookmarkBorder, "Add to favourites")
                 }
@@ -47,9 +47,6 @@ fun RoutineDetailsScreen() {
                 }
             })
         },
-        bottomBar = {
-            NavBar(items)
-        }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -91,7 +88,7 @@ fun RoutineDetailsScreen() {
 
             plantListItems(
                 plants = List(6) {"Plant no. $it"},
-                onPlantClick = {}
+                onPlantClick = onPlantClick
             )
         }
     }
@@ -103,6 +100,9 @@ fun RoutineDetailsScreen() {
 @Composable
 fun RoutineDetailsPreview() {
     PlanteeTheme {
-        RoutineDetailsScreen()
+        RoutineDetailsScreen(
+            onBackClick = {},
+            onPlantClick = {}
+        )
     }
 }

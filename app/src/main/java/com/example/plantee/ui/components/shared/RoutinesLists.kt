@@ -23,14 +23,14 @@ fun LazyListScope.todayRoutinesSection(
 
 fun LazyListScope.routinesSection(
     routines: List<String>,
-    onRoutineClick: () -> Unit,
+    onRoutineClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     items(routines.size) { index ->
         RoutinesListItem(
             headlineText = routines[index],
             supportingText = "Description for routine no. $index",
-            onClick = onRoutineClick,
+            onClick = { onRoutineClick(index) },
             modifier = modifier
         )
     }

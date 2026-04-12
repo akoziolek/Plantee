@@ -73,7 +73,7 @@ fun RoutinesListItem(
             .fillMaxWidth()
             .heightIn(min = 72.dp)
             .clip(RoundedCornerShape(8.dp))
-            .clickable { onClick() }
+            .clickable { onClick }
     )
 }
 
