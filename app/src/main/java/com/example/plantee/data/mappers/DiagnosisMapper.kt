@@ -1,5 +1,6 @@
 package com.example.plantee.data.mappers
 
+import com.example.plantee.data.local.entities.DiagnosisEntity
 import com.example.plantee.data.local.entities.FullDiagnosisEntity
 import com.example.plantee.domain.model.Diagnosis
 fun FullDiagnosisEntity?.toDomain(): Diagnosis? {
@@ -11,7 +12,8 @@ fun FullDiagnosisEntity?.toDomain(): Diagnosis? {
         sunLevel = diagnosis.sunLevel,
         moistureLevel = diagnosis.moistureLevel,
         diagnosedAt = diagnosis.diagnosedAt,
-        listOfMedia = listOfMedia,
+        plantId = diagnosis.plantId,
+        listOfMedia = listOfMedia.map { it.id },
         routinesIds = plantRoutines.map { it.idRoutine }
     )
 }
@@ -24,8 +26,22 @@ fun List<FullDiagnosisEntity>.toDomainList(): List<Diagnosis> {
             sunLevel = entity.diagnosis.sunLevel,
             moistureLevel = entity.diagnosis.moistureLevel,
             diagnosedAt = entity.diagnosis.diagnosedAt,
-            listOfMedia = entity.listOfMedia,
+            plantId = entity.diagnosis.plantId,
+            listOfMedia = entity.listOfMedia.map { it.id },
             routinesIds = entity.plantRoutines.map { it.idRoutine }
         )
     }
+}
+
+fun Diagnosis?.toEntity(): DiagnosisEntity? {
+    if (this == null) return null
+
+    return DiagnosisEntity(
+        id = this.id,
+        description = this.description,
+        sunLevel = this.sunLevel,
+        moistureLevel = this.moistureLevel,
+        diagnosedAt = this.diagnosedAt,
+        idPlant = this.plantId
+    )
 }

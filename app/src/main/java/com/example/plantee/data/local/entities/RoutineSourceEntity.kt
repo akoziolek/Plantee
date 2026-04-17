@@ -4,6 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import kotlin.TODO
+
 
 @Entity(
     tableName = "routine_sources",
@@ -12,7 +14,8 @@ import androidx.room.PrimaryKey
             entity = DiagnosisEntity::class,
             parentColumns = ["id"],
             childColumns = ["idDiagnosis"],
-            onDelete = ForeignKey.RESTRICT
+            onDelete = ForeignKey.CASCADE
+            // TODO("Should routines be deleted when deleting diagnosis?")
         ),
         ForeignKey(
             entity = PlantRoutineEntity::class,

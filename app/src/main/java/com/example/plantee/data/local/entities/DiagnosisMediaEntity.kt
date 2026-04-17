@@ -12,7 +12,7 @@ import androidx.room.PrimaryKey
             entity = DiagnosisEntity::class,
             parentColumns = ["id"],
             childColumns = ["idDiagnosis"],
-            onDelete = ForeignKey.RESTRICT
+            onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
             entity = MediaEntity::class,

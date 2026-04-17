@@ -8,6 +8,7 @@ data class Diagnosis(
     val sunLevel: Int,
     val moistureLevel: Int,
     val diagnosedAt: LocalDateTime,
-    val listOfMedia: List<Media> = emptyList(),
+    val plantId: Int,
+    val listOfMedia: List<Int> = emptyList(),
     val routinesIds: List<Int> = emptyList()
 )

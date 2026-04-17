@@ -7,4 +7,6 @@ interface IPlantsRepository {
     fun getAllPlantsWithDetails(): Flow<List<Plant>>
     fun getPlantsWithDetails(ids: List<Int>): Flow<List<Plant>>
     fun getPlantWithDetails(id: Int): Flow<Plant?>
+
+    // TODO("cud fun")
 }
