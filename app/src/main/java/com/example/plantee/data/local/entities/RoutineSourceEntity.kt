@@ -18,7 +18,7 @@ import androidx.room.PrimaryKey
             entity = PlantRoutineEntity::class,
             parentColumns = ["id"],
             childColumns = ["idPlantRoutine"],
-            onDelete = ForeignKey.RESTRICT
+            onDelete = ForeignKey.CASCADE
         )
     ]
 )

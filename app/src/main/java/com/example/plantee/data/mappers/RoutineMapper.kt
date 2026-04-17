@@ -1,6 +1,7 @@
 package com.example.plantee.data.mappers
 
 import com.example.plantee.data.local.entities.FullRoutineEntity
+import com.example.plantee.data.local.entities.RoutineEntity
 import com.example.plantee.domain.model.Routine
 
 fun FullRoutineEntity?.toDomain(): Routine? {
@@ -33,4 +34,18 @@ fun List<FullRoutineEntity>.toDomainList(): List<Routine> {
             plantsIds = entity.plantRoutines.map { it.idPlant }
         )
     }
+}
+
+fun Routine?.toEntity(): RoutineEntity? {
+    if (this == null) return null
+
+    return RoutineEntity(
+        id = this.id,
+        name = this.name,
+        description = this.description,
+        startDate = this.startDate,
+        endDate = this.endDate,
+        activeDays = this.activeDays,
+        lastlyDoneAt = this.lastlyDoneAt
+    )
 }

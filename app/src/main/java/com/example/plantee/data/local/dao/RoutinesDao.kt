@@ -17,13 +17,16 @@ import java.time.LocalDate
 @Dao
 interface RoutinesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(routine: RoutineEntity)
+    suspend fun insert(routine: RoutineEntity): Int
 
     @Update
     suspend fun update(routine: RoutineEntity)
 
     @Delete
     suspend fun delete(routine: RoutineEntity)
+
+    @Query("DELETE FROM routines WHERE id = :id")
+    suspend fun deleteById(id: Int)
 
     @Query("SELECT * FROM routines ORDER BY id DESC")
     fun getAllRoutines(): Flow<List<RoutineEntity>>
