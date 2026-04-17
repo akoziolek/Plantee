@@ -1,10 +1,15 @@
 package com.example.plantee.navigation
 
+import android.util.Log
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.ui.NavDisplay
 import com.example.plantee.ui.screens.diagnosis.DiagnosePlantScreen
 import com.example.plantee.ui.screens.diagnosis.DiagnosisDetailsScreen
 import com.example.plantee.ui.screens.diagnosis.DiagnosisResultsScreen
@@ -18,111 +23,165 @@ import com.example.plantee.ui.screens.routine.RoutineDetailsScreen
 import com.example.plantee.ui.screens.routine.RoutineEditScreen
 import com.example.plantee.ui.screens.routine.RoutinesScreen
 
+
 @Composable
 fun MainNavigation(
-    navController: NavHostController
+    modifier: Modifier = Modifier,
+    viewModel: NavigationViewModel = viewModel()
 ) {
 
-    NavHost(navController = navController, startDestination= Screen.Home) {
-        composable<Screen.Home> {
-            HomeScreen(
-                onRoutineClick = { id -> navController.navigate(route = Screen.RoutineDetails) },
-                onPlantClick = { id -> navController.navigate(route = Screen.PlantDetails) },
-                onAddPlantClick = { navController.navigate(route = Screen.PlantAdd) },
-                onRoutinesClick = { navController.navigate(route = Screen.Routines) }
-            )
-        }
+    NavDisplay(
+        backStack = viewModel.backStack,
+        onBack = { viewModel.back() },
+        modifier = modifier,
+        entryProvider = entryProvider {
 
-        composable<Screen.DiagnosePlant> {
-            DiagnosePlantScreen(
-                onDiagnoseClick = { navController.navigate(Screen.DiagnosisResults) },
-                onBackClick = { navController.navigateUp() }
-            )
-        }
-        composable<Screen.DiagnosisDetails> {
-            DiagnosisDetailsScreen(
-                onBackClick = { navController.navigateUp() },
-                onRoutineClicked = { navController.navigate(Screen.RoutineDetails)}
-            )
-        }
-        composable<Screen.DiagnosisResults> {
-            DiagnosisResultsScreen(
-                onFinishClick = {
-                    navController.navigate(route = Screen.DiagnosisDetails) {
-                        popUpTo<Screen.DiagnosisResults> { inclusive = true }
+            entry<Screen.Home> {
+                HomeScreen(
+                    onRoutineClick = { id ->
+                        viewModel.navigate(Screen.RoutineDetails(id))
+                        Log.d("Nawigacja", "DEBUUUUUUUG")
+                    },
+                    onPlantClick = { id ->
+                        viewModel.navigate(Screen.PlantDetails(id))
+                    },
+                    onAddPlantClick = {
+                        viewModel.navigate(Screen.PlantAdd)
+                    },
+                    onRoutinesClick = {
+                        viewModel.navigate(Screen.Routines)
                     }
-                },
-                onBackClick = { navController.navigateUp() }
-            )
-        }
+                )
 
-        composable<Screen.PlantAdd> {
-            PlantAddScreen(
-                onAddPlantClick = {
-                    navController.navigate(route = Screen.PlantDetails) {
-                        popUpTo<Screen.PlantAdd> { inclusive = true }
-                    }
-                },
-                onBackClick = { navController.navigateUp() }
-            )
-        }
-        composable<Screen.PlantDetails> {
-            PlantDetailsScreen(
-                onDiagnoseClick = { navController.navigate( route = Screen.DiagnosePlant) },
-                onConnectedRoutinesClick = { navController.navigate(route = Screen.Routines) },
-                onDiagnosesClick = { navController.navigate(route = Screen.DiagnosisDetails) },
-                onRoutineClick = { id -> navController.navigate(route = Screen.RoutineDetails) },
-                onBackClick = { navController.navigateUp() },
-                onDiagnosisClick = { id -> navController.navigate(route = Screen.DiagnosisDetails) }
-            )
-        }
-        composable<Screen.PlantEdit> {
-            PlantEditScreen(
-                onSaveClick = {
-                    navController.navigate(route = Screen.PlantDetails) {
-                        popUpTo<Screen.PlantEdit> { inclusive = true }
-                    }
-                },
-                onBackClick = { navController.navigateUp() }
-            )
-        }
-        composable<Screen.Plants> {
-            PlantsScreen(
-                onAddPlantClick = { navController.navigate(Screen.PlantAdd)}
-            )
-        }
+            }
 
-        composable<Screen.RoutineAdd> {
-            RoutineAddScreen(
-                onAddRoutineClick = {
-                    navController.navigate(route = Screen.RoutineDetails) {
-                        popUpTo<Screen.RoutineAdd> { inclusive = true }
+            entry<Screen.DiagnosePlant> {
+                DiagnosePlantScreen(
+                    onDiagnoseClick = {
+                        viewModel.navigate(Screen.DiagnosisResults(1))
+                    },
+                    onBackClick = {
+                        viewModel.back()
                     }
-                },
-                onBackClick = { navController.navigateUp() }
-            )
-        }
-        composable<Screen.RoutineDetails> {
-            RoutineDetailsScreen(
-                onPlantClick = {navController.navigate(route = Screen.PlantDetails)},
-                onBackClick = { navController.navigateUp() }
-            )
-        }
-        composable<Screen.RoutineEdit> {
-            RoutineEditScreen(
-                onSaveRoutineClick = {
-                    navController.navigate(route = Screen.RoutineDetails) {
-                        popUpTo<Screen.RoutineEdit> { inclusive = true }
+                )
+            }
+
+            entry<Screen.DiagnosisDetails> {
+                DiagnosisDetailsScreen(
+                    onRoutineClicked = { id ->
+                        viewModel.navigate(Screen.RoutineDetails(id))
+                    },
+                    onBackClick = {
+                        viewModel.back()
                     }
-                },
-                onBackClick = { navController.navigateUp() }
-            )
+                )
+            }
+
+            entry<Screen.DiagnosisResults> {
+                DiagnosisResultsScreen(
+                    onFinishClick = {
+                        viewModel.popUpTo(target = Screen.DiagnosePlant, inclusive = true)
+                    },
+                    onBackClick = {
+                        viewModel.back()
+                    },
+                    onRoutineClick = {
+                        // TODO
+                    }
+                )
+            }
+
+            entry<Screen.Plants> {
+                PlantsScreen(
+                    onPlantClick = {
+                        viewModel.navigate(Screen.PlantDetails(it))
+                    },
+                    onAddPlantClick = {
+                        viewModel.navigate(Screen.PlantAdd)
+                    }
+                )
+            }
+
+            entry<Screen.PlantDetails> {
+                PlantDetailsScreen(
+                    onDiagnosisClick = { id ->
+                        viewModel.navigate(Screen.DiagnosisDetails(id))
+                    },
+                    onDiagnoseClick = {
+                        viewModel.navigate(Screen.DiagnosePlant)
+                    },
+                    onRoutineClick = {
+                        viewModel.navigate(Screen.RoutineDetails(it))
+                    },
+                    onBackClick = {
+                        viewModel.back()
+                    }
+                )
+            }
+
+            entry<Screen.PlantAdd> {
+                PlantAddScreen(
+                    onAddPlantClick = {
+                        // FIXME change the signature
+                        viewModel.replace(Screen.PlantDetails(1))
+                    },
+                    onBackClick = {
+                        viewModel.back()
+                    }
+                )
+            }
+
+            entry<Screen.PlantEdit> {
+                PlantEditScreen(
+                    onSaveClick = {
+                        viewModel.replace(Screen.PlantDetails(1))
+                    }, onBackClick = {
+                        viewModel.back()
+                    }
+                )
+            }
+
+            entry<Screen.Routines> {
+                RoutinesScreen(
+                    onRoutineClick = { id ->
+                        viewModel.navigate(Screen.RoutineDetails(id))
+                    },
+                    onRoutineAddClick = {
+                        viewModel.navigate(Screen.RoutineAdd)
+                    }
+                )
+            }
+
+            entry<Screen.RoutineDetails> {
+                RoutineDetailsScreen (
+                    onPlantClick = { id ->
+                        viewModel.navigate(Screen.PlantDetails(id))
+                    },
+                    onBackClick = {
+                        viewModel.back()
+                    }
+                )
+            }
+
+            entry<Screen.RoutineAdd> {
+                RoutineAddScreen(
+                    onAddRoutineClick = {
+                        viewModel.replace(Screen.RoutineDetails(1))
+                    },
+                    onBackClick = {
+                        viewModel.back()
+                    }
+                )
+            }
+
+            entry<Screen.RoutineEdit> {
+                RoutineEditScreen(
+                    onSaveRoutineClick = {},
+                    onBackClick = {
+                        viewModel.back()
+                    }
+                )
+            }
         }
-        composable<Screen.Routines> {
-            RoutinesScreen(
-                onRoutineAddClick = { navController.navigate(Screen.RoutineAdd) },
-                onRoutineClick = { id -> navController.navigate(route = Screen.RoutineDetails) }
-            )
-        }
-    }
+    )
 }

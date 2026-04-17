@@ -27,6 +27,7 @@ import com.example.plantee.ui.components.base.BackTopBar
 import com.example.plantee.ui.components.base.InfoSection
 import com.example.plantee.ui.components.base.NavBar
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
+import com.example.plantee.ui.components.base.SectionHeader
 import com.example.plantee.ui.components.shared.LinkHeader
 import com.example.plantee.ui.components.shared.diagnosisListItems
 import com.example.plantee.ui.components.shared.routinesSection
@@ -36,8 +37,6 @@ import com.example.plantee.ui.theme.PlanteeTheme
 @Composable
 fun PlantDetailsScreen(
     onDiagnoseClick: () -> Unit,
-    onConnectedRoutinesClick: () -> Unit,
-    onDiagnosesClick: () -> Unit,
     onRoutineClick: (Int) -> Unit,
     onBackClick: () -> Unit,
     onDiagnosisClick: (Int) -> Unit
@@ -81,7 +80,8 @@ fun PlantDetailsScreen(
 
             }
 
-            item {
+            // FIXME - usunac dodawanie paddingu w kazdym miejscu
+            item() {
                 Column(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -90,9 +90,9 @@ fun PlantDetailsScreen(
                         headerText = stringResource(R.string.plant_details_label_description),
                         bodyText = "I found this plant in the dumpster :( but I managed to bring it back to life"
                     )
-                    LinkHeader(
+                    SectionHeader(
                         title = stringResource(R.string.plant_details_label_routines),
-                        onClick = onConnectedRoutinesClick
+                        modifier = Modifier.padding(top = 16.dp)
                     )
                 }
             }
@@ -104,10 +104,9 @@ fun PlantDetailsScreen(
             )
 
             item {
-                LinkHeader(
-                    title = "Health journal",
-                    onClick = onDiagnosesClick,
-                    modifier = Modifier.padding(horizontal = 16.dp)
+                SectionHeader(
+                    title = stringResource(R.string.plant_details_label_health_journal),
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
                 )
             }
 
@@ -125,8 +124,6 @@ fun PlantDetailsPreview() {
     PlanteeTheme() {
         PlantDetailsScreen(
             onDiagnoseClick = {},
-            onConnectedRoutinesClick = {},
-            onDiagnosesClick = {},
             onBackClick = {},
             onRoutineClick = {},
             onDiagnosisClick = {}

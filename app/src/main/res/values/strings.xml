@@ -68,4 +68,5 @@
     <string name="plant_details_label_description">Description</string>
     <string name="plant_details_label_routines">Connected routines</string>
     <string name="plant_details_btn_diagnose">Diagnose</string>
+    <string name="plant_details_label_health_journal">Health journal</string>
 </resources>

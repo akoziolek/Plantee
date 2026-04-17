@@ -10,16 +10,16 @@ sealed interface Screen : NavKey {
     @Serializable
     data object DiagnosePlant : Screen
     @Serializable
-    data object DiagnosisDetails : Screen
+    data class DiagnosisDetails(val id: Int) : Screen
     @Serializable
-    data object DiagnosisResults : Screen
+    data class DiagnosisResults(val id: Int) : Screen
 
     @Serializable
     data object PlantAdd : Screen
     @Serializable
-    data object PlantDetails : Screen
+    data class PlantDetails(val id: Int) : Screen
     @Serializable
-    data object PlantEdit: Screen
+    data class PlantEdit(val id: Int): Screen
     @Serializable
     data object Plants : Screen
 
@@ -27,9 +27,9 @@ sealed interface Screen : NavKey {
     @Serializable
     data object RoutineAdd : Screen
     @Serializable
-    data object RoutineDetails : Screen
+    data class RoutineDetails(val id: Int) : Screen
     @Serializable
-    data object RoutineEdit : Screen
+    data class RoutineEdit(val id: Int) : Screen
     @Serializable
     data object Routines : Screen
 

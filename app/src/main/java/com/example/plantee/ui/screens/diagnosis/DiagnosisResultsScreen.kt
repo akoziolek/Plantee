@@ -29,6 +29,7 @@ import com.example.plantee.ui.theme.PlanteeTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiagnosisResultsScreen(
+    onRoutineClick: (Int) -> Unit,
     onFinishClick: () -> Unit,
     onBackClick: () -> Unit
 ) {
@@ -91,6 +92,7 @@ fun DiagnosisResultsScreen(
 fun DiagnosisResultsPreview() {
     PlanteeTheme() {
         DiagnosisResultsScreen(
+            onRoutineClick = {},
             onFinishClick = {},
             onBackClick = {}
         )

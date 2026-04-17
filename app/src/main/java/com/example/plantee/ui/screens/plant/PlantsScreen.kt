@@ -30,6 +30,7 @@ import com.example.plantee.ui.theme.PlanteeTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlantsScreen(
+    onPlantClick: (Int) -> Unit,
     onAddPlantClick: () -> Unit
 ) {
     val state = rememberSearchBarState()
@@ -71,7 +72,7 @@ fun PlantsScreen(
 
             plantListItems(
                 plants = List(10) {"Plant no. $it"},
-                onPlantClick = {}
+                onPlantClick = onPlantClick
             )
         }
     }
@@ -84,6 +85,7 @@ fun PlantsScreen(
 fun PlantsPreview() {
     PlanteeTheme {
         PlantsScreen(
+            onPlantClick = { id -> println("Kliknięto planta $id") },
             onAddPlantClick = { println("Kliknięto dodaj planta") }
         )
     }

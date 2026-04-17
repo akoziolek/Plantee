@@ -34,6 +34,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.SearchBar
@@ -168,34 +169,23 @@ sealed class NavItem(val title: String, val icon: ImageVector, val screen: Scree
     object Routines : NavItem(title = "Routines", Icons.Default.CalendarMonth, screen = Screen.Routines)
 }
 @Composable
-fun NavBar(navController: NavController) {
+fun NavBar(
+    currentScreen: Screen?,
+    onTabSelected: (Screen) -> Unit
+) {
     val items = listOf(NavItem.Home, NavItem.Plants, NavItem.Routines)
-
-    // 1. Pobieramy aktualny stan nawigacji
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
 
     NavigationBar(
         containerColor = extendedLight.dimNeutral.colorContainer,
         tonalElevation = 3.dp
     ) {
         items.forEach { item ->
-            // 2. Sprawdzamy czy ten element to nasz aktualny ekran
-            val isSelected = currentDestination?.hierarchy?.any {
-                it.hasRoute(item.screen::class)
-            } == true
+            val isSelected = currentScreen == item.screen
 
             NavigationBarItem(
-                selected = isSelected,
+                selected =  isSelected,
                 onClick = {
-                    navController.navigate(item.screen) {
-                        // Te 3 linijki to standard do przełączania głównych zakładek bez dublowania historii
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
+                    onTabSelected(item.screen)
                 },
                 label = {
                     Text(
