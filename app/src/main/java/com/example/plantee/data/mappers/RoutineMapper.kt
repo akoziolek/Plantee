@@ -1,8 +1,6 @@
 package com.example.plantee.data.mappers
 
-import com.example.plantee.data.local.entities.FullPlantEntity
 import com.example.plantee.data.local.entities.FullRoutineEntity
-import com.example.plantee.domain.model.Plant
 import com.example.plantee.domain.model.Routine
 
 fun FullRoutineEntity?.toDomain(): Routine? {
