@@ -17,11 +17,15 @@ class PlantsRepository (
     private val diagnosisDao: DiagnosisDao,
     private val mediaDao: MediaDao
 ) : IPlantsRepository {
-    override fun getAllPlants(): Flow<List<Plant>> {
+    override fun getAllPlantsWithDetails(): Flow<List<Plant>> {
         return plantsDao.getAllFullPlants().map { it.toDomainList() }
     }
 
-    override fun getPlant(id: Int): Flow<Plant?> {
+    override fun getPlantsWithDetails(ids: List<Int>): Flow<List<Plant>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getPlantWithDetails(id: Int): Flow<Plant?> {
         return plantsDao.getFullPlant(id).map { it.toDomain() }
     }
 
