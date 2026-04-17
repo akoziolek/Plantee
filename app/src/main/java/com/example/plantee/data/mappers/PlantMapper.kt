@@ -16,7 +16,7 @@ fun FullPlantEntity?.toDomain(): Plant? {
         isFavourite = plant.isFavourite,
         media = media?.toDomain(),
         diagnosesIds = plantDiagnoses.map { it.id },
-        routinesIds = plantRoutines.map { it.id }
+        routinesIds = plantRoutines.map { it.idRoutine }
     )
 }
 

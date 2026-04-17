@@ -29,6 +29,10 @@ interface PlantsDao {
     @Query("SELECT * FROM plants ORDER BY id DESC")
     fun getAllFullPlants(): Flow<List<FullPlantEntity>>
 
+    @Transaction
+    @Query("SELECT * FROM plants WHERE id IN (:ids) ORDER BY id DESC")
+    fun getPlantsByIds(ids: List<Int>): Flow<List<FullPlantEntity>>
+
     @Query("SELECT * FROM plants WHERE name LIKE '%' || :searchQuery || '%'")
     fun searchPlants(searchQuery: String): Flow<List<PlantEntity>>
 
