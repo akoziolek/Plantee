@@ -9,20 +9,20 @@ import androidx.room.PrimaryKey
     tableName = "diagnosis_media",
     foreignKeys = [
         ForeignKey(
-            entity = Diagnosis::class,
+            entity = DiagnosisEntity::class,
             parentColumns = ["id"],
             childColumns = ["idDiagnosis"],
             onDelete = ForeignKey.RESTRICT
         ),
         ForeignKey(
-            entity = Media::class,
+            entity = MediaEntity::class,
             parentColumns = ["id"],
             childColumns = ["idMedia"],
             onDelete = ForeignKey.RESTRICT
         )
     ]
 )
-data class DiagnosisMedia(
+data class DiagnosisMediaEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "id_diagnosis") val idDiagnosis: Int,
     @ColumnInfo(name = "id_media") val idMedia: Int

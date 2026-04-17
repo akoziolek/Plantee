@@ -9,20 +9,20 @@ import androidx.room.PrimaryKey
     tableName = "routine_sources",
     foreignKeys = [
         ForeignKey(
-            entity = Diagnosis::class,
+            entity = DiagnosisEntity::class,
             parentColumns = ["id"],
             childColumns = ["idDiagnosis"],
             onDelete = ForeignKey.RESTRICT
         ),
         ForeignKey(
-            entity = PlantRoutine::class,
+            entity = PlantRoutineEntity::class,
             parentColumns = ["id"],
             childColumns = ["idPlantRoutine"],
             onDelete = ForeignKey.RESTRICT
         )
     ]
 )
-data class RoutineSource(
+data class RoutineSourceEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "id_diagnosis") val idDiagnosis: Int,
     @ColumnInfo(name = "id_plant_routine") val idPlantRoutine: Int

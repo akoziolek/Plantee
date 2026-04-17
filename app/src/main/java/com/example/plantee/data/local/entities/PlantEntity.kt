@@ -9,14 +9,14 @@ import androidx.room.PrimaryKey
     tableName = "plants",
     foreignKeys = [
         ForeignKey(
-            entity = Media::class,
+            entity = MediaEntity::class,
             parentColumns = ["id"],
             childColumns = ["idMedia"],
             onDelete = ForeignKey.RESTRICT
         )
     ]
 )
-data class Plant (
+data class PlantEntity (
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
     val description: String? = null,

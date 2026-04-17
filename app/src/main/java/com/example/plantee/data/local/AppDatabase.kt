@@ -13,23 +13,23 @@ import com.example.plantee.data.local.dao.PlantRoutinesDao
 import com.example.plantee.data.local.dao.PlantsDao
 import com.example.plantee.data.local.dao.RoutineSourcesDao
 import com.example.plantee.data.local.dao.RoutinesDao
-import com.example.plantee.data.local.entities.Diagnosis
-import com.example.plantee.data.local.entities.DiagnosisMedia
-import com.example.plantee.data.local.entities.Media
-import com.example.plantee.data.local.entities.Plant
-import com.example.plantee.data.local.entities.PlantRoutine
-import com.example.plantee.data.local.entities.Routine
-import com.example.plantee.data.local.entities.RoutineSource
+import com.example.plantee.data.local.entities.DiagnosisEntity
+import com.example.plantee.data.local.entities.DiagnosisMediaEntity
+import com.example.plantee.data.local.entities.MediaEntity
+import com.example.plantee.data.local.entities.PlantEntity
+import com.example.plantee.data.local.entities.PlantRoutineEntity
+import com.example.plantee.data.local.entities.RoutineEntity
+import com.example.plantee.data.local.entities.RoutineSourceEntity
 
 @Database(
     entities = [
-        Diagnosis::class,
-        DiagnosisMedia::class,
-        Media::class,
-        Plant::class,
-        PlantRoutine::class,
-        Routine::class,
-        RoutineSource::class
+        DiagnosisEntity::class,
+        DiagnosisMediaEntity::class,
+        MediaEntity::class,
+        PlantEntity::class,
+        PlantRoutineEntity::class,
+        RoutineEntity::class,
+        RoutineSourceEntity::class
     ],
     version = 1
 )

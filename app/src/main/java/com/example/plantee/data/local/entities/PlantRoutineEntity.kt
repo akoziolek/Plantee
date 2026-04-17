@@ -4,24 +4,26 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import java.time.LocalDateTime
 
 @Entity(
-    tableName = "diagnosis",
+    tableName = "plant_routines",
     foreignKeys = [
         ForeignKey(
-            entity = Plant::class,
+            entity = RoutineEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["idRoutine"],
+            onDelete = ForeignKey.RESTRICT
+        ),
+        ForeignKey(
+            entity = PlantEntity::class,
             parentColumns = ["id"],
             childColumns = ["idPlant"],
             onDelete = ForeignKey.RESTRICT
         )
     ]
 )
-data class Diagnosis(
+data class PlantRoutineEntity (
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val description: String? = null,
-    @ColumnInfo(name = "sun_level") val sunLevel: Int,
-    @ColumnInfo(name = "moisture_level") val moistureLevel: Int,
-    @ColumnInfo(name = "diagnosed_at") val diagnosedAt: LocalDateTime,
+    @ColumnInfo(name = "id_routine") val idRoutine: Int,
     @ColumnInfo(name = "id_plant") val idPlant: Int? = null
 )

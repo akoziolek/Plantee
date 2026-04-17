@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import java.time.LocalDate
 
 @Entity(tableName = "routines")
-data class Routine (
+data class RoutineEntity (
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
     val description: String? = null,

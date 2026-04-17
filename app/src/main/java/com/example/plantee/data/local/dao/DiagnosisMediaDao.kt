@@ -5,16 +5,16 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Update
-import com.example.plantee.data.local.entities.DiagnosisMedia
+import com.example.plantee.data.local.entities.DiagnosisMediaEntity
 
 @Dao
 interface DiagnosisMediaDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(diagnosisMedia: DiagnosisMedia)
+    suspend fun insert(diagnosisMedia: DiagnosisMediaEntity)
 
     @Update
-    suspend fun update(diagnosisMedia: DiagnosisMedia)
+    suspend fun update(diagnosisMedia: DiagnosisMediaEntity)
 
     @Delete
-    suspend fun delete(diagnosisMedia: DiagnosisMedia)
+    suspend fun delete(diagnosisMedia: DiagnosisMediaEntity)
 }
