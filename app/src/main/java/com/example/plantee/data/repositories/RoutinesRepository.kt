@@ -32,7 +32,8 @@ class RoutinesRepository(
     override suspend fun addRoutine(routine: Routine): Boolean {
         val entity = routine.toEntity() ?: return false
 
-        val newId =  routinesDao.insert(entity)
+        // FIXME Insert return type
+        val newId =  routinesDao.insert(entity).toInt()
 
         if (routine.plantsIds.isNotEmpty()) {
             plantRoutinesDao.insertAll(routine.plantsIds.map { id ->

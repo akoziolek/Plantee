@@ -4,10 +4,8 @@ import androidx.room.withTransaction
 import com.example.plantee.data.local.AppDatabase
 import com.example.plantee.data.local.dao.DiagnosisDao
 import com.example.plantee.data.local.dao.DiagnosisMediaDao
-import com.example.plantee.data.local.dao.MediaDao
 import com.example.plantee.data.local.dao.PlantRoutinesDao
 import com.example.plantee.data.local.dao.RoutineSourcesDao
-import com.example.plantee.data.local.dao.RoutinesDao
 import com.example.plantee.data.local.entities.DiagnosisMediaEntity
 import com.example.plantee.data.local.entities.PlantRoutineEntity
 import com.example.plantee.data.local.entities.RoutineSourceEntity
@@ -18,7 +16,6 @@ import com.example.plantee.domain.model.Diagnosis
 import com.example.plantee.domain.repositories.IDiagnosesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlin.collections.map
 
 class DiagnosesRepository(
     private val db: AppDatabase,
@@ -39,7 +36,8 @@ class DiagnosesRepository(
         val entity = diagnosis.toEntity() ?: return false
 
         db.withTransaction {
-            val newId = diagnosisDao.insert(entity)
+            // FIXME Insert return type is LONG??
+            val newId = diagnosisDao.insert(entity).toInt()
 
             if (diagnosis.routinesIds.isNotEmpty()) {
                 val ids = plantRoutinesDao.insertAll(diagnosis.routinesIds.map { id ->

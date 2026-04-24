@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface DiagnosisDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(diagnosis: DiagnosisEntity): Int
+    suspend fun insert(diagnosis: DiagnosisEntity): Long
 
     @Update
     suspend fun update(diagnosis: DiagnosisEntity)

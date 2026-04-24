@@ -27,5 +27,5 @@ data class DiagnosisEntity(
     @ColumnInfo(name = "sun_level") val sunLevel: Int,
     @ColumnInfo(name = "moisture_level") val moistureLevel: Int,
     @ColumnInfo(name = "diagnosed_at") val diagnosedAt: LocalDateTime,
-    @ColumnInfo(name = "id_plant") val idPlant: Int? = null
+    @ColumnInfo(name = "id_plant") val idPlant: Int
 )

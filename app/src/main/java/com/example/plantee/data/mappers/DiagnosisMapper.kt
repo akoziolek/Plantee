@@ -12,7 +12,7 @@ fun FullDiagnosisEntity?.toDomain(): Diagnosis? {
         sunLevel = diagnosis.sunLevel,
         moistureLevel = diagnosis.moistureLevel,
         diagnosedAt = diagnosis.diagnosedAt,
-        plantId = diagnosis.plantId,
+        plantId = diagnosis.idPlant,
         listOfMedia = listOfMedia.map { it.id },
         routinesIds = plantRoutines.map { it.idRoutine }
     )
@@ -26,7 +26,7 @@ fun List<FullDiagnosisEntity>.toDomainList(): List<Diagnosis> {
             sunLevel = entity.diagnosis.sunLevel,
             moistureLevel = entity.diagnosis.moistureLevel,
             diagnosedAt = entity.diagnosis.diagnosedAt,
-            plantId = entity.diagnosis.plantId,
+            plantId = entity.diagnosis.idPlant,
             listOfMedia = entity.listOfMedia.map { it.id },
             routinesIds = entity.plantRoutines.map { it.idRoutine }
         )

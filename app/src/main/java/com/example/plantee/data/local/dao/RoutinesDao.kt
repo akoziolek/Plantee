@@ -8,16 +8,15 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.example.plantee.data.local.entities.FullRoutineEntity
-import com.example.plantee.data.local.entities.PlantEntity
 import com.example.plantee.data.local.entities.RoutineEntity
-import com.example.plantee.domain.model.Routine
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
 @Dao
 interface RoutinesDao {
+    // FIXME error: 'Not sure how to handle insert function's return type.' when trying to return Int
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(routine: RoutineEntity): Int
+    suspend fun insert(routine: RoutineEntity): Long
 
     @Update
     suspend fun update(routine: RoutineEntity)
@@ -64,5 +63,5 @@ interface RoutinesDao {
     fun getRoutineWithDetails(id: Int): Flow<FullRoutineEntity?>
 
     @Query("SELECT * FROM routines WHERE id = :id")
-    fun getRoutine(id: Int): Flow<Routine?>
+    fun getRoutine(id: Int): Flow<RoutineEntity?>
 }
