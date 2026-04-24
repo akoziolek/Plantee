@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowRight
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
@@ -64,7 +66,7 @@ fun RoutinesListItem(
             }
         } else null,
         trailingContent = {
-            Icon(Icons.AutoMirrored.Filled.ArrowRight, contentDescription = null)
+            Icon(imageVector = Icons.AutoMirrored.Filled.ArrowRight, contentDescription = null)
         },
         colors = ListItemDefaults.colors(
             containerColor = containerColor
@@ -82,8 +84,12 @@ fun PlantListItem(
     title: String,
     description: String,
     modifier: Modifier = Modifier,
+    isBookmarked: Boolean = false,
     onClick: () -> Unit = {}
 ) {
+    val bookMarkIcon = if(isBookmarked) Icons.Default.Bookmark else Icons.Default.BookmarkBorder
+    val iconTint = if(isBookmarked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+
     Surface(
         modifier = modifier
             .fillMaxWidth()
@@ -115,10 +121,21 @@ fun PlantListItem(
                     .padding(horizontal = 16.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Icon(
+                        imageVector = bookMarkIcon,
+                        contentDescription = null,
+                        tint = iconTint
+                    )
+                }
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodyMedium,
@@ -126,7 +143,6 @@ fun PlantListItem(
                     overflow = TextOverflow.Ellipsis
                 )
             }
-            // TODO saved icon
         }
     }
 }

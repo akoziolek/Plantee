@@ -85,8 +85,8 @@ fun MainNavigation(
                     onBackClick = {
                         viewModel.back()
                     },
-                    onRoutineClick = {
-                        // TODO
+                    onRoutineClick = { id ->
+                        viewModel.navigate(Screen.RoutineDetails(id))
                     }
                 )
             }
@@ -122,7 +122,6 @@ fun MainNavigation(
             entry<Screen.PlantAdd> {
                 PlantAddScreen(
                     onAddPlantClick = {
-                        // FIXME change the signature
                         viewModel.replace(Screen.PlantDetails(1))
                     },
                     onBackClick = {

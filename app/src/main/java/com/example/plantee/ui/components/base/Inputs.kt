@@ -97,10 +97,10 @@ fun DaysOfWeek(
 ) {
     val daysOfWeek = listOf("M", "T", "W", "T", "F", "S", "S")
 
-    Column {
+    Column(modifier = modifier) {
         SectionHeader(title = title)
         Row(
-            modifier = modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             daysOfWeek.forEachIndexed { index, day ->

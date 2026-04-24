@@ -55,13 +55,13 @@ fun RoutineDetailsScreen(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // TODO bigger spacing between sections?
             // --- TITLE ---
             item {
                 Text(
                     text = stringResource(R.string.routine_details_label_name),
                     style = MaterialTheme.typography.displayMedium,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(bottom = 8.dp)
                 )
             }
 
@@ -69,7 +69,7 @@ fun RoutineDetailsScreen(
             item {
                 InfoSection(
                     headerText = stringResource(R.string.routine_details_label_description),
-                    bodyText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sollicitudin libero nec velit commodo, ac imperdiet diam egestas.",
+                    bodyText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sollicitudin libero nec velit commodo, ac imperdiet diam egestas."
                 )
             }
 
@@ -77,13 +77,17 @@ fun RoutineDetailsScreen(
             item {
                 DaysOfWeek(
                     selectedDays = selectedDays,
-                    onDayClick = { }
+                    onDayClick = { },
+                    modifier = Modifier.padding(top= 8.dp)
                 )
             }
 
             // --- PLANTS ---
             item {
-                SectionHeader(stringResource(R.string.routine_details_label_plants))
+                SectionHeader(
+                    title = stringResource(R.string.routine_details_label_plants),
+                    modifier = Modifier.padding(top = 8.dp)
+                )
             }
 
             plantListItems(

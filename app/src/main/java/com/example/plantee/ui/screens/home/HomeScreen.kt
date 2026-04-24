@@ -33,7 +33,6 @@ import com.example.plantee.ui.components.shared.plantListItems
 import com.example.plantee.ui.components.shared.todayRoutinesSection
 import com.example.plantee.ui.theme.PlanteeTheme
 
-// TODO connect navigation callbacks with viewmodels
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(

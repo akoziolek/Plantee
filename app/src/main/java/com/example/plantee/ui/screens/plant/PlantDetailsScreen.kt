@@ -80,7 +80,6 @@ fun PlantDetailsScreen(
 
             }
 
-            // FIXME - usunac dodawanie paddingu w kazdym miejscu
             item() {
                 Column(
                     modifier = Modifier.padding(horizontal = 16.dp),

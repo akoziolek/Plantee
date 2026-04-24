@@ -45,7 +45,6 @@ fun DiagnosePlantScreen(
                 onBackClick = onBackClick)
         },
         bottomBar = {
-            // FIXME bigger font?
             PrimaryButtonFullWidth(
                 text = stringResource(R.string.plant_diagnosis_btn_diagnose),
                 onClick = onDiagnoseClick,

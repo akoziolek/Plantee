@@ -125,7 +125,6 @@ fun MainTopBar(
     )
 }
 
-//FIXME components params to match M3 component params
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SimpleSearchBar(
@@ -237,8 +236,7 @@ fun FilterBar(
             )
             Spacer(Modifier.width(4.dp))
             Text(
-                // FIXME layout breaks when using R.string, idk why
-                text = "Filter",
+                text = stringResource(R.string.filter_menu_label),
                 style = MaterialTheme.typography.labelLarge
             )
         }
@@ -261,7 +259,6 @@ fun FilterBar(
 fun TopBarsPreview() {
     PlanteeTheme {
         Column {
-            //TODO move CONTENT DESCRIPTIONS to strings.xml??
             BackTopBar(stringResource(R.string.plant_add_title), onBackClick = { })
             BackTopBar(stringResource(R.string.plant_edit_title), onBackClick = { })
             BackTopBar(stringResource(R.string.diagnosis_form_title), onBackClick = { })

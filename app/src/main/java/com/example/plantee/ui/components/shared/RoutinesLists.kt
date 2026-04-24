@@ -13,7 +13,6 @@ fun LazyListScope.todayRoutinesSection(
         RoutinesListItem(
             headlineText = routines[index],
             supportingText = "Description for routine no. $index",
-            // FIXME different color?
             containerColor = MaterialTheme.colorScheme.tertiaryContainer,
             onCheckedChange = {},
             onClick = { onItemClick(index) }
