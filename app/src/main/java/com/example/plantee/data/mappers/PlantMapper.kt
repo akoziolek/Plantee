@@ -1,6 +1,9 @@
 package com.example.plantee.data.mappers
 
+import com.example.plantee.data.local.entities.DiagnosisEntity
 import com.example.plantee.data.local.entities.FullPlantEntity
+import com.example.plantee.data.local.entities.PlantEntity
+import com.example.plantee.domain.model.Diagnosis
 import com.example.plantee.domain.model.Plant
 
 fun FullPlantEntity?.toDomain(): Plant? {
@@ -35,4 +38,19 @@ fun List<FullPlantEntity>.toDomainList(): List<Plant> {
             routinesIds = entity.plantRoutines.map { it.id }
         )
     }
+}
+
+fun Plant?.toEntity(): PlantEntity? {
+    if (this == null) return null
+
+    return PlantEntity(
+        id = this.id,
+        name = this.name,
+        description = this.description,
+        species = this.species,
+        place = this.place,
+        state = this.state,
+        isFavourite = this.isFavourite,
+        idMedia = this.media?.id
+    )
 }

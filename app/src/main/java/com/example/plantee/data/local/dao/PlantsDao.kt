@@ -22,6 +22,9 @@ interface PlantsDao {
     @Delete
     suspend fun delete(plant: PlantEntity)
 
+    @Query("DELETE FROM plants WHERE id = :id")
+    suspend fun deleteById(id: Int)
+
     @Query("SELECT * FROM plants ORDER BY id DESC")
     fun getAllPlants(): Flow<List<PlantEntity>>
 
