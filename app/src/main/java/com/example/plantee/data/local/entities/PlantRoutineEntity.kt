@@ -3,6 +3,7 @@ package com.example.plantee.data.local.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
@@ -20,6 +21,10 @@ import androidx.room.PrimaryKey
             childColumns = ["id_plant"],
             onDelete = ForeignKey.RESTRICT
         )
+    ],
+    indices = [
+        Index(value = ["id_routine"]),
+        Index(value = ["id_plant"])
     ]
 )
 data class PlantRoutineEntity (

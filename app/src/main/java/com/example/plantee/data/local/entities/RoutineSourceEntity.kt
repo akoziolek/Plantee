@@ -3,6 +3,7 @@ package com.example.plantee.data.local.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlin.TODO
 
@@ -23,6 +24,10 @@ import kotlin.TODO
             childColumns = ["id_plant_routine"],
             onDelete = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        Index(value = ["id_diagnosis"]),
+        Index(value = ["id_plant_routine"])
     ]
 )
 data class RoutineSourceEntity(

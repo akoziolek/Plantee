@@ -3,6 +3,7 @@ package com.example.plantee.data.local.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
@@ -11,15 +12,19 @@ import androidx.room.PrimaryKey
         ForeignKey(
             entity = DiagnosisEntity::class,
             parentColumns = ["id"],
-            childColumns = ["idDiagnosis"],
+            childColumns = ["id_diagnosis"],
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
             entity = MediaEntity::class,
             parentColumns = ["id"],
-            childColumns = ["idMedia"],
+            childColumns = ["id_media"],
             onDelete = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        Index(value = ["id_diagnosis"]),
+        Index(value = ["id_media"])
     ]
 )
 data class DiagnosisMediaEntity(
