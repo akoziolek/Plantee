@@ -12,11 +12,11 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PlantRoutinesDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(plantRoutine: PlantRoutineEntity)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(plantRoutines: List<PlantRoutineEntity>)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAll(plantRoutines: List<PlantRoutineEntity>): List<Long>
 
     @Update
     suspend fun update(plantRoutine: PlantRoutineEntity)
