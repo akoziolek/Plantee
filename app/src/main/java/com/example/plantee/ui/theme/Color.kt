@@ -231,6 +231,11 @@ val onAccentDarkLight = Color(0xFFFFFFFF)
 val accentDarkContainerLight = Color(0xFFC3EFAD)
 val onAccentDarkContainerLight = Color(0xFF2B4F1E)
 
+val dimNeutralLight = Color(0xFF96A378)
+val onDimNeutralLightLight = Color(0xFF042100)
+val dimNeutralLightContainerLight = Color(0xFFCBD5B3)
+val onDimNeutralLightContainerLight = Color(0xFF43483F)
+
 val darkNeutralLightMediumContrast = Color(0xFF2A3C01)
 val onDarkNeutralLightMediumContrast = Color(0xFFFFFFFF)
 val darkNeutralContainerLightMediumContrast = Color(0xFF607434)

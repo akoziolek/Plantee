@@ -1,6 +1,5 @@
 package com.example.plantee.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -9,18 +8,16 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-
-import androidx.compose.material3.Typography
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 
 @Immutable
 data class ExtendedColorScheme(
     val darkNeutral: ColorFamily,
     val neutralVariant2: ColorFamily,
     val accentDark: ColorFamily,
+    val dimNeutral: ColorFamily
 )
 
 private val lightScheme = lightColorScheme(
@@ -270,6 +267,12 @@ val extendedLight = ExtendedColorScheme(
         accentDarkContainerLight,
         onAccentDarkContainerLight,
     ),
+    dimNeutral = ColorFamily(
+        dimNeutralLight,
+        onDimNeutralLightLight,
+        dimNeutralLightContainerLight,
+        onDimNeutralLightContainerLight
+    )
 )
 
 val extendedDark = ExtendedColorScheme(
@@ -291,6 +294,12 @@ val extendedDark = ExtendedColorScheme(
         accentDarkContainerDark,
         onAccentDarkContainerDark,
     ),
+    dimNeutral = ColorFamily(
+        dimNeutralLight,
+        onDimNeutralLightLight,
+        dimNeutralLightContainerLight,
+        onDimNeutralLightContainerLight
+    )
 )
 
 val extendedLightMediumContrast = ExtendedColorScheme(
@@ -312,6 +321,12 @@ val extendedLightMediumContrast = ExtendedColorScheme(
         accentDarkContainerLightMediumContrast,
         onAccentDarkContainerLightMediumContrast,
     ),
+    dimNeutral = ColorFamily(
+        dimNeutralLight,
+        onDimNeutralLightLight,
+        dimNeutralLightContainerLight,
+        onDimNeutralLightContainerLight
+    )
 )
 
 val extendedLightHighContrast = ExtendedColorScheme(
@@ -333,6 +348,12 @@ val extendedLightHighContrast = ExtendedColorScheme(
         accentDarkContainerLightHighContrast,
         onAccentDarkContainerLightHighContrast,
     ),
+    dimNeutral = ColorFamily(
+        dimNeutralLight,
+        onDimNeutralLightLight,
+        dimNeutralLightContainerLight,
+        onDimNeutralLightContainerLight
+    )
 )
 
 val extendedDarkMediumContrast = ExtendedColorScheme(
@@ -354,6 +375,12 @@ val extendedDarkMediumContrast = ExtendedColorScheme(
         accentDarkContainerDarkMediumContrast,
         onAccentDarkContainerDarkMediumContrast,
     ),
+    dimNeutral = ColorFamily(
+        dimNeutralLight,
+        onDimNeutralLightLight,
+        dimNeutralLightContainerLight,
+        onDimNeutralLightContainerLight
+    )
 )
 
 val extendedDarkHighContrast = ExtendedColorScheme(
@@ -375,6 +402,12 @@ val extendedDarkHighContrast = ExtendedColorScheme(
         accentDarkContainerDarkHighContrast,
         onAccentDarkContainerDarkHighContrast,
     ),
+    dimNeutral = ColorFamily(
+        dimNeutralLight,
+        onDimNeutralLightLight,
+        dimNeutralLightContainerLight,
+        onDimNeutralLightContainerLight
+    )
 )
 
 @Immutable
@@ -393,7 +426,7 @@ val unspecified_scheme = ColorFamily(
 fun PlanteeTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
