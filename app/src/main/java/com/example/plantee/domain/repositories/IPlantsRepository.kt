@@ -1,8 +1,7 @@
 package com.example.plantee.domain.repositories
 
-import com.example.plantee.domain.model.Diagnosis
-import kotlinx.coroutines.flow.Flow
 import com.example.plantee.domain.model.Plant
+import kotlinx.coroutines.flow.Flow
 
 interface IPlantsRepository {
     fun getAllPlantsWithDetails(): Flow<List<Plant>>

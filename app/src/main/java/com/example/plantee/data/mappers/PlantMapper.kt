@@ -1,9 +1,7 @@
 package com.example.plantee.data.mappers
 
-import com.example.plantee.data.local.entities.DiagnosisEntity
 import com.example.plantee.data.local.entities.FullPlantEntity
 import com.example.plantee.data.local.entities.PlantEntity
-import com.example.plantee.domain.model.Diagnosis
 import com.example.plantee.domain.model.Plant
 
 fun FullPlantEntity?.toDomain(): Plant? {
