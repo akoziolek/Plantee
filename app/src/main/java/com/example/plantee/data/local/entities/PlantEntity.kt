@@ -21,12 +21,12 @@ import androidx.room.PrimaryKey
     ]
 )
 data class PlantEntity (
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0L,
     val name: String,
     val description: String? = null,
     val species: String? = null,
     val place: String? = null,
     val state: String? = null,
     @ColumnInfo(name = "is_favourite") val isFavourite: Boolean,
-    @ColumnInfo(name = "id_media") val idMedia: Int? = null
+    @ColumnInfo(name = "id_media") val idMedia: Long? = null
 )

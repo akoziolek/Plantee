@@ -28,7 +28,7 @@ import androidx.room.PrimaryKey
     ]
 )
 data class PlantRoutineEntity (
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo(name = "id_routine") val idRoutine: Int,
-    @ColumnInfo(name = "id_plant") val idPlant: Int
+    @PrimaryKey(autoGenerate = true) val id: Long = 0L,
+    @ColumnInfo(name = "id_routine") val idRoutine: Long,
+    @ColumnInfo(name = "id_plant") val idPlant: Long
 )

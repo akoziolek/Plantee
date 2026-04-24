@@ -2,7 +2,6 @@ package com.example.plantee.data.repositories
 
 import com.example.plantee.data.local.dao.DiagnosisMediaDao
 import com.example.plantee.data.local.dao.MediaDao
-import com.example.plantee.data.local.entities.PlantRoutineEntity
 import com.example.plantee.data.mappers.toDomain
 import com.example.plantee.data.mappers.toDomainList
 import com.example.plantee.data.mappers.toEntity
@@ -12,7 +11,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlin.collections.map
 
 class MediaRepository(
     private val mediaDao: MediaDao,
@@ -20,7 +18,7 @@ class MediaRepository(
 ) : IMediaRepository {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getMediaForDiagnosis(diagnosisId: Int): Flow<List<Media>> {
+    override fun getMediaForDiagnosis(diagnosisId: Long): Flow<List<Media>> {
         return diagnosisMediaDao.getMediaIdsForDiagnosis(diagnosisId)
             .flatMapLatest { ids ->
                 mediaDao.getMediaByIds(ids)
@@ -28,29 +26,27 @@ class MediaRepository(
             .map { entities -> entities.toDomainList() }
     }
 
-    override fun getMedia(id: Int): Flow<Media?> {
+    override fun getMedia(id: Long): Flow<Media?> {
         return mediaDao.getMedia(id).map { it.toDomain() }
     }
 
-    override suspend fun createMedia(media: Media): Boolean {
-        val entity = media.toEntity() ?: return false
+    override suspend fun createMedia(media: Media): Long {
+        val entity = media.toEntity() ?: return -1L
 
-        mediaDao.insert(entity)
+        val newId = mediaDao.insert(entity)
 
-        return true
+        return newId
     }
 
-    override suspend fun updateMedia(media: Media): Boolean {
+    override suspend fun updateMedia(media: Media) {
         // TODO("Do we need to update media? What can be updated?")
-        val entity = media.toEntity() ?: return false
+        val entity = media.toEntity() ?: return
 
         mediaDao.update(entity)
-        return true
     }
 
-    override suspend fun deleteMedia(id: Int): Boolean {
+    override suspend fun deleteMedia(id: Long) {
         mediaDao.deleteById(id)
-        return true
     }
 
 }

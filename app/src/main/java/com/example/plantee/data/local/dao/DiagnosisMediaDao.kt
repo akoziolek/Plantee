@@ -7,16 +7,15 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.plantee.data.local.entities.DiagnosisMediaEntity
-import com.example.plantee.data.local.entities.PlantRoutineEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DiagnosisMediaDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(diagnosisMedia: DiagnosisMediaEntity)
+    suspend fun insert(diagnosisMedia: DiagnosisMediaEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(diagnosisMedia: List<DiagnosisMediaEntity>)
+    suspend fun insertAll(diagnosisMedia: List<DiagnosisMediaEntity>): List<Long>
 
     @Update
     suspend fun update(diagnosisMedia: DiagnosisMediaEntity)
@@ -25,5 +24,5 @@ interface DiagnosisMediaDao {
     suspend fun delete(diagnosisMedia: DiagnosisMediaEntity)
 
     @Query("SELECT id_media FROM diagnosis_media WHERE id_diagnosis = :diagnosisId ORDER BY id DESC")
-    fun getMediaIdsForDiagnosis(diagnosisId: Int): Flow<List<Int>>
+    fun getMediaIdsForDiagnosis(diagnosisId: Long): Flow<List<Long>>
 }

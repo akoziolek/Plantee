@@ -17,7 +17,7 @@ fun FullPlantEntity?.toDomain(): Plant? {
         place = plant.place,
         state = plant.state,
         isFavourite = plant.isFavourite,
-        media = media?.toDomain(),
+        mediaId = plant.idMedia,
         diagnosesIds = plantDiagnoses.map { it.id },
         routinesIds = plantRoutines.map { it.idRoutine }
     )
@@ -33,7 +33,7 @@ fun List<FullPlantEntity>.toDomainList(): List<Plant> {
             place = entity.plant.place,
             state = entity.plant.state,
             isFavourite = entity.plant.isFavourite,
-            media = entity.media?.toDomain(),
+            mediaId = entity.plant.idMedia,
             diagnosesIds = entity.plantDiagnoses.map { it.id },
             routinesIds = entity.plantRoutines.map { it.id }
         )
@@ -51,6 +51,6 @@ fun Plant?.toEntity(): PlantEntity? {
         place = this.place,
         state = this.state,
         isFavourite = this.isFavourite,
-        idMedia = this.media?.id
+        idMedia = this.mediaId
     )
 }

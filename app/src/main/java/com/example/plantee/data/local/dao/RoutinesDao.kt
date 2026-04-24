@@ -14,7 +14,6 @@ import java.time.LocalDate
 
 @Dao
 interface RoutinesDao {
-    // FIXME error: 'Not sure how to handle insert function's return type.' when trying to return Int
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(routine: RoutineEntity): Long
 
@@ -25,7 +24,7 @@ interface RoutinesDao {
     suspend fun delete(routine: RoutineEntity)
 
     @Query("DELETE FROM routines WHERE id = :id")
-    suspend fun deleteById(id: Int)
+    suspend fun deleteById(id: Long)
 
     @Query("SELECT * FROM routines ORDER BY id DESC")
     fun getAllRoutines(): Flow<List<RoutineEntity>>
@@ -60,8 +59,8 @@ interface RoutinesDao {
         LEFT JOIN routine_sources rs ON rs.id_plant_routine = pr.id
         WHERE r.id = :id
     """)
-    fun getRoutineWithDetails(id: Int): Flow<FullRoutineEntity?>
+    fun getRoutineWithDetails(id: Long): Flow<FullRoutineEntity?>
 
     @Query("SELECT * FROM routines WHERE id = :id")
-    fun getRoutine(id: Int): Flow<RoutineEntity?>
+    fun getRoutine(id: Long): Flow<RoutineEntity?>
 }

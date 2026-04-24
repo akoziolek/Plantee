@@ -28,7 +28,7 @@ import androidx.room.PrimaryKey
     ]
 )
 data class DiagnosisMediaEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo(name = "id_diagnosis") val idDiagnosis: Int,
-    @ColumnInfo(name = "id_media") val idMedia: Int
+    @PrimaryKey(autoGenerate = true) val id: Long = 0L,
+    @ColumnInfo(name = "id_diagnosis") val idDiagnosis: Long,
+    @ColumnInfo(name = "id_media") val idMedia: Long
 )

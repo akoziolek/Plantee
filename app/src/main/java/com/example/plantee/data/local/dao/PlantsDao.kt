@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PlantsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(plant: PlantEntity)
+    suspend fun insert(plant: PlantEntity): Long
 
     @Update
     suspend fun update(plant: PlantEntity)
@@ -23,7 +23,7 @@ interface PlantsDao {
     suspend fun delete(plant: PlantEntity)
 
     @Query("DELETE FROM plants WHERE id = :id")
-    suspend fun deleteById(id: Int)
+    suspend fun deleteById(id: Long)
 
     @Query("SELECT * FROM plants ORDER BY id DESC")
     fun getAllPlants(): Flow<List<PlantEntity>>
@@ -34,15 +34,15 @@ interface PlantsDao {
 
     @Transaction
     @Query("SELECT * FROM plants WHERE id IN (:ids) ORDER BY id DESC")
-    fun getPlantsByIds(ids: List<Int>): Flow<List<FullPlantEntity>>
+    fun getPlantsByIds(ids: List<Long>): Flow<List<FullPlantEntity>>
 
     @Query("SELECT * FROM plants WHERE name LIKE '%' || :searchQuery || '%'")
     fun searchPlants(searchQuery: String): Flow<List<PlantEntity>>
 
     @Query("SELECT * FROM plants WHERE id = :id")
-    fun getPlant(id: Int): Flow<PlantEntity?>
+    fun getPlant(id: Long): Flow<PlantEntity?>
 
     @Transaction
     @Query("SELECT * FROM plants WHERE id = :id")
-    fun getFullPlant(id: Int): Flow<FullPlantEntity?>
+    fun getFullPlant(id: Long): Flow<FullPlantEntity?>
 }

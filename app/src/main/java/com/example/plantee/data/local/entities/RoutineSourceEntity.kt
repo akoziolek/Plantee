@@ -31,7 +31,7 @@ import kotlin.TODO
     ]
 )
 data class RoutineSourceEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo(name = "id_diagnosis") val idDiagnosis: Int,
-    @ColumnInfo(name = "id_plant_routine") val idPlantRoutine: Int
+    @PrimaryKey(autoGenerate = true) val id: Long = 0L,
+    @ColumnInfo(name = "id_diagnosis") val idDiagnosis: Long,
+    @ColumnInfo(name = "id_plant_routine") val idPlantRoutine: Long
 )

@@ -7,7 +7,7 @@ import java.time.LocalDate
 
 @Entity(tableName = "routines")
 data class RoutineEntity (
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0L,
     val name: String,
     val description: String? = null,
     @ColumnInfo(name = "start_date") val startDate: LocalDate? = null,

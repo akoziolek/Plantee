@@ -24,20 +24,20 @@ class DiagnosesRepository(
     private val plantRoutinesDao: PlantRoutinesDao,
     private val routineSourcesDao: RoutineSourcesDao
 ) : IDiagnosesRepository {
-    override fun getDiagnoses(plantId: Int): Flow<List<Diagnosis>> {
+    override fun getDiagnoses(plantId: Long): Flow<List<Diagnosis>> {
         return diagnosisDao.getDiagnosesWithDetailsForPlant(plantId).map { it.toDomainList() }
     }
 
-    override fun getDiagnosis(id: Int): Flow<Diagnosis?> {
+    override fun getDiagnosis(id: Long): Flow<Diagnosis?> {
         return diagnosisDao.getDiagnosisWithDetails(id).map { it.toDomain() }
     }
 
-    override suspend fun createDiagnosis(diagnosis: Diagnosis): Boolean {
-        val entity = diagnosis.toEntity() ?: return false
+    override suspend fun createDiagnosis(diagnosis: Diagnosis): Long {
+        var newId = -1L
+        val entity = diagnosis.toEntity() ?: return newId
 
         db.withTransaction {
-            // FIXME Insert return type is LONG??
-            val newId = diagnosisDao.insert(entity).toInt()
+            newId = diagnosisDao.insert(entity)
 
             if (diagnosis.routinesIds.isNotEmpty()) {
                 val ids = plantRoutinesDao.insertAll(diagnosis.routinesIds.map { id ->
@@ -45,7 +45,7 @@ class DiagnosesRepository(
                 })
 
                 routineSourcesDao.insertAll(ids.map { id ->
-                    RoutineSourceEntity(idDiagnosis = newId, idPlantRoutine = id.toInt())
+                    RoutineSourceEntity(idDiagnosis = newId, idPlantRoutine = id)
                 })
             }
 
@@ -56,19 +56,17 @@ class DiagnosesRepository(
             }
         }
 
-        return true
+        return newId
     }
 
-    override suspend fun updateDiagnosis(diagnosis: Diagnosis): Boolean {
+    override suspend fun updateDiagnosis(diagnosis: Diagnosis) {
         // TODO("Do we need to update diagnosis? What can be updated?")
-        val entity = diagnosis.toEntity() ?: return false
+        val entity = diagnosis.toEntity() ?: return
 
         diagnosisDao.update(entity)
-        return true
     }
 
-    override suspend fun deleteDiagnosis(id: Int): Boolean {
+    override suspend fun deleteDiagnosis(id: Long) {
         diagnosisDao.deleteById(id)
-        return true
     }
 }

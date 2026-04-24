@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PlantRoutinesDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(plantRoutine: PlantRoutineEntity)
+    suspend fun insert(plantRoutine: PlantRoutineEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(plantRoutines: List<PlantRoutineEntity>): List<Long>
@@ -22,7 +22,7 @@ interface PlantRoutinesDao {
     suspend fun update(plantRoutine: PlantRoutineEntity)
 
     @Transaction
-    suspend fun clearAndInsertNewForRoutine(routineId: Int, newPlantIds: List<Int>) {
+    suspend fun clearAndInsertNewForRoutine(routineId: Long, newPlantIds: List<Long>) {
         deleteByRoutineId(routineId)
 
         val newPlantRoutines = newPlantIds.map { id ->
@@ -36,11 +36,11 @@ interface PlantRoutinesDao {
     suspend fun delete(plantRoutine: PlantRoutineEntity)
 
     @Query("DELETE FROM plant_routines WHERE id_routine = :routineId")
-    fun deleteByRoutineId(routineId: Int)
+    fun deleteByRoutineId(routineId: Long)
 
     @Query("SELECT * FROM plant_routines WHERE id_routine = :routineId ORDER BY id DESC")
-    fun getPlantsRoutinesForRoutine(routineId: Int): Flow<List<PlantRoutineEntity>>
+    fun getPlantsRoutinesForRoutine(routineId: Long): Flow<List<PlantRoutineEntity>>
 
     @Query("SELECT * FROM plant_routines WHERE id_plant = :plantId ORDER BY id DESC")
-    fun getPlantsRoutinesForPlant(plantId: Int): Flow<List<PlantRoutineEntity>>
+    fun getPlantsRoutinesForPlant(plantId: Long): Flow<List<PlantRoutineEntity>>
 }

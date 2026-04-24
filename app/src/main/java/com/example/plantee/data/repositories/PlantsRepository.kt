@@ -16,32 +16,30 @@ class PlantsRepository (
         return plantsDao.getAllFullPlants().map { it.toDomainList() }
     }
 
-    override fun getPlantsWithDetails(ids: List<Int>): Flow<List<Plant>> {
+    override fun getPlantsWithDetails(ids: List<Long>): Flow<List<Plant>> {
         return plantsDao.getPlantsByIds(ids).map { it.toDomainList() }
     }
 
-    override fun getPlantWithDetails(id: Int): Flow<Plant?> {
+    override fun getPlantWithDetails(id: Long): Flow<Plant?> {
         return plantsDao.getFullPlant(id).map { it.toDomain() }
     }
 
-    override suspend fun createPlant(plant: Plant): Boolean {
-        val entity = plant.toEntity() ?: return false
+    override suspend fun createPlant(plant: Plant): Long {
+        val entity = plant.toEntity() ?: return -1L
 
-        plantsDao.insert(entity)
+        val newId = plantsDao.insert(entity)
 
-        return true
+        return newId
     }
 
-    override suspend fun updatePlant(plant: Plant): Boolean {
-        val entity = plant.toEntity() ?: return false
+    override suspend fun updatePlant(plant: Plant) {
+        val entity = plant.toEntity() ?: return
 
         plantsDao.update(entity)
-        return true
     }
 
-    override suspend fun deletePlant(id: Int): Boolean {
+    override suspend fun deletePlant(id: Long) {
         plantsDao.deleteById(id)
-        return true
     }
 
 }

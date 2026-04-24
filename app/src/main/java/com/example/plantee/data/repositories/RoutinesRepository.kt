@@ -25,34 +25,31 @@ class RoutinesRepository(
         return routinesDao.getRoutinesWithDate(today).map { it.toDomainList() }
     }
 
-    override fun getRoutine(id: Int): Flow<Routine?> {
+    override fun getRoutine(id: Long): Flow<Routine?> {
         return routinesDao.getRoutineWithDetails(id).map { it.toDomain() }
     }
 
-    override suspend fun addRoutine(routine: Routine): Boolean {
-        val entity = routine.toEntity() ?: return false
+    override suspend fun addRoutine(routine: Routine): Long {
+        val entity = routine.toEntity() ?: return -1L
 
-        // FIXME Insert return type
-        val newId =  routinesDao.insert(entity).toInt()
+        val newId =  routinesDao.insert(entity)
 
         if (routine.plantsIds.isNotEmpty()) {
             plantRoutinesDao.insertAll(routine.plantsIds.map { id ->
                 PlantRoutineEntity(idRoutine = newId, idPlant = id)
             })
         }
-        return true
+        return newId
     }
 
-    override suspend fun updateRoutine(routine: Routine): Boolean {
-        val entity = routine.toEntity() ?: return false
+    override suspend fun updateRoutine(routine: Routine) {
+        val entity = routine.toEntity() ?: return
 
         routinesDao.update(entity)
         plantRoutinesDao.clearAndInsertNewForRoutine(routine.id, routine.plantsIds)
-        return true
     }
 
-    override suspend fun deleteRoutine(id: Int): Boolean {
+    override suspend fun deleteRoutine(id: Long) {
         routinesDao.deleteById(id)
-        return true
     }
 }

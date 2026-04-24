@@ -23,16 +23,16 @@ interface DiagnosisDao {
     suspend fun delete(diagnosis: DiagnosisEntity)
 
     @Query("DELETE FROM diagnosis WHERE id = :id")
-    suspend fun deleteById(id: Int)
+    suspend fun deleteById(id: Long)
 
     @Query("SELECT * FROM diagnosis WHERE id_plant = :plantId ORDER BY id DESC")
-    fun getDiagnosesForPlant(plantId: Int): Flow<List<DiagnosisEntity>>
+    fun getDiagnosesForPlant(plantId: Long): Flow<List<DiagnosisEntity>>
 
     @Transaction
     @Query("SELECT * FROM diagnosis WHERE id_plant = :plantId ORDER BY id DESC")
-    fun getDiagnosesWithDetailsForPlant(plantId: Int): Flow<List<FullDiagnosisEntity>>
+    fun getDiagnosesWithDetailsForPlant(plantId: Long): Flow<List<FullDiagnosisEntity>>
 
     @Transaction
     @Query("SELECT * FROM diagnosis WHERE id = :id")
-    fun getDiagnosisWithDetails(id: Int): Flow<FullDiagnosisEntity?>
+    fun getDiagnosisWithDetails(id: Long): Flow<FullDiagnosisEntity?>
 }

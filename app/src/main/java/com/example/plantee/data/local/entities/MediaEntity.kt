@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 
 @Entity(tableName = "media")
 data class MediaEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0L,
     @ColumnInfo(name = "file_path") val filePath: String,
     @ColumnInfo(name = "file_name") val fileName: String? = null,
     @ColumnInfo(name = "created_at") val createdAt: LocalDateTime

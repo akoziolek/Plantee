@@ -14,5 +14,5 @@ data class FullRoutineEntity(
     val plantRoutines: List<PlantRoutineEntity>,
 
     @ColumnInfo(name = "id_diagnosis")
-    val idDiagnosis: Int?,
+    val idDiagnosis: Long?,
 )
