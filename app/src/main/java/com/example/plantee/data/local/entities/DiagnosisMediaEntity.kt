@@ -18,7 +18,7 @@ import androidx.room.PrimaryKey
             entity = MediaEntity::class,
             parentColumns = ["id"],
             childColumns = ["idMedia"],
-            onDelete = ForeignKey.RESTRICT
+            onDelete = ForeignKey.CASCADE
         )
     ]
 )

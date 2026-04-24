@@ -4,9 +4,11 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import androidx.room.Update
 import com.example.plantee.data.local.entities.DiagnosisMediaEntity
 import com.example.plantee.data.local.entities.PlantRoutineEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DiagnosisMediaDao {
@@ -21,4 +23,7 @@ interface DiagnosisMediaDao {
 
     @Delete
     suspend fun delete(diagnosisMedia: DiagnosisMediaEntity)
+
+    @Query("SELECT id_media FROM diagnosis_media WHERE id_diagnosis = :diagnosisId ORDER BY id DESC")
+    fun getMediaIdsForDiagnosis(diagnosisId: Int): Flow<List<Int>>
 }

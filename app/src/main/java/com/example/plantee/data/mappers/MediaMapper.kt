@@ -1,12 +1,11 @@
 package com.example.plantee.data.mappers
 
-import com.example.plantee.data.local.entities.DiagnosisEntity
-import com.example.plantee.data.local.entities.FullDiagnosisEntity
 import com.example.plantee.data.local.entities.MediaEntity
-import com.example.plantee.domain.model.Diagnosis
 import com.example.plantee.domain.model.Media
 
-fun MediaEntity.toDomain(): Media {
+fun MediaEntity?.toDomain(): Media? {
+    if (this == null) return null
+
     return Media (
         id = this.id,
         fileName = this.fileName,
