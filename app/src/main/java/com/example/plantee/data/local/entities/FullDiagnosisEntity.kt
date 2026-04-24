@@ -14,8 +14,8 @@ data class FullDiagnosisEntity (
         entityColumn = "id",
         associateBy = Junction(
             value = DiagnosisMediaEntity::class,
-            parentColumn = "idDiagnosis",
-            entityColumn = "idMedia"
+            parentColumn = "id_diagnosis",
+            entityColumn = "id_media"
         )
     )
     val listOfMedia: List<Media>,
@@ -25,8 +25,8 @@ data class FullDiagnosisEntity (
         entityColumn = "id",
         associateBy = Junction(
             value = RoutineSourceEntity::class,
-            parentColumn = "idDiagnosis",
-            entityColumn = "idPlantRoutine"
+            parentColumn = "id_diagnosis",
+            entityColumn = "id_plant_routine"
         )
     )
     val plantRoutines: List<PlantRoutineEntity>

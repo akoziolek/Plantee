@@ -12,7 +12,7 @@ import java.time.LocalDateTime
         ForeignKey(
             entity = PlantEntity::class,
             parentColumns = ["id"],
-            childColumns = ["idPlant"],
+            childColumns = ["id_plant"],
             onDelete = ForeignKey.RESTRICT
         )
     ]

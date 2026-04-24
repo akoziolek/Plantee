@@ -8,18 +8,18 @@ data class FullPlantEntity (
 
     @Relation(
         parentColumn = "id",
-        entityColumn = "idPlant"
+        entityColumn = "id_plant"
     )
     val plantRoutines: List<PlantRoutineEntity>,
 
     @Relation(
         parentColumn = "id",
-        entityColumn = "idPlant"
+        entityColumn = "id_plant"
     )
     val plantDiagnoses: List<DiagnosisEntity>,
 
     @Relation(
-        parentColumn = "idMedia",
+        parentColumn = "id_media",
         entityColumn = "id"
     )
     val media: MediaEntity?

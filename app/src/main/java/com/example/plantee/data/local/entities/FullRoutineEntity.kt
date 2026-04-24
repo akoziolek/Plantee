@@ -9,7 +9,7 @@ data class FullRoutineEntity(
 
     @Relation(
         parentColumn = "id",
-        entityColumn = "idRoutine"
+        entityColumn = "id_routine"
     )
     val plantRoutines: List<PlantRoutineEntity>,
 

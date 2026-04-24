@@ -13,14 +13,14 @@ import kotlin.TODO
         ForeignKey(
             entity = DiagnosisEntity::class,
             parentColumns = ["id"],
-            childColumns = ["idDiagnosis"],
+            childColumns = ["id_diagnosis"],
             onDelete = ForeignKey.CASCADE
             // TODO("Should routines be deleted when deleting diagnosis?")
         ),
         ForeignKey(
             entity = PlantRoutineEntity::class,
             parentColumns = ["id"],
-            childColumns = ["idPlantRoutine"],
+            childColumns = ["id_plant_routine"],
             onDelete = ForeignKey.CASCADE
         )
     ]
