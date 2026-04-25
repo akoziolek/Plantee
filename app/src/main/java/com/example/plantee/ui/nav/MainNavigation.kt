@@ -1,10 +1,5 @@
-package com.example.plantee.navigation
+package com.example.plantee.ui.nav
 
-import android.util.Log
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -14,6 +9,7 @@ import com.example.plantee.ui.screens.diagnosis.DiagnosePlantScreen
 import com.example.plantee.ui.screens.diagnosis.DiagnosisDetailsScreen
 import com.example.plantee.ui.screens.diagnosis.DiagnosisResultsScreen
 import com.example.plantee.ui.screens.home.HomeScreen
+import com.example.plantee.ui.screens.plant.PlantAddEvent
 import com.example.plantee.ui.screens.plant.PlantAddScreen
 import com.example.plantee.ui.screens.plant.PlantDetailsScreen
 import com.example.plantee.ui.screens.plant.PlantEditScreen
@@ -40,7 +36,6 @@ fun MainNavigation(
                 HomeScreen(
                     onRoutineClick = { id ->
                         viewModel.navigate(Screen.RoutineDetails(id))
-                        Log.d("Nawigacja", "DEBUUUUUUUG")
                     },
                     onPlantClick = { id ->
                         viewModel.navigate(Screen.PlantDetails(id))
@@ -121,8 +116,13 @@ fun MainNavigation(
 
             entry<Screen.PlantAdd> {
                 PlantAddScreen(
-                    onAddPlantClick = {
-                        viewModel.replace(Screen.PlantDetails(1))
+                    onNavigate = { event ->
+                        when (event) {
+                            is PlantAddEvent.NavigateToDetails -> {
+                                viewModel.replace(Screen.PlantDetails(event.plantId.toInt()))
+                            }
+                            PlantAddEvent.NavigateBack -> viewModel.back()
+                        }
                     },
                     onBackClick = {
                         viewModel.back()

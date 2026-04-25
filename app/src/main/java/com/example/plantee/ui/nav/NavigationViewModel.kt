@@ -1,4 +1,4 @@
-package com.example.plantee.navigation
+package com.example.plantee.ui.nav
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
