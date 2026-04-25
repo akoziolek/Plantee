@@ -25,10 +25,8 @@ import androidx.compose.ui.unit.dp
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
 import com.example.plantee.ui.components.base.InfoSection
-import com.example.plantee.ui.components.base.NavBar
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.base.SectionHeader
-import com.example.plantee.ui.components.shared.LinkHeader
 import com.example.plantee.ui.components.shared.diagnosisListItems
 import com.example.plantee.ui.components.shared.routinesSection
 import com.example.plantee.ui.theme.PlanteeTheme
@@ -117,10 +115,11 @@ fun PlantDetailsScreen(
         }
     }
 }
+
 @Preview
 @Composable
 fun PlantDetailsPreview() {
-    PlanteeTheme() {
+    PlanteeTheme {
         PlantDetailsScreen(
             onDiagnoseClick = {},
             onBackClick = {},

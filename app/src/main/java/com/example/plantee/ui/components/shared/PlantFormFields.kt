@@ -19,7 +19,8 @@ fun PlantFormFields(
     onSpeciesChange: (String) -> Unit,
     descriptionValue: String,
     onDescriptionChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    nameError: Boolean = false
 ) {
     Column(
         modifier = modifier,
@@ -29,7 +30,9 @@ fun PlantFormFields(
             title = stringResource(R.string.plant_form_label_plant),
             value = nameValue,
             onValueChange = onNameChange,
-            supportingText = stringResource(R.string.plant_form_support_plant)
+            supportingText = stringResource(R.string.plant_form_support_plant),
+            isError = nameError,
+            errorText = stringResource(R.string.plant_form_error_name)
         )
         InputTextField(
             title = stringResource(R.string.plant_form_label_species),

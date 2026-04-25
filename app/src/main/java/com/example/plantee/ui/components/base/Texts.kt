@@ -66,25 +66,12 @@ fun InfoSection(
     }
 }
 
-@Composable
-fun InputSupportingText(
-    text: String,
-    modifier: Modifier = Modifier
-) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.bodySmall,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        modifier = modifier
-    )
-}
 
 @Preview(showBackground = true)
 @Composable
 fun TextsPreview() {
     Column {
         SectionHeader(title = "Some title")
-        InputSupportingText(text = "Some supporting text")
         SectionBodyText(text = "some text")
     }
 }

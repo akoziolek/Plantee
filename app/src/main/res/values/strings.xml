@@ -70,4 +70,6 @@
     <string name="plant_details_btn_diagnose">Diagnose</string>
     <string name="plant_details_label_health_journal">Health journal</string>
     <string name="filter_menu_label">Filter</string>
+    <string name="plant_form_error_required">This field is required</string>
+    <string name="plant_form_error_name">Name is required</string>
 </resources>

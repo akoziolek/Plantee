@@ -13,38 +13,53 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
 import com.example.plantee.ui.components.base.LabeledSwitch
 import com.example.plantee.ui.components.base.PrimaryButtonFullWidth
 import com.example.plantee.ui.components.shared.PlantFormFields
 import com.example.plantee.ui.theme.PlanteeTheme
-
+import com.example.plantee.ui.viewmodels.plant.PlantAddEvent
+import com.example.plantee.ui.viewmodels.plant.PlantAddViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlantAddScreen(
-    onAddPlantClick: () -> Unit,
-    onBackClick: () -> Unit
+    viewModel: PlantAddViewModel = hiltViewModel<PlantAddViewModel>(),
+    onNavigate: (PlantAddEvent) -> Unit
 ) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(viewModel.events) {
+        viewModel.events.collect { event ->
+            onNavigate(event)
+        }
+    }
+
     Scaffold(
         topBar = {
             BackTopBar(
                 title = stringResource(R.string.plant_add_title),
-                onBackClick = onBackClick)
+                onBackClick = { viewModel.onBackClick() }
+            )
         },
         bottomBar = {
             PrimaryButtonFullWidth(
                 text = stringResource(R.string.plant_add_btn_add),
-                onClick = onAddPlantClick,
+                onClick = { viewModel.savePlant() },
                 modifier = Modifier.padding(10.dp)
             )
         }
-    ) {innerPadding ->
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -64,18 +79,19 @@ fun PlantAddScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 PlantFormFields(
-                    nameValue = "Plant1",
-                    onNameChange = {},
-                    speciesValue = "Philodendron",
-                    onSpeciesChange = {},
-                    descriptionValue = "Nice",
-                    onDescriptionChange = {}
+                    nameValue = state.name,
+                    onNameChange = { viewModel.onNameChange(it) },
+                    speciesValue = state.species,
+                    onSpeciesChange = { viewModel.onSpeciesChange(it) },
+                    descriptionValue = state.description,
+                    onDescriptionChange = { viewModel.onDescriptionChange(it) },
+                    nameError = state.nameError
                 )
 
                 LabeledSwitch(
                     label = stringResource(R.string.plant_add_switch_label),
-                    checked = true,
-                    onCheckedChange = {},
+                    checked = state.isFavourite,
+                    onCheckedChange = { viewModel.onFavouriteChange(it) },
                     modifier = Modifier.padding(horizontal = 6.dp)
                 )
             }
@@ -86,10 +102,9 @@ fun PlantAddScreen(
 @Preview
 @Composable
 fun PlantAddPreview() {
-    PlanteeTheme() {
+    PlanteeTheme {
         PlantAddScreen(
-            onAddPlantClick = {},
-            onBackClick = {}
+            onNavigate = {}
         )
     }
 }

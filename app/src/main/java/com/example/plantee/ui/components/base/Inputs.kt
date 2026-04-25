@@ -31,6 +31,8 @@ fun InputTextField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     supportingText: String? = null,
+    isError: Boolean = false,
+    errorText: String? = null,
     singleLine: Boolean = true,
     minLines: Int = 1
 ) {
@@ -43,21 +45,34 @@ fun InputTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = Modifier.fillMaxWidth(),
-            supportingText = supportingText?.let { text ->
-                {
-                    InputSupportingText(text = text)
+            isError = isError,
+            supportingText = {
+                if (isError && errorText != null) {
+                    Text(
+                        text = errorText,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                } else if (supportingText != null) {
+                    Text(
+                        text = supportingText,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = MaterialTheme.colorScheme.onSurface,
                 unfocusedBorderColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 focusedContainerColor = Color.Transparent,
+                errorBorderColor = MaterialTheme.colorScheme.errorContainer,
             ),
             singleLine = singleLine,
             minLines = minLines
         )
     }
 }
+
 @Composable
 fun InputSlider(
     title: String,

@@ -9,7 +9,7 @@ import com.example.plantee.ui.screens.diagnosis.DiagnosePlantScreen
 import com.example.plantee.ui.screens.diagnosis.DiagnosisDetailsScreen
 import com.example.plantee.ui.screens.diagnosis.DiagnosisResultsScreen
 import com.example.plantee.ui.screens.home.HomeScreen
-import com.example.plantee.ui.screens.plant.PlantAddEvent
+import com.example.plantee.ui.viewmodels.plant.PlantAddEvent
 import com.example.plantee.ui.screens.plant.PlantAddScreen
 import com.example.plantee.ui.screens.plant.PlantDetailsScreen
 import com.example.plantee.ui.screens.plant.PlantEditScreen
@@ -119,13 +119,11 @@ fun MainNavigation(
                     onNavigate = { event ->
                         when (event) {
                             is PlantAddEvent.NavigateToDetails -> {
+                                // TODO remove parsing to int as our id will be LONG
                                 viewModel.replace(Screen.PlantDetails(event.plantId.toInt()))
                             }
                             PlantAddEvent.NavigateBack -> viewModel.back()
                         }
-                    },
-                    onBackClick = {
-                        viewModel.back()
                     }
                 )
             }
