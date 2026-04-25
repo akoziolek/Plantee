@@ -1,10 +1,12 @@
-package com.example.plantee.data.local.entities
+package com.example.plantee.data.local.relations
 
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Relation
+import com.example.plantee.data.local.entities.PlantRoutineEntity
+import com.example.plantee.data.local.entities.RoutineEntity
 
-data class FullRoutineEntity(
+data class RoutineWithDetails(
     @Embedded val routine: RoutineEntity,
 
     @Relation(
