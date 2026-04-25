@@ -1,10 +1,10 @@
 package com.example.plantee.data.mappers
 
-import com.example.plantee.data.local.entities.FullPlantEntity
+import com.example.plantee.data.local.relations.PlantWithDetails
 import com.example.plantee.data.local.entities.PlantEntity
 import com.example.plantee.domain.model.Plant
 
-fun FullPlantEntity?.toDomain(): Plant? {
+fun PlantWithDetails?.toDomain(): Plant? {
     if (this == null) return null
 
     return Plant(
@@ -21,7 +21,7 @@ fun FullPlantEntity?.toDomain(): Plant? {
     )
 }
 
-fun List<FullPlantEntity>.toDomainList(): List<Plant> {
+fun List<PlantWithDetails>.toDomainList(): List<Plant> {
     return this.map { entity ->
         Plant(
             id = entity.plant.id,

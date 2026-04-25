@@ -7,7 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import com.example.plantee.data.local.entities.FullPlantEntity
+import com.example.plantee.data.local.relations.PlantWithDetails
 import com.example.plantee.data.local.entities.PlantEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -30,11 +30,11 @@ interface PlantsDao {
 
     @Transaction
     @Query("SELECT * FROM plants ORDER BY id DESC")
-    fun getAllFullPlants(): Flow<List<FullPlantEntity>>
+    fun getAllFullPlants(): Flow<List<PlantWithDetails>>
 
     @Transaction
     @Query("SELECT * FROM plants WHERE id IN (:ids) ORDER BY id DESC")
-    fun getPlantsByIds(ids: List<Long>): Flow<List<FullPlantEntity>>
+    fun getPlantsByIds(ids: List<Long>): Flow<List<PlantWithDetails>>
 
     @Query("SELECT * FROM plants WHERE name LIKE '%' || :searchQuery || '%'")
     fun searchPlants(searchQuery: String): Flow<List<PlantEntity>>
@@ -44,5 +44,5 @@ interface PlantsDao {
 
     @Transaction
     @Query("SELECT * FROM plants WHERE id = :id")
-    fun getFullPlant(id: Long): Flow<FullPlantEntity?>
+    fun getFullPlant(id: Long): Flow<PlantWithDetails?>
 }

@@ -1,10 +1,10 @@
 package com.example.plantee.data.mappers
 
-import com.example.plantee.data.local.entities.FullRoutineEntity
+import com.example.plantee.data.local.relations.RoutineWithDetails
 import com.example.plantee.data.local.entities.RoutineEntity
 import com.example.plantee.domain.model.Routine
 
-fun FullRoutineEntity?.toDomain(): Routine? {
+fun RoutineWithDetails?.toDomain(): Routine? {
     if (this == null) return null
 
     return Routine(
@@ -20,7 +20,7 @@ fun FullRoutineEntity?.toDomain(): Routine? {
     )
 }
 
-fun List<FullRoutineEntity>.toDomainList(): List<Routine> {
+fun List<RoutineWithDetails>.toDomainList(): List<Routine> {
     return this.map { entity ->
         Routine(
             id = entity.routine.id,

@@ -8,7 +8,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.example.plantee.data.local.entities.DiagnosisEntity
-import com.example.plantee.data.local.entities.FullDiagnosisEntity
+import com.example.plantee.data.local.relations.DiagnosisWithDetails
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -30,9 +30,9 @@ interface DiagnosisDao {
 
     @Transaction
     @Query("SELECT * FROM diagnosis WHERE id_plant = :plantId ORDER BY id DESC")
-    fun getDiagnosesWithDetailsForPlant(plantId: Long): Flow<List<FullDiagnosisEntity>>
+    fun getDiagnosesWithDetailsForPlant(plantId: Long): Flow<List<DiagnosisWithDetails>>
 
     @Transaction
     @Query("SELECT * FROM diagnosis WHERE id = :id")
-    fun getDiagnosisWithDetails(id: Long): Flow<FullDiagnosisEntity?>
+    fun getDiagnosisWithDetails(id: Long): Flow<DiagnosisWithDetails?>
 }

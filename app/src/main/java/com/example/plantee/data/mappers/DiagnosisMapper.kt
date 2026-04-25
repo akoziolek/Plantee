@@ -1,9 +1,9 @@
 package com.example.plantee.data.mappers
 
 import com.example.plantee.data.local.entities.DiagnosisEntity
-import com.example.plantee.data.local.entities.FullDiagnosisEntity
+import com.example.plantee.data.local.relations.DiagnosisWithDetails
 import com.example.plantee.domain.model.Diagnosis
-fun FullDiagnosisEntity?.toDomain(): Diagnosis? {
+fun DiagnosisWithDetails?.toDomain(): Diagnosis? {
     if (this == null) return null
 
     return Diagnosis(
@@ -18,7 +18,7 @@ fun FullDiagnosisEntity?.toDomain(): Diagnosis? {
     )
 }
 
-fun List<FullDiagnosisEntity>.toDomainList(): List<Diagnosis> {
+fun List<DiagnosisWithDetails>.toDomainList(): List<Diagnosis> {
     return this.map { entity ->
         Diagnosis(
             id = entity.diagnosis.id,
