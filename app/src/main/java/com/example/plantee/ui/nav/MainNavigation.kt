@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.example.plantee.ui.screens.diagnosis.DiagnosePlantScreen
 import com.example.plantee.ui.screens.diagnosis.DiagnosisDetailsScreen
@@ -21,7 +23,6 @@ import com.example.plantee.ui.screens.routine.RoutineDetailsScreen
 import com.example.plantee.ui.screens.routine.RoutineEditScreen
 import com.example.plantee.ui.screens.routine.RoutinesScreen
 
-
 @Composable
 fun MainNavigation(
     modifier: Modifier = Modifier,
@@ -32,6 +33,10 @@ fun MainNavigation(
         backStack = viewModel.backStack,
         onBack = { viewModel.back() },
         modifier = modifier,
+        entryDecorators = listOf(
+            rememberSaveableStateHolderNavEntryDecorator(),
+            rememberViewModelStoreNavEntryDecorator()
+        ),
         entryProvider = entryProvider {
 
             entry<Screen.Home> {
@@ -108,14 +113,21 @@ fun MainNavigation(
                                 viewModel.navigate(Screen.DiagnosePlant)
                             }
                             is PlantDetailsEvent.NavigateToDiagnosis -> {
-                                viewModel.navigate(Screen.DiagnosisDetails(event.id))
+                                viewModel.navigate(Screen.DiagnosisDetails(event.diagnosisId))
                             }
                             is PlantDetailsEvent.NavigateToRoutine -> {
-                                viewModel.navigate(Screen.RoutineDetails(event.id))
+                                viewModel.navigate(Screen.RoutineDetails(event.routineId))
+                            }
+                            is PlantDetailsEvent.NavigateToEdit -> {
+                                viewModel.navigate(Screen.PlantEdit(event.plantId))
+                            }
+                            is PlantDetailsEvent.PlantDeleted -> {
+                                viewModel.popUpTo(Screen.Home, inclusive = false)
                             }
                             PlantDetailsEvent.NavigateBack -> {
                                 viewModel.back()
                             }
+
                         }
                     }
                 )

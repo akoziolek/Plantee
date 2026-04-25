@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BookmarkBorder
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -19,6 +18,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -28,7 +30,10 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
+import com.example.plantee.ui.components.base.DeleteConfirmationDialog
 import com.example.plantee.ui.components.base.InfoSection
+import com.example.plantee.ui.components.base.OverflowAction
+import com.example.plantee.ui.components.base.OverflowMenu
 import com.example.plantee.ui.components.base.PlantImage
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.base.SectionHeader
@@ -49,11 +54,26 @@ fun PlantDetailsScreen(
     onNavigate: (PlantDetailsEvent) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    var showDeleteConfirmation by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             onNavigate(event)
         }
+    }
+
+    if (showDeleteConfirmation) {
+        DeleteConfirmationDialog(
+            onDismissRequest = { showDeleteConfirmation = false },
+            onConfirm = {
+                showDeleteConfirmation = false
+                viewModel.deletePlant()
+            },
+            title = stringResource(R.string.delete_plant_dialog_title),
+            message = stringResource(R.string.delete_plant_dialog_message),
+            confirmText = stringResource(R.string.dialog_confirm),
+            dismissText = stringResource(R.string.dialog_cancel)
+        )
     }
 
     Scaffold(
@@ -65,9 +85,18 @@ fun PlantDetailsScreen(
                     IconButton(onClick = { /* action 1 */ }) {
                         Icon(Icons.Default.BookmarkBorder, contentDescription = "Add to favourites")
                     }
-                    IconButton(onClick = { /* action 2 */ }) {
-                        Icon(Icons.Default.MoreVert, contentDescription = "See more")
-                    }
+                    OverflowMenu(
+                        actions = listOf(
+                            OverflowAction(
+                                text = stringResource(R.string.menu_edit),
+                                onClick = { viewModel.onEditClick() }
+                            ),
+                            OverflowAction(
+                                text = stringResource(R.string.menu_delete),
+                                onClick = { showDeleteConfirmation = true }
+                            )
+                        )
+                    )
                 }
             )
         },
@@ -142,6 +171,11 @@ fun PlantDetailsScreen(
             is PlantDetailsUiState.Error -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(text = currentState.message, color = MaterialTheme.colorScheme.error)
+                }
+            }
+            is PlantDetailsUiState.Deleted -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
                 }
             }
         }

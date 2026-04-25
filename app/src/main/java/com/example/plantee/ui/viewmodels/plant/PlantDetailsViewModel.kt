@@ -9,6 +9,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -18,21 +19,24 @@ import kotlinx.coroutines.launch
 
 sealed class PlantDetailsEvent {
     object NavigateToDiagnose : PlantDetailsEvent()
-    class NavigateToDiagnosis(val id: Long) : PlantDetailsEvent()
-    class NavigateToRoutine(val id: Long) : PlantDetailsEvent()
+    class NavigateToDiagnosis(val diagnosisId: Long) : PlantDetailsEvent()
+    class NavigateToRoutine(val routineId: Long) : PlantDetailsEvent()
+    class NavigateToEdit(val plantId: Long) : PlantDetailsEvent()
     object NavigateBack : PlantDetailsEvent()
+    object PlantDeleted : PlantDetailsEvent()
 }
 
 sealed interface PlantDetailsUiState {
     object Loading : PlantDetailsUiState
     data class Success(val plant: Plant) : PlantDetailsUiState
     data class Error(val message: String) : PlantDetailsUiState
+    object Deleted : PlantDetailsUiState
 }
 
 // https://stackoverflow.com/questions/79763944/how-to-pass-arguments-with-navigation3-using-savedstatehandle
 @HiltViewModel(assistedFactory = PlantDetailsViewModel.Factory::class)
 class PlantDetailsViewModel @AssistedInject constructor(
-    plantsRepository: IPlantsRepository,
+    private val plantsRepository: IPlantsRepository,
     @Assisted private val plantId: Long
 ) : ViewModel() {
 
@@ -41,10 +45,14 @@ class PlantDetailsViewModel @AssistedInject constructor(
         fun create(plantId: Long): PlantDetailsViewModel
     }
 
+    private val isDeleted = MutableStateFlow(false)
+
     val state: StateFlow<PlantDetailsUiState> = plantsRepository
         .getPlant(plantId)
         .map { plant ->
-            if (plant != null) {
+            if (isDeleted.value) {
+                PlantDetailsUiState.Deleted
+            } else if (plant != null) {
                 PlantDetailsUiState.Success(plant)
             } else {
                 PlantDetailsUiState.Error("Plant not found")
@@ -82,4 +90,19 @@ class PlantDetailsViewModel @AssistedInject constructor(
             _events.send(PlantDetailsEvent.NavigateToRoutine(routineId))
         }
     }
+
+    fun onEditClick() {
+        viewModelScope.launch {
+            _events.send(PlantDetailsEvent.NavigateToEdit(plantId))
+        }
+    }
+
+    fun deletePlant() {
+        viewModelScope.launch {
+            isDeleted.value = true
+            plantsRepository.deletePlant(plantId)
+            _events.send(PlantDetailsEvent.PlantDeleted)
+        }
+    }
+
 }

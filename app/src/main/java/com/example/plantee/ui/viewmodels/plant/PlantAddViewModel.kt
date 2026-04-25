@@ -1,6 +1,5 @@
 package com.example.plantee.ui.viewmodels.plant
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.plantee.domain.model.Plant
@@ -83,7 +82,12 @@ class PlantAddViewModel @Inject constructor(
                 isFavourite = currentState.isFavourite
             )
             val id = plantsRepository.createPlant(plant)
+            resetState()
             _events.send(PlantAddEvent.NavigateToDetails(plantId = id))
         }
+    }
+
+    fun resetState() {
+        _state.value = PlantAddUiState()
     }
 }

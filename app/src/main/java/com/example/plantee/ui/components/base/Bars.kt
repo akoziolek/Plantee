@@ -16,7 +16,6 @@ import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocalFlorist
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
@@ -97,6 +96,7 @@ fun BackTopBar(
         actions = actions
     )
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -255,17 +255,23 @@ fun TopBarsPreview() {
                 IconButton(onClick = { /* action 1 */ }) {
                     Icon(Icons.Default.BookmarkBorder, "Add to favourites")
                 }
-                IconButton(onClick = { /* action 2 */ }) {
-                    Icon(Icons.Default.MoreVert, "See more")
-                }
+                OverflowMenu(
+                    actions = listOf(
+                        OverflowAction(text = "Edit") { },
+                        OverflowAction(text = "Delete") { }
+                    )
+                )
             })
             BackTopBar(stringResource(R.string.plant_details_title), onBackClick = { }, actions = {
                 IconButton(onClick = { /* action 1 */ }) {
                     Icon(Icons.Default.BookmarkBorder, "Add to favourites")
                 }
-                IconButton(onClick = { /* action 2 */ }) {
-                    Icon(Icons.Default.MoreVert, "See more")
-                }
+                OverflowMenu(
+                    actions = listOf(
+                        OverflowAction(text = "Edit") { },
+                        OverflowAction(text = "Delete") { }
+                    )
+                )
             })
 
             MainTopBar(stringResource(R.string.home_title), actions = {
