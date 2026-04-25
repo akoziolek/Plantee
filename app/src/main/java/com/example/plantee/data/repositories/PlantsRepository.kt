@@ -8,8 +8,9 @@ import com.example.plantee.domain.model.Plant
 import com.example.plantee.domain.repositories.IPlantsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class PlantsRepository (
+class PlantsRepository @Inject constructor(
     private val plantsDao: PlantsDao
 ) : IPlantsRepository {
     override fun getAllPlantsWithDetails(): Flow<List<Plant>> {

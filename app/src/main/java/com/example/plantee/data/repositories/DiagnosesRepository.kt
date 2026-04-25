@@ -16,8 +16,9 @@ import com.example.plantee.domain.model.Diagnosis
 import com.example.plantee.domain.repositories.IDiagnosesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class DiagnosesRepository(
+class DiagnosesRepository @Inject constructor(
     private val db: AppDatabase,
     private val diagnosisDao: DiagnosisDao,
     private val diagnosisMediaDao: DiagnosisMediaDao,

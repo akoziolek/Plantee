@@ -11,8 +11,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class MediaRepository(
+class MediaRepository @Inject constructor(
     private val mediaDao: MediaDao,
     private val diagnosisMediaDao: DiagnosisMediaDao
 ) : IMediaRepository {

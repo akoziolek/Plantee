@@ -11,8 +11,9 @@ import com.example.plantee.domain.repositories.IRoutinesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate
+import javax.inject.Inject
 
-class RoutinesRepository(
+class RoutinesRepository @Inject constructor(
     private val routinesDao: RoutinesDao,
     private val plantRoutinesDao: PlantRoutinesDao
 ) : IRoutinesRepository {
