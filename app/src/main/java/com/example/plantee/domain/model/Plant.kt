@@ -9,6 +9,6 @@ data class Plant(
     val state: String? = null,
     val isFavourite: Boolean,
     val mediaId: Long? = null,
-    val diagnosesIds: List<Long> = emptyList(),
-    val routinesIds: List<Long> = emptyList()
+    val diagnoses: List<DiagnosisSummary> = emptyList(),
+    val routines: List<RoutineSummary> = emptyList()
 )

@@ -1,5 +1,6 @@
 package com.example.plantee.ui.nav
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -10,6 +11,7 @@ import com.example.plantee.ui.screens.diagnosis.DiagnosisDetailsScreen
 import com.example.plantee.ui.screens.diagnosis.DiagnosisResultsScreen
 import com.example.plantee.ui.screens.home.HomeScreen
 import com.example.plantee.ui.viewmodels.plant.PlantAddEvent
+import com.example.plantee.ui.viewmodels.plant.PlantDetailsEvent
 import com.example.plantee.ui.screens.plant.PlantAddScreen
 import com.example.plantee.ui.screens.plant.PlantDetailsScreen
 import com.example.plantee.ui.screens.plant.PlantEditScreen
@@ -97,19 +99,24 @@ fun MainNavigation(
                 )
             }
 
-            entry<Screen.PlantDetails> {
+            entry<Screen.PlantDetails> { route ->
                 PlantDetailsScreen(
-                    onDiagnosisClick = { id ->
-                        viewModel.navigate(Screen.DiagnosisDetails(id))
-                    },
-                    onDiagnoseClick = {
-                        viewModel.navigate(Screen.DiagnosePlant)
-                    },
-                    onRoutineClick = {
-                        viewModel.navigate(Screen.RoutineDetails(it))
-                    },
-                    onBackClick = {
-                        viewModel.back()
+                    plantId = route.plantId,
+                    onNavigate = { event ->
+                        when (event) {
+                            is PlantDetailsEvent.NavigateToDiagnose -> {
+                                viewModel.navigate(Screen.DiagnosePlant)
+                            }
+                            is PlantDetailsEvent.NavigateToDiagnosis -> {
+                                viewModel.navigate(Screen.DiagnosisDetails(event.id))
+                            }
+                            is PlantDetailsEvent.NavigateToRoutine -> {
+                                viewModel.navigate(Screen.RoutineDetails(event.id))
+                            }
+                            PlantDetailsEvent.NavigateBack -> {
+                                viewModel.back()
+                            }
+                        }
                     }
                 )
             }
@@ -119,6 +126,7 @@ fun MainNavigation(
                     onNavigate = { event ->
                         when (event) {
                             is PlantAddEvent.NavigateToDetails -> {
+                                Log.d("MyLog", "NavigateToDetails with id: ${event.plantId}")
                                 viewModel.replace(Screen.PlantDetails(event.plantId))
                             }
                             PlantAddEvent.NavigateBack -> viewModel.back()

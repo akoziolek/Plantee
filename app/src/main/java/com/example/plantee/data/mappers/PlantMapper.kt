@@ -2,7 +2,10 @@ package com.example.plantee.data.mappers
 
 import com.example.plantee.data.local.relations.PlantWithDetails
 import com.example.plantee.data.local.entities.PlantEntity
+import com.example.plantee.domain.model.Diagnosis
+import com.example.plantee.domain.model.DiagnosisSummary
 import com.example.plantee.domain.model.Plant
+import com.example.plantee.domain.model.RoutineSummary
 
 fun PlantWithDetails?.toDomain(): Plant? {
     if (this == null) return null
@@ -16,8 +19,20 @@ fun PlantWithDetails?.toDomain(): Plant? {
         state = plant.state,
         isFavourite = plant.isFavourite,
         mediaId = plant.idMedia,
-        diagnosesIds = plantDiagnoses.map { it.id },
-        routinesIds = plantRoutines.map { it.idRoutine }
+        diagnoses = plantDiagnoses.map {
+            DiagnosisSummary(
+                id = it.id,
+                diagnosedAt = it.diagnosedAt,
+                description = it.description
+            )
+        },
+        routines = plantRoutines.map {
+            RoutineSummary(
+                id = it.id,
+                name = it.name,
+                description = it.description
+            )
+        }
     )
 }
 
@@ -32,8 +47,20 @@ fun List<PlantWithDetails>.toDomainList(): List<Plant> {
             state = entity.plant.state,
             isFavourite = entity.plant.isFavourite,
             mediaId = entity.plant.idMedia,
-            diagnosesIds = entity.plantDiagnoses.map { it.id },
-            routinesIds = entity.plantRoutines.map { it.id }
+            diagnoses = entity.plantDiagnoses.map {
+                DiagnosisSummary(
+                    id = it.id,
+                    diagnosedAt = it.diagnosedAt,
+                    description = it.description
+                )
+            },
+            routines = entity.plantRoutines.map {
+                RoutineSummary(
+                    id = it.id,
+                    name = it.name,
+                    description = it.description
+                )
+            }
         )
     }
 }

@@ -1,5 +1,6 @@
 package com.example.plantee.ui.viewmodels.plant
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.plantee.domain.model.Plant
@@ -14,6 +15,12 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+sealed class PlantAddEvent {
+    data class NavigateToDetails(val plantId: Long) : PlantAddEvent()
+    object NavigateBack : PlantAddEvent()
+}
+
+
 data class PlantAddUiState(
     val name: String = "",
     val nameError: Boolean = false,
@@ -21,11 +28,6 @@ data class PlantAddUiState(
     val description: String = "",
     val isFavourite: Boolean = false
 )
-
-sealed class PlantAddEvent {
-    data class NavigateToDetails(val plantId: Long) : PlantAddEvent()
-    object NavigateBack : PlantAddEvent()
-}
 
 @HiltViewModel
 class PlantAddViewModel @Inject constructor(
@@ -81,7 +83,7 @@ class PlantAddViewModel @Inject constructor(
                 isFavourite = currentState.isFavourite
             )
             val id = plantsRepository.createPlant(plant)
-            _events.send(PlantAddEvent.NavigateToDetails(id))
+            _events.send(PlantAddEvent.NavigateToDetails(plantId = id))
         }
     }
 }

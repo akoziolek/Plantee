@@ -13,15 +13,15 @@ import javax.inject.Inject
 class PlantsRepository @Inject constructor(
     private val plantsDao: PlantsDao
 ) : IPlantsRepository {
-    override fun getAllPlantsWithDetails(): Flow<List<Plant>> {
+    override fun getAllPlants(): Flow<List<Plant>> {
         return plantsDao.getAllFullPlants().map { it.toDomainList() }
     }
 
-    override fun getPlantsWithDetails(ids: List<Long>): Flow<List<Plant>> {
+    override fun getPlants(ids: List<Long>): Flow<List<Plant>> {
         return plantsDao.getPlantsByIds(ids).map { it.toDomainList() }
     }
 
-    override fun getPlantWithDetails(id: Long): Flow<Plant?> {
+    override fun getPlant(id: Long): Flow<Plant?> {
         return plantsDao.getFullPlant(id).map { it.toDomain() }
     }
 

@@ -26,7 +26,6 @@ class NavigationViewModel : ViewModel() {
 
     fun back() {
         if (_backStack.size > 1) {
-            // istnieje też _backStack.removeLast(), ale nie jest obslugiwane na wersjach < 35
             _backStack.removeAt(_backStack.lastIndex)
         }
     }
