@@ -75,6 +75,7 @@ fun RoutinesListItem(
             .fillMaxWidth()
             .heightIn(min = 72.dp)
             .clip(RoundedCornerShape(8.dp))
+            // TODO pass the Routine object, and the proper id?
             .clickable { onClick() }
     )
 }
@@ -94,6 +95,7 @@ fun PlantListItem(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(10.dp))
+            // TODO pass the Plant object, and the proper id?
             .clickable { onClick() },
         color = MaterialTheme.colorScheme.surfaceVariant
     ) {

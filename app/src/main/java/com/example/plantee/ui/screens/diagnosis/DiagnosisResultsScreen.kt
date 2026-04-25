@@ -29,7 +29,7 @@ import com.example.plantee.ui.theme.PlanteeTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiagnosisResultsScreen(
-    onRoutineClick: (Int) -> Unit,
+    onRoutineClick: (Long) -> Unit,
     onFinishClick: () -> Unit,
     onBackClick: () -> Unit
 ) {

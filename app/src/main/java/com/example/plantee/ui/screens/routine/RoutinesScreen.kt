@@ -36,7 +36,7 @@ import com.example.plantee.ui.theme.PlanteeTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoutinesScreen(
-    onRoutineClick: (Int) -> Unit,
+    onRoutineClick: (Long) -> Unit,
     onRoutineAddClick: () -> Unit
 ) {
     val state = rememberSearchBarState()

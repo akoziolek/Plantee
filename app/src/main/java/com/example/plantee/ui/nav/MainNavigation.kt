@@ -119,8 +119,7 @@ fun MainNavigation(
                     onNavigate = { event ->
                         when (event) {
                             is PlantAddEvent.NavigateToDetails -> {
-                                // TODO remove parsing to int as our id will be LONG
-                                viewModel.replace(Screen.PlantDetails(event.plantId.toInt()))
+                                viewModel.replace(Screen.PlantDetails(event.plantId))
                             }
                             PlantAddEvent.NavigateBack -> viewModel.back()
                         }

@@ -36,8 +36,8 @@ import com.example.plantee.ui.theme.PlanteeTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    onRoutineClick: (Int) -> Unit,
-    onPlantClick: (Int) -> Unit,
+    onRoutineClick: (Long) -> Unit,
+    onPlantClick: (Long) -> Unit,
     onAddPlantClick: () -> Unit,
     onRoutinesClick: () -> Unit
 ) {

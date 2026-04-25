@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 
 fun LazyListScope.diagnosisListItems(
     diagnosis: List<String>,
-    onDiagnosisClick: (Int) -> Unit,
+    onDiagnosisClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     diagnosis.forEachIndexed { index, item ->
@@ -21,7 +21,8 @@ fun LazyListScope.diagnosisListItems(
                 headlineText = item,
                 modifier = modifier,
                 supportingText = "Longer description duis aute irure dolor $index",
-                onClick = { onDiagnosisClick(index) }
+                // TODO change to diagnosis idx
+                onClick = { onDiagnosisClick(1) }
             )
         }
 

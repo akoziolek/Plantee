@@ -7,7 +7,7 @@ import com.example.plantee.ui.components.base.RoutinesListItem
 
 fun LazyListScope.todayRoutinesSection(
     routines: List<String>, // Instead of string there will be routine object
-    onItemClick: (Int) -> Unit
+    onItemClick: (Long) -> Unit
 ) {
     items(routines.size) { index ->
         RoutinesListItem(
@@ -15,21 +15,23 @@ fun LazyListScope.todayRoutinesSection(
             supportingText = "Description for routine no. $index",
             containerColor = MaterialTheme.colorScheme.tertiaryContainer,
             onCheckedChange = {},
-            onClick = { onItemClick(index) }
+            // TODO change to routine id
+            onClick = { onItemClick(1) }
         )
     }
 }
 
 fun LazyListScope.routinesSection(
     routines: List<String>,
-    onRoutineClick: (Int) -> Unit,
+    onRoutineClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     items(routines.size) { index ->
         RoutinesListItem(
             headlineText = routines[index],
             supportingText = "Description for routine no. $index",
-            onClick = { onRoutineClick(index) },
+            // TODO change to routine id
+            onClick = { onRoutineClick(1) },
             modifier = modifier
         )
     }

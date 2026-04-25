@@ -27,7 +27,7 @@ import com.example.plantee.ui.theme.PlanteeTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiagnosisDetailsScreen(
-    onRoutineClicked: (Int) -> Unit,
+    onRoutineClicked: (Long) -> Unit,
     onBackClick: () -> Unit
 ) {
     Scaffold(

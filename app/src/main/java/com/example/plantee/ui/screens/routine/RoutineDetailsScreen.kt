@@ -31,7 +31,7 @@ import com.example.plantee.ui.theme.PlanteeTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoutineDetailsScreen(
-    onPlantClick: (Int) -> Unit,
+    onPlantClick: (Long) -> Unit,
     onBackClick: () -> Unit
 ) {
     val selectedDays = listOf(0, 2, 3, 6)

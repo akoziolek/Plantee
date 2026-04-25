@@ -35,9 +35,9 @@ import com.example.plantee.ui.theme.PlanteeTheme
 @Composable
 fun PlantDetailsScreen(
     onDiagnoseClick: () -> Unit,
-    onRoutineClick: (Int) -> Unit,
+    onRoutineClick: (Long) -> Unit,
     onBackClick: () -> Unit,
-    onDiagnosisClick: (Int) -> Unit
+    onDiagnosisClick: (Long) -> Unit
 ) {
     Scaffold(
         topBar = {
