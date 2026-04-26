@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -55,6 +56,11 @@ fun PlantDetailsScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     var showDeleteConfirmation by remember { mutableStateOf(false) }
+    val bookMarkIcon =
+        if(state is PlantDetailsUiState.Success && (state as PlantDetailsUiState.Success).plant.isFavourite)
+            Icons.Default.Bookmark
+        else
+            Icons.Default.BookmarkBorder
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
@@ -82,8 +88,11 @@ fun PlantDetailsScreen(
                 title = stringResource(R.string.plant_details_title),
                 onBackClick = { viewModel.onBackClick() },
                 actions = {
-                    IconButton(onClick = { /* action 1 */ }) {
-                        Icon(Icons.Default.BookmarkBorder, contentDescription = "Add to favourites")
+                    IconButton(onClick = { viewModel.toggleFavourite() }) {
+                        Icon(
+                            imageVector = bookMarkIcon,
+                            contentDescription = "Toggle favourite"
+                        )
                     }
                     OverflowMenu(
                         actions = listOf(

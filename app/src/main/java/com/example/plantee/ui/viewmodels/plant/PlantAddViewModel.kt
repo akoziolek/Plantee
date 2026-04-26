@@ -19,7 +19,7 @@ sealed class PlantAddEvent {
     object NavigateBack : PlantAddEvent()
 }
 
-
+// TODO images
 data class PlantAddUiState(
     val name: String = "",
     val nameError: Boolean = false,
