@@ -22,6 +22,7 @@ import com.example.plantee.ui.screens.routine.RoutineAddScreen
 import com.example.plantee.ui.screens.routine.RoutineDetailsScreen
 import com.example.plantee.ui.screens.routine.RoutineEditScreen
 import com.example.plantee.ui.screens.routine.RoutinesScreen
+import com.example.plantee.ui.viewmodels.plant.PlantEditEvent
 
 @Composable
 fun MainNavigation(
@@ -147,12 +148,17 @@ fun MainNavigation(
                 )
             }
 
-            entry<Screen.PlantEdit> {
+            entry<Screen.PlantEdit> { route ->
                 PlantEditScreen(
-                    onSaveClick = {
-                        viewModel.replace(Screen.PlantDetails(1))
-                    }, onBackClick = {
-                        viewModel.back()
+                    plantId = route.plantId,
+                    onNavigate = { event ->
+                        when(event) {
+                            is PlantEditEvent.PlantUpdated -> {
+                                viewModel.popUpTo(Screen.PlantDetails(route.plantId), inclusive = false)
+                            }
+                            PlantEditEvent.NavigateBack -> viewModel.back()
+                        }
+
                     }
                 )
             }
