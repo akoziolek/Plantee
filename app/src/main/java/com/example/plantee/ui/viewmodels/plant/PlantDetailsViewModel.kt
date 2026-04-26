@@ -109,8 +109,7 @@ class PlantDetailsViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val currentState = state.value
             if(currentState is PlantDetailsUiState.Success) {
-                val updatedPlant = currentState.plant.copy(isFavourite = !currentState.plant.isFavourite)
-                plantsRepository.updatePlant(updatedPlant)
+                plantsRepository.togglePlantFavourite(plantId)
             }
         }
     }

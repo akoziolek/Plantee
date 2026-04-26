@@ -1,13 +1,14 @@
 package com.example.plantee.ui.components.base
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -21,15 +22,18 @@ import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -86,9 +90,15 @@ fun PlantListItem(
     description: String,
     modifier: Modifier = Modifier,
     isBookmarked: Boolean = false,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
+    onBookmarkClick: () -> Unit = {}
 ) {
-    val bookMarkIcon = if(isBookmarked) Icons.Default.Bookmark else Icons.Default.BookmarkBorder
+    val scale by animateFloatAsState(
+        targetValue = if (isBookmarked) 1.2f else 1f,
+        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+        label = "ScaleAnimation"
+    )
+    val bookmarkIcon = if(isBookmarked) Icons.Default.Bookmark else Icons.Default.BookmarkBorder
     val iconTint = if(isBookmarked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
 
     Surface(
@@ -132,11 +142,17 @@ fun PlantListItem(
                         text = title,
                         style = MaterialTheme.typography.titleMedium
                     )
-                    Icon(
-                        imageVector = bookMarkIcon,
-                        contentDescription = null,
-                        tint = iconTint
-                    )
+                    IconButton(onClick = {
+                        onBookmarkClick()
+
+                    }) {
+                        Icon(
+                            imageVector = bookmarkIcon,
+                            tint = iconTint,
+                            contentDescription = "Toggle favourite",
+                            modifier = Modifier.scale(scale)
+                        )
+                    }
                 }
                 Text(
                     text = description,

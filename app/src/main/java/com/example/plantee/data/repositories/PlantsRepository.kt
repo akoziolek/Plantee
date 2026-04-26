@@ -3,8 +3,10 @@ package com.example.plantee.data.repositories
 import com.example.plantee.data.local.dao.PlantsDao
 import com.example.plantee.data.mappers.toDomain
 import com.example.plantee.data.mappers.toDomainList
+import com.example.plantee.data.mappers.toSummaryDomainList
 import com.example.plantee.data.mappers.toEntity
 import com.example.plantee.domain.model.Plant
+import com.example.plantee.domain.model.PlantSummary
 import com.example.plantee.domain.repositories.IPlantsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -25,6 +27,10 @@ class PlantsRepository @Inject constructor(
         return plantsDao.getFullPlant(id).map { it.toDomain() }
     }
 
+    override fun getAllPlantsSummary(): Flow<List<PlantSummary>> {
+        return plantsDao.getAllPlants().map { it.toSummaryDomainList() }
+    }
+
     override suspend fun createPlant(plant: Plant): Long {
         val entity = plant.toEntity() ?: return -1L
 
@@ -37,6 +43,10 @@ class PlantsRepository @Inject constructor(
         val entity = plant.toEntity() ?: return
 
         plantsDao.update(entity)
+    }
+
+    override suspend fun togglePlantFavourite(id: Long) {
+        plantsDao.updateFavouriteStatus(id)
     }
 
     override suspend fun deletePlant(id: Long) {

@@ -78,4 +78,5 @@
     <string name="dialog_cancel">Cancel</string>
     <string name="menu_edit">Edit</string>
     <string name="menu_delete">Delete</string>
+    <string name="plants_label_no_plants">No plants found</string>
 </resources>

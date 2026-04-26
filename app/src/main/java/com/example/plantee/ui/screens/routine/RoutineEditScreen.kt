@@ -26,7 +26,7 @@ import com.example.plantee.ui.components.base.InputTextField
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.base.SectionHeader
 import com.example.plantee.ui.components.base.SimpleSearchBar
-import com.example.plantee.ui.components.shared.plantListItems
+import com.example.plantee.ui.components.shared.plantListItems_TODELETE
 import com.example.plantee.ui.theme.PlanteeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -105,7 +105,7 @@ fun RoutineEditScreen(
                 Spacer(modifier = Modifier.height(4.dp))
             }
 
-            plantListItems(
+            plantListItems_TODELETE(
                 plants = List(6) {"Plant no. $it"},
                 onPlantClick = {}
             )

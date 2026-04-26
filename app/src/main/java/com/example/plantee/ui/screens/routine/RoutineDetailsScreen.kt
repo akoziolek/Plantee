@@ -23,9 +23,8 @@ import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
 import com.example.plantee.ui.components.base.DaysOfWeek
 import com.example.plantee.ui.components.base.InfoSection
-import com.example.plantee.ui.components.base.NavBar
 import com.example.plantee.ui.components.base.SectionHeader
-import com.example.plantee.ui.components.shared.plantListItems
+import com.example.plantee.ui.components.shared.plantListItems_TODELETE
 import com.example.plantee.ui.theme.PlanteeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -90,7 +89,7 @@ fun RoutineDetailsScreen(
                 )
             }
 
-            plantListItems(
+            plantListItems_TODELETE(
                 plants = List(6) {"Plant no. $it"},
                 onPlantClick = onPlantClick
             )

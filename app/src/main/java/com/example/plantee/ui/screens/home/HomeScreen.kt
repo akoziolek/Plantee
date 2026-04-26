@@ -25,11 +25,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.MainTopBar
-import com.example.plantee.ui.components.base.NavBar
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.shared.FilterSectionHeader
 import com.example.plantee.ui.components.shared.LinkHeader
-import com.example.plantee.ui.components.shared.plantListItems
+import com.example.plantee.ui.components.shared.plantListItems_TODELETE
 import com.example.plantee.ui.components.shared.todayRoutinesSection
 import com.example.plantee.ui.theme.PlanteeTheme
 
@@ -96,7 +95,7 @@ fun HomeScreen(
                 ) { }
             }
 
-            plantListItems(
+            plantListItems_TODELETE(
                 plants = List(10) {"Plant no. $it"},
                 onPlantClick = onPlantClick
             )

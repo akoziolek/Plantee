@@ -19,6 +19,9 @@ interface PlantsDao {
     @Update
     suspend fun update(plant: PlantEntity)
 
+    @Query("UPDATE plants SET is_favourite = NOT is_favourite WHERE id = :id")
+    suspend fun updateFavouriteStatus(id: Long)
+
     @Delete
     suspend fun delete(plant: PlantEntity)
 

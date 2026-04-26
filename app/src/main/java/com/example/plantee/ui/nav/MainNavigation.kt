@@ -23,6 +23,7 @@ import com.example.plantee.ui.screens.routine.RoutineDetailsScreen
 import com.example.plantee.ui.screens.routine.RoutineEditScreen
 import com.example.plantee.ui.screens.routine.RoutinesScreen
 import com.example.plantee.ui.viewmodels.plant.PlantEditEvent
+import com.example.plantee.ui.viewmodels.plant.PlantsEvent
 
 @Composable
 fun MainNavigation(
@@ -96,11 +97,18 @@ fun MainNavigation(
 
             entry<Screen.Plants> {
                 PlantsScreen(
-                    onPlantClick = {
-                        viewModel.navigate(Screen.PlantDetails(it))
-                    },
-                    onAddPlantClick = {
-                        viewModel.navigate(Screen.PlantAdd)
+                    onNavigate = { event ->
+                        when(event) {
+                            is PlantsEvent.NavigateToDetails -> {
+                                viewModel.navigate(Screen.PlantDetails(event.plantId))
+                            }
+                            is PlantsEvent.NavigateToAdd -> {
+                                viewModel.navigate(Screen.PlantAdd)
+                            }
+                            PlantsEvent.NavigateBack -> {
+                                viewModel.back()
+                            }
+                        }
                     }
                 )
             }
@@ -123,7 +131,7 @@ fun MainNavigation(
                                 viewModel.navigate(Screen.PlantEdit(event.plantId))
                             }
                             is PlantDetailsEvent.PlantDeleted -> {
-                                viewModel.popUpTo(Screen.Home, inclusive = false)
+                                viewModel.back()
                             }
                             PlantDetailsEvent.NavigateBack -> {
                                 viewModel.back()

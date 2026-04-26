@@ -1,17 +1,19 @@
 package com.example.plantee.domain.repositories
 
-import com.example.plantee.data.local.relations.PlantWithDetails
 import com.example.plantee.domain.model.Plant
+import com.example.plantee.domain.model.PlantSummary
 import kotlinx.coroutines.flow.Flow
 
 interface IPlantsRepository {
     fun getAllPlants(): Flow<List<Plant>>
     fun getPlants(ids: List<Long>): Flow<List<Plant>>
     fun getPlant(id: Long): Flow<Plant?>
+    fun getAllPlantsSummary(): Flow<List<PlantSummary>>
 
     suspend fun createPlant(plant: Plant): Long
 
     suspend fun updatePlant(plant: Plant)
+    suspend fun togglePlantFavourite(id: Long)
 
     suspend fun deletePlant(id: Long)
 }
