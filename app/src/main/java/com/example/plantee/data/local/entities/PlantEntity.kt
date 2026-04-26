@@ -25,7 +25,6 @@ data class PlantEntity (
     val name: String,
     val description: String? = null,
     val species: String? = null,
-    val place: String? = null,
     val state: String? = null,
     @ColumnInfo(name = "is_favourite") val isFavourite: Boolean,
     @ColumnInfo(name = "id_media") val idMedia: Long? = null

@@ -1,10 +1,10 @@
 package com.example.plantee.data.mappers
 
-import com.example.plantee.data.local.relations.PlantWithDetails
 import com.example.plantee.data.local.entities.PlantEntity
-import com.example.plantee.domain.model.Diagnosis
+import com.example.plantee.data.local.relations.PlantWithDetails
 import com.example.plantee.domain.model.DiagnosisSummary
 import com.example.plantee.domain.model.Plant
+import com.example.plantee.domain.model.PlantSummary
 import com.example.plantee.domain.model.RoutineSummary
 
 fun PlantWithDetails?.toDomain(): Plant? {
@@ -15,7 +15,6 @@ fun PlantWithDetails?.toDomain(): Plant? {
         name = plant.name,
         description = plant.description,
         species = plant.species,
-        place = plant.place,
         state = plant.state,
         isFavourite = plant.isFavourite,
         mediaId = plant.idMedia,
@@ -37,30 +36,16 @@ fun PlantWithDetails?.toDomain(): Plant? {
 }
 
 fun List<PlantWithDetails>.toDomainList(): List<Plant> {
+    return this.mapNotNull { it.toDomain() }
+}
+
+fun List<PlantEntity>.toSummaryDomainList(): List<PlantSummary> {
     return this.map { entity ->
-        Plant(
-            id = entity.plant.id,
-            name = entity.plant.name,
-            description = entity.plant.description,
-            species = entity.plant.species,
-            place = entity.plant.place,
-            state = entity.plant.state,
-            isFavourite = entity.plant.isFavourite,
-            mediaId = entity.plant.idMedia,
-            diagnoses = entity.plantDiagnoses.map {
-                DiagnosisSummary(
-                    id = it.id,
-                    diagnosedAt = it.diagnosedAt,
-                    description = it.description
-                )
-            },
-            routines = entity.plantRoutines.map {
-                RoutineSummary(
-                    id = it.id,
-                    name = it.name,
-                    description = it.description
-                )
-            }
+        PlantSummary(
+            id = entity.id,
+            name = entity.name,
+            description = entity.description,
+            isFavourite = entity.isFavourite
         )
     }
 }
@@ -73,7 +58,6 @@ fun Plant?.toEntity(): PlantEntity? {
         name = this.name,
         description = this.description,
         species = this.species,
-        place = this.place,
         state = this.state,
         isFavourite = this.isFavourite,
         idMedia = this.mediaId
