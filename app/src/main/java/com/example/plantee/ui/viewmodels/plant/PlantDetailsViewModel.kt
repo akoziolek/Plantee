@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 sealed class PlantDetailsEvent {
-    object NavigateToDiagnose : PlantDetailsEvent()
+    class NavigateToDiagnose(val plantId: Long) : PlantDetailsEvent()
     class NavigateToDiagnosis(val diagnosisId: Long) : PlantDetailsEvent()
     class NavigateToRoutine(val routineId: Long) : PlantDetailsEvent()
     class NavigateToEdit(val plantId: Long) : PlantDetailsEvent()
@@ -68,7 +68,7 @@ class PlantDetailsViewModel @AssistedInject constructor(
 
     fun onDiagnoseClick() {
         viewModelScope.launch {
-            _events.send(PlantDetailsEvent.NavigateToDiagnose)
+            _events.send(PlantDetailsEvent.NavigateToDiagnose(plantId))
         }
     }
 

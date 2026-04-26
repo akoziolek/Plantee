@@ -8,7 +8,7 @@ sealed interface Screen : NavKey {
     data object Home : Screen
 
     @Serializable
-    data object DiagnosePlant : Screen
+    data class DiagnosePlant(val plantId: Long) : Screen
     @Serializable
     data class DiagnosisDetails(val diagnosisId: Long) : Screen
     @Serializable

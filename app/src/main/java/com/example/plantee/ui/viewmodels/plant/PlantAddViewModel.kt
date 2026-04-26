@@ -62,11 +62,7 @@ class PlantAddViewModel @Inject constructor(
 
     private fun validate(): Boolean {
         val nameIsBlank = _state.value.name.isBlank()
-        
-        _state.update {
-            it.copy(nameError = nameIsBlank)
-        }
-        
+        _state.update { it.copy(nameError = nameIsBlank) }
         return !nameIsBlank
     }
 

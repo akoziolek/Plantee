@@ -22,7 +22,7 @@ fun PlantWithDetails?.toDomain(): Plant? {
             DiagnosisSummary(
                 id = it.id,
                 diagnosedAt = it.diagnosedAt,
-                description = it.description
+                description = it.problemDescription
             )
         },
         routines = plantRoutines.map {

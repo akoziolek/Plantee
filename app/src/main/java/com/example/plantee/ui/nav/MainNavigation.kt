@@ -22,6 +22,7 @@ import com.example.plantee.ui.screens.routine.RoutineAddScreen
 import com.example.plantee.ui.screens.routine.RoutineDetailsScreen
 import com.example.plantee.ui.screens.routine.RoutineEditScreen
 import com.example.plantee.ui.screens.routine.RoutinesScreen
+import com.example.plantee.ui.viewmodels.diagnosis.DiagnosePlantEvent
 import com.example.plantee.ui.viewmodels.plant.PlantEditEvent
 import com.example.plantee.ui.viewmodels.plant.PlantsEvent
 
@@ -59,13 +60,18 @@ fun MainNavigation(
 
             }
 
-            entry<Screen.DiagnosePlant> {
+            entry<Screen.DiagnosePlant> { route ->
                 DiagnosePlantScreen(
-                    onDiagnoseClick = {
-                        viewModel.navigate(Screen.DiagnosisResults(1))
-                    },
-                    onBackClick = {
-                        viewModel.back()
+                    plantId = route.plantId,
+                    onNavigate = { event ->
+                        when(event) {
+                            is DiagnosePlantEvent.NavigateToDiagnosis -> {
+                                viewModel.replace(Screen.DiagnosisResults(diagnosisId = event.diagnosisId))
+                            }
+                            DiagnosePlantEvent.NavigateBack -> {
+                                viewModel.back()
+                            }
+                        }
                     }
                 )
             }
@@ -84,7 +90,8 @@ fun MainNavigation(
             entry<Screen.DiagnosisResults> {
                 DiagnosisResultsScreen(
                     onFinishClick = {
-                        viewModel.popUpTo(target = Screen.DiagnosePlant, inclusive = true)
+                        // FIXME proper popUp target
+                        viewModel.popUpTo(target = Screen.Home, inclusive = true)
                     },
                     onBackClick = {
                         viewModel.back()
@@ -119,7 +126,7 @@ fun MainNavigation(
                     onNavigate = { event ->
                         when (event) {
                             is PlantDetailsEvent.NavigateToDiagnose -> {
-                                viewModel.navigate(Screen.DiagnosePlant)
+                                viewModel.navigate(Screen.DiagnosePlant(event.plantId))
                             }
                             is PlantDetailsEvent.NavigateToDiagnosis -> {
                                 viewModel.navigate(Screen.DiagnosisDetails(event.diagnosisId))

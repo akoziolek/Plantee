@@ -79,8 +79,8 @@ fun InputSlider(
     value: Float,
     onValueChange: (Float) -> Unit,
     modifier: Modifier = Modifier,
-    valueRange: ClosedFloatingPointRange<Float> = 0f..100f,
-    steps: Int = 7
+    valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
+    steps: Int = 9
 ) {
     Column(modifier = modifier) {
         SectionHeader(

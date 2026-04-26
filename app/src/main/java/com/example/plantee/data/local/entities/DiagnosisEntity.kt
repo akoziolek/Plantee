@@ -23,7 +23,8 @@ import java.time.LocalDateTime
 )
 data class DiagnosisEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0L,
-    val description: String? = null,
+    val problemDescription: String? = null,
+    val response: String? = null,
     @ColumnInfo(name = "sun_level") val sunLevel: Int,
     @ColumnInfo(name = "moisture_level") val moistureLevel: Int,
     @ColumnInfo(name = "diagnosed_at") val diagnosedAt: LocalDateTime,

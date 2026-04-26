@@ -8,7 +8,8 @@ fun DiagnosisWithDetails?.toDomain(): Diagnosis? {
 
     return Diagnosis(
         id = diagnosis.id,
-        description = diagnosis.description,
+        problemDescription = diagnosis.problemDescription,
+        response = diagnosis.response,
         sunLevel = diagnosis.sunLevel,
         moistureLevel = diagnosis.moistureLevel,
         diagnosedAt = diagnosis.diagnosedAt,
@@ -22,7 +23,8 @@ fun List<DiagnosisWithDetails>.toDomainList(): List<Diagnosis> {
     return this.map { entity ->
         Diagnosis(
             id = entity.diagnosis.id,
-            description = entity.diagnosis.description,
+            problemDescription = entity.diagnosis.problemDescription,
+            response = entity.diagnosis.response,
             sunLevel = entity.diagnosis.sunLevel,
             moistureLevel = entity.diagnosis.moistureLevel,
             diagnosedAt = entity.diagnosis.diagnosedAt,
@@ -38,7 +40,7 @@ fun Diagnosis?.toEntity(): DiagnosisEntity? {
 
     return DiagnosisEntity(
         id = this.id,
-        description = this.description,
+        problemDescription = this.problemDescription,
         sunLevel = this.sunLevel,
         moistureLevel = this.moistureLevel,
         diagnosedAt = this.diagnosedAt,

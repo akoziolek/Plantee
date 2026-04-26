@@ -4,11 +4,12 @@ import java.time.LocalDateTime
 
 data class Diagnosis(
     val id: Long = 0L,
-    val description: String? = null,
+    val plantId: Long,
+    val problemDescription: String? = null,
     val sunLevel: Int,
     val moistureLevel: Int,
     val diagnosedAt: LocalDateTime,
-    val plantId: Long,
+    val response: String? = null,
     val listOfMedia: List<Long> = emptyList(),
     val routinesIds: List<Long> = emptyList()
 )
