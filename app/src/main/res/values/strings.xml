@@ -79,4 +79,7 @@
     <string name="menu_edit">Edit</string>
     <string name="menu_delete">Delete</string>
     <string name="plants_label_no_plants">No plants found</string>
+    <string name="label_no_plants_found">No plants found</string>
+    <string name="label_no_routines_found">No routines found</string>
+    <string name="label_no_diagnoses_found">No diagnoses found</string>
 </resources>

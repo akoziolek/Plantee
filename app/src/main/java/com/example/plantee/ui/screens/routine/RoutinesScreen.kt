@@ -24,11 +24,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.FilterBar
-import com.example.plantee.ui.components.base.NavBar
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.base.SectionHeader
 import com.example.plantee.ui.components.base.SimpleSearchBar
-import com.example.plantee.ui.components.shared.routinesSection
+import com.example.plantee.ui.components.shared.routinesSection_TODELETE
 import com.example.plantee.ui.components.shared.todayRoutinesSection
 import com.example.plantee.ui.theme.PlanteeTheme
 
@@ -84,7 +83,7 @@ fun RoutinesScreen(
                 FilterBar({}, {})
             }
 
-            routinesSection(
+            routinesSection_TODELETE(
                 routines = List(6) { "Routine $it" },
                 onRoutineClick = onRoutineClick
             )

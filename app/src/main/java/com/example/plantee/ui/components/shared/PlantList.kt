@@ -1,6 +1,11 @@
 package com.example.plantee.ui.components.shared
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.plantee.R
 import com.example.plantee.domain.model.PlantSummary
 import com.example.plantee.ui.components.base.PlantListItem
 
@@ -23,14 +28,25 @@ fun LazyListScope.plantListItems(
     onPlantClick: (Long) -> Unit,
     onPlantBookmarkClick: (Long) -> Unit
 ) {
-    items(plants.size) { index ->
-        val plant = plants[index]
-        PlantListItem(
-            title = plant.name,
-            description = plant.description ?: "",
-            isBookmarked = plant.isFavourite,
-            onClick = { onPlantClick(plant.id) },
-            onBookmarkClick = { onPlantBookmarkClick(plant.id) }
-        )
+    if (plants.isEmpty()) {
+        item {
+            EmptySectionPlaceholder(
+                text = stringResource(R.string.label_no_plants_found),
+                modifier = Modifier.fillParentMaxSize()
+            )
+        }
+    } else {
+        items(
+            items = plants,
+            key = { plant -> plant.id }
+        ) { plant ->
+            PlantListItem(
+                title = plant.name,
+                description = plant.description ?: "",
+                isBookmarked = plant.isFavourite,
+                onClick = { onPlantClick(plant.id) },
+                onBookmarkClick = { onPlantBookmarkClick(plant.id) }
+            )
+        }
     }
 }

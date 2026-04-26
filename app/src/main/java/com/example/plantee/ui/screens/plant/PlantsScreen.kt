@@ -3,7 +3,6 @@ package com.example.plantee.ui.screens.plant
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,9 +10,7 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,7 +27,6 @@ import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.base.SimpleSearchBar
 import com.example.plantee.ui.components.shared.FilterSectionHeader
 import com.example.plantee.ui.components.shared.plantListItems
-import com.example.plantee.ui.components.shared.plantListItems_TODELETE
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.viewmodels.plant.PlantsEvent
 import com.example.plantee.ui.viewmodels.plant.PlantsViewModel
@@ -88,27 +84,17 @@ fun PlantsScreen(
                     }
                 )
 
-                if (state.plants.isEmpty()) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = stringResource(R.string.plants_label_no_plants),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                } else {
-                    LazyColumn(
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        plantListItems(
-                            plants = state.plants,
-                            onPlantClick = { viewModel.onPlantClick(it) },
-                            onPlantBookmarkClick = { viewModel.onPlantBookmarkClick(it) }
-                        )
-                    }
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier.weight(1f)
+                ) {
+                    plantListItems(
+                        plants = state.plants,
+                        onPlantClick = { viewModel.onPlantClick(it) },
+                        onPlantBookmarkClick = { viewModel.onPlantBookmarkClick(it) }
+                    )
                 }
+
             }
         }
     }

@@ -155,9 +155,9 @@ fun PlantDetailsScreen(
                         }
                     }
 
+                    // TODO placeholders, min height
                     routinesSection(
-                        // TODO placeholders
-                        routines = plant.routines.map { it.name },
+                        routines = plant.routines,
                         onRoutineClick = { id -> viewModel.onRoutineClick(id) },
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
@@ -170,8 +170,7 @@ fun PlantDetailsScreen(
                     }
 
                     diagnosisListItems(
-                        // TODO placeholders
-                        diagnosis = plant.diagnoses.map { it.diagnosedAt.toString() },
+                        diagnoses = plant.diagnoses,
                         onDiagnosisClick = { id -> viewModel.onDiagnosisClick(id) },
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )

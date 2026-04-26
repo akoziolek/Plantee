@@ -27,6 +27,7 @@ class PlantsRepository @Inject constructor(
         return plantsDao.getFullPlant(id).map { it.toDomain() }
     }
 
+    // FIXME isn't this ineffective? loading all the data from db just to map it
     override fun getAllPlantsSummary(): Flow<List<PlantSummary>> {
         return plantsDao.getAllPlants().map { it.toSummaryDomainList() }
     }

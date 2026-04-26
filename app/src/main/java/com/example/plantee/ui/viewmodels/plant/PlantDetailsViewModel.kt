@@ -44,7 +44,6 @@ class PlantDetailsViewModel @AssistedInject constructor(
     interface Factory {
         fun create(plantId: Long): PlantDetailsViewModel
     }
-
     private val isDeleted = MutableStateFlow(false)
 
     val state: StateFlow<PlantDetailsUiState> = plantsRepository
