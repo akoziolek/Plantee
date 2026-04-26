@@ -23,6 +23,8 @@ import com.example.plantee.ui.screens.routine.RoutineDetailsScreen
 import com.example.plantee.ui.screens.routine.RoutineEditScreen
 import com.example.plantee.ui.screens.routine.RoutinesScreen
 import com.example.plantee.ui.viewmodels.diagnosis.DiagnosePlantEvent
+import com.example.plantee.ui.viewmodels.diagnosis.DiagnosisDetailsEvent
+import com.example.plantee.ui.viewmodels.diagnosis.DiagnosisResultsEvent
 import com.example.plantee.ui.viewmodels.plant.PlantEditEvent
 import com.example.plantee.ui.viewmodels.plant.PlantsEvent
 
@@ -76,28 +78,39 @@ fun MainNavigation(
                 )
             }
 
-            entry<Screen.DiagnosisDetails> {
+            entry<Screen.DiagnosisDetails> { route ->
                 DiagnosisDetailsScreen(
-                    onRoutineClicked = { id ->
-                        viewModel.navigate(Screen.RoutineDetails(id))
-                    },
-                    onBackClick = {
-                        viewModel.back()
+                    diagnosisId = route.diagnosisId,
+                    onNavigate = { event ->
+                        when (event) {
+                            is DiagnosisDetailsEvent.NavigateToRoutine -> {
+                                viewModel.replace(Screen.RoutineDetails(event.routineId))
+                            }
+                            DiagnosisDetailsEvent.NavigateBack -> {
+                                viewModel.back()
+                            }
+                        }
                     }
                 )
             }
 
-            entry<Screen.DiagnosisResults> {
+            entry<Screen.DiagnosisResults> { route ->
                 DiagnosisResultsScreen(
-                    onFinishClick = {
-                        // FIXME proper popUp target
-                        viewModel.popUpTo(target = Screen.Home, inclusive = true)
-                    },
-                    onBackClick = {
-                        viewModel.back()
-                    },
-                    onRoutineClick = { id ->
-                        viewModel.navigate(Screen.RoutineDetails(id))
+                    diagnosisId = route.diagnosisId,
+                    onNavigate = { event ->
+                        when(event) {
+                            is DiagnosisResultsEvent.NavigateToRoutine -> {
+                                viewModel.navigate(Screen.RoutineDetails(event.routineId))
+                            }
+                            is DiagnosisResultsEvent.NavigateBack -> {
+                                viewModel.back()
+                            }
+                            is DiagnosisResultsEvent.FinishDiagnosis -> {
+                                viewModel.replace(Screen.DiagnosisDetails(event.diagnosisId))
+                            }
+
+                        }
+
                     }
                 )
             }
@@ -189,7 +202,7 @@ fun MainNavigation(
                 )
             }
 
-            entry<Screen.RoutineDetails> {
+            entry<Screen.RoutineDetails> { route ->
                 RoutineDetailsScreen (
                     onPlantClick = { id ->
                         viewModel.navigate(Screen.PlantDetails(id))
@@ -211,7 +224,7 @@ fun MainNavigation(
                 )
             }
 
-            entry<Screen.RoutineEdit> {
+            entry<Screen.RoutineEdit> { route ->
                 RoutineEditScreen(
                     onSaveRoutineClick = {},
                     onBackClick = {
