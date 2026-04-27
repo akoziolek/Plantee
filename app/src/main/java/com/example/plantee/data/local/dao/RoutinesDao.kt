@@ -20,6 +20,9 @@ interface RoutinesDao {
     @Update
     suspend fun update(routine: RoutineEntity)
 
+    @Query("UPDATE routines SET lastly_done_at = :date WHERE id = :id")
+    suspend fun updateLastlyDoneAt(id: Long, date: LocalDate = LocalDate.now())
+
     @Delete
     suspend fun delete(routine: RoutineEntity)
 
@@ -48,8 +51,21 @@ interface RoutinesDao {
     """)
     fun getRoutinesWithDate(date: LocalDate): Flow<List<RoutineWithDetails>>
 
+    @Query("""
+        SELECT *
+        FROM routines
+        WHERE (active_days & :dayBitmap) > 0
+    """)
+    fun getRoutinesForWeekday(dayBitmap: Int): Flow<List<RoutineEntity>>
+
     @Query("SELECT * FROM routines WHERE name LIKE '%' || :searchQuery || '%'")
     fun searchRoutines(searchQuery: String): Flow<List<RoutineEntity>>
+
+    @Query("SELECT * FROM routines WHERE name LIKE '%' || :searchQuery || '%' ORDER BY name ASC")
+    fun searchRoutinesAsc(searchQuery: String): Flow<List<RoutineEntity>>
+
+    @Query("SELECT * FROM routines WHERE name LIKE '%' || :searchQuery || '%' ORDER BY name DESC")
+    fun searchRoutinesDesc(searchQuery: String): Flow<List<RoutineEntity>>
 
     @Transaction
     @Query("""

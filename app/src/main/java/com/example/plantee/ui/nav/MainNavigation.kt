@@ -27,6 +27,7 @@ import com.example.plantee.ui.viewmodels.diagnosis.DiagnosisDetailsEvent
 import com.example.plantee.ui.viewmodels.diagnosis.DiagnosisResultsEvent
 import com.example.plantee.ui.viewmodels.plant.PlantEditEvent
 import com.example.plantee.ui.viewmodels.plant.PlantsEvent
+import com.example.plantee.ui.viewmodels.routine.RoutinesEvent
 
 @Composable
 fun MainNavigation(
@@ -193,11 +194,18 @@ fun MainNavigation(
 
             entry<Screen.Routines> {
                 RoutinesScreen(
-                    onRoutineClick = { id ->
-                        viewModel.navigate(Screen.RoutineDetails(id))
-                    },
-                    onRoutineAddClick = {
-                        viewModel.navigate(Screen.RoutineAdd)
+                    onNavigate = { event ->
+                        when(event) {
+                            is RoutinesEvent.NavigateToDetails -> {
+                                viewModel.navigate(Screen.RoutineDetails(event.routineId))
+                            }
+                            is RoutinesEvent.NavigateToAdd -> {
+                                viewModel.navigate(Screen.RoutineAdd)
+                            }
+                            RoutinesEvent.NavigateBack -> {
+                                viewModel.back()
+                            }
+                        }
                     }
                 )
             }

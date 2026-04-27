@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.plantee.domain.model.PlantSummary
 import com.example.plantee.domain.repositories.IPlantsRepository
+import com.example.plantee.utils.SortOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -33,18 +34,6 @@ data class PlantsUiState(
     val isLoading: Boolean = true,
     val searchQuery: String = ""
 )
-
-enum class SortOrder{
-    NONE, ASCENDING, DESCENDING;
-
-    fun next(): SortOrder {
-        return when (this) {
-            NONE -> ASCENDING
-            ASCENDING -> DESCENDING
-            DESCENDING -> NONE
-        }
-    }
-}
 
 @HiltViewModel
 class PlantsViewModel @Inject constructor(

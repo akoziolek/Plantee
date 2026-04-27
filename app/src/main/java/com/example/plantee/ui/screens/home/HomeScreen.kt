@@ -31,7 +31,7 @@ import com.example.plantee.ui.components.shared.LinkHeader
 import com.example.plantee.ui.components.shared.plantListItems_TODELETE
 import com.example.plantee.ui.components.shared.todayRoutinesSection
 import com.example.plantee.ui.theme.PlanteeTheme
-import com.example.plantee.ui.viewmodels.plant.SortOrder
+import com.example.plantee.utils.SortOrder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -80,10 +80,10 @@ fun HomeScreen(
                 )
             }
 
-            todayRoutinesSection(
-                routines = List(3) { "Routine $it" },
-                onItemClick = onRoutineClick
-            )
+//            todayRoutinesSection(
+//                routines = List(3) { "Routine $it" },
+//                onItemClick = onRoutineClick
+//            )
 
             item {
                 Spacer(modifier = Modifier.height(4.dp))

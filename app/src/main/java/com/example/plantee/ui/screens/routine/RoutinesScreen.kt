@@ -1,6 +1,7 @@
 package com.example.plantee.ui.screens.routine
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,45 +10,68 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.FilterBar
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.base.SectionHeader
 import com.example.plantee.ui.components.base.SimpleSearchBar
+import com.example.plantee.ui.components.shared.plantListItems
+import com.example.plantee.ui.components.shared.routinesSection
 import com.example.plantee.ui.components.shared.routinesSection_TODELETE
 import com.example.plantee.ui.components.shared.todayRoutinesSection
 import com.example.plantee.ui.theme.PlanteeTheme
+import com.example.plantee.ui.viewmodels.plant.PlantsEvent
+import com.example.plantee.ui.viewmodels.plant.PlantsViewModel
+import com.example.plantee.ui.viewmodels.routine.RoutinesEvent
+import com.example.plantee.ui.viewmodels.routine.RoutinesViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoutinesScreen(
-    onRoutineClick: (Long) -> Unit,
-    onRoutineAddClick: () -> Unit
+    viewModel: RoutinesViewModel = hiltViewModel<RoutinesViewModel>(),
+    onNavigate: (RoutinesEvent) -> Unit
+//    onRoutineClick: (Long) -> Unit,
+//    onRoutineAddClick: () -> Unit
 ) {
-    val state = rememberSearchBarState()
-    var query by remember { mutableStateOf("") }
-    var selectedItem by remember { mutableIntStateOf(2) }
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val text by viewModel.searchQuery.collectAsStateWithLifecycle()
+    val sort by viewModel.sortOrder.collectAsStateWithLifecycle()
+    val searchBarState = rememberSearchBarState()
+//    val state = rememberSearchBarState()
+//    var query by remember { mutableStateOf("") }
+//    var selectedItem by remember { mutableIntStateOf(2) }
+
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            onNavigate(event)
+        }
+    }
 
     Scaffold(
         topBar = {
             SimpleSearchBar(
-                query = query,
-                onQueryChange = { query = it },
-                state = state,
+                query = text,
+                onQueryChange = { viewModel.onSearchQueryChange(it) },
+                state = searchBarState,
                 placeholder = stringResource(R.string.routines_search_bar_placeholder),
                 expanded = false,
                 onExpandedChange = { },
@@ -59,34 +83,46 @@ fun RoutinesScreen(
             )
         },
         floatingActionButton = {
-            PrimaryFloatingButton(text = stringResource(R.string.routines_btn_add), onClick = onRoutineAddClick )
+            PrimaryFloatingButton(text = stringResource(R.string.routines_btn_add), onClick = { viewModel.onAddClick() })
         }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(innerPadding),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            item {
-                SectionHeader(stringResource(R.string.routines_label_for_today))
+        if (state.isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
             }
-            // ewentualnie bardziej odsunac od gory
-            todayRoutinesSection(
-                routines = List(2) { "Routine $it" },
-                onItemClick = onRoutineClick
-            )
+        } else {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize().padding(innerPadding),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                item {
+                    SectionHeader(stringResource(R.string.routines_label_for_today))
+                }
+                // ewentualnie bardziej odsunac od gory
+                todayRoutinesSection(
+                    routines = state.todayRoutines,
+                    onCheckboxClick = { viewModel.onCheckboxClick(it)},
+                    onItemClick = { viewModel.onRoutineClick(it) }
+                )
 
-            item { Spacer(modifier = Modifier.height(24.dp)) }
+                item { Spacer(modifier = Modifier.height(24.dp)) }
 
-            item {
-                SectionHeader(stringResource(R.string.routines_label_all))
-                FilterBar({}, {})
+                item {
+                    SectionHeader(stringResource(R.string.routines_label_all))
+                    FilterBar({}, {})
+                }
+
+                routinesSection(
+                    routines = state.routines,
+                    onRoutineClick = { viewModel.onRoutineClick(it) }
+                )
+
+//                routinesSection_TODELETE(
+//                    routines = List(6) { "Routine $it" },
+//                    onRoutineClick = onRoutineClick
+//                )
             }
-
-            routinesSection_TODELETE(
-                routines = List(6) { "Routine $it" },
-                onRoutineClick = onRoutineClick
-            )
         }
     }
 }
@@ -96,8 +132,9 @@ fun RoutinesScreen(
 fun RoutinesPreview() {
     PlanteeTheme {
         RoutinesScreen(
-            onRoutineAddClick = { println("Kliknięto dodaj rutynę") },
-            onRoutineClick = { id -> println("Kliknięto rutynę $id") }
+            onNavigate = {}
+//            onRoutineAddClick = { println("Kliknięto dodaj rutynę") },
+//            onRoutineClick = { id -> println("Kliknięto rutynę $id") }
         )
     }
 }
