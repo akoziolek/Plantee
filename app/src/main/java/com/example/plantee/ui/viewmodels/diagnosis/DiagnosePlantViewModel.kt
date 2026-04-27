@@ -86,6 +86,8 @@ class DiagnosePlantViewModel @AssistedInject constructor(
                 diagnosedAt = LocalDateTime.now()
             )
             val diagnosisId = diagnosesRepository.createDiagnosis(diagnosis)
+            // TODO przekazywanie calego obiektu do diagnozy, do viewmodelu diagnose tez trzeba wtedy dodac diagnoze
+            // TODO usunac navbar z detali
             _events.send(DiagnosePlantEvent.NavigateToDiagnosis(diagnosisId))
         }
     }

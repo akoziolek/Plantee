@@ -11,6 +11,7 @@ import com.example.plantee.data.local.relations.PlantWithDetails
 import com.example.plantee.data.local.entities.PlantEntity
 import kotlinx.coroutines.flow.Flow
 
+
 @Dao
 interface PlantsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
