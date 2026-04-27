@@ -31,6 +31,7 @@ import com.example.plantee.ui.components.shared.LinkHeader
 import com.example.plantee.ui.components.shared.plantListItems_TODELETE
 import com.example.plantee.ui.components.shared.todayRoutinesSection
 import com.example.plantee.ui.theme.PlanteeTheme
+import com.example.plantee.ui.viewmodels.plant.SortOrder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -91,8 +92,10 @@ fun HomeScreen(
             item {
                 FilterSectionHeader(
                     title = stringResource(R.string.home_label_your_plants),
-                    filterTitle = stringResource(R.string.home_label_filter_plants)
-                ) { }
+                    filterTitle = stringResource(R.string.home_label_filter_plants),
+                    onClick = { },
+                    sort = SortOrder.NONE
+                )
             }
 
             plantListItems_TODELETE(

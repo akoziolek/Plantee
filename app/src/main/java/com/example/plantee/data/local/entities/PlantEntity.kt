@@ -17,7 +17,8 @@ import androidx.room.PrimaryKey
         )
     ],
     indices = [
-        Index(value = ["id_media"])
+        Index(value = ["id_media"]),
+        Index(value = ["name"])
     ]
 )
 data class PlantEntity (

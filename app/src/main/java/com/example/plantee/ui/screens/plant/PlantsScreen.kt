@@ -38,6 +38,8 @@ fun PlantsScreen(
     onNavigate: (PlantsEvent) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val text by viewModel.searchQuery.collectAsStateWithLifecycle()
+    val sort by viewModel.sortOrder.collectAsStateWithLifecycle()
     val searchBarState = rememberSearchBarState()
 
     LaunchedEffect(Unit) {
@@ -48,8 +50,9 @@ fun PlantsScreen(
 
     Scaffold(
         topBar = {
+            // FIXME gap between search bar and list
             SimpleSearchBar(
-                query = state.searchQuery,
+                query = text,
                 onQueryChange = { viewModel.onSearchQueryChange(it) },
                 state = searchBarState,
                 placeholder = stringResource(R.string.plants_search_bar_placeholder),
@@ -80,8 +83,8 @@ fun PlantsScreen(
                 FilterSectionHeader(
                     title = stringResource(R.string.plants_label_your_plants),
                     filterTitle = stringResource(R.string.home_label_filter_plants),
-                    onClick = { //TODO add logic
-                    }
+                    onClick = { viewModel.toggleSortOrder() },
+                    sort = sort
                 )
 
                 LazyColumn(
