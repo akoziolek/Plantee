@@ -28,7 +28,7 @@ fun LazyListScope.todayRoutinesSection(
     } else {
         items(
             items = routines,
-            key = { routine -> routine.id }
+            key = { routine -> "today_${routine.id}" }
         ) { routine ->
             RoutinesListItem(
                 headlineText = routine.name,
@@ -75,7 +75,7 @@ fun LazyListScope.routinesSection(
     else {
         items(
             items = routines,
-            key = { routine -> routine.id }
+            key = { routine -> "all_${routine.id}" }
         ) { routine ->
             RoutinesListItem(
                 headlineText = routine.name,
