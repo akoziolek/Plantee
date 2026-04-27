@@ -2,14 +2,27 @@ package com.example.plantee.ui.viewmodels.routine
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.plantee.data.repositories.PlantsRepository
 import com.example.plantee.domain.model.Routine
+import com.example.plantee.domain.repositories.IPlantsRepository
 import com.example.plantee.domain.repositories.IRoutinesRepository
+import com.example.plantee.ui.viewmodels.plant.PlantsUiState
+import com.example.plantee.utils.SortOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,10 +42,38 @@ data class RoutineAddUiState(
 
 @HiltViewModel
 class RoutineAddViewModel @Inject constructor(
-    private val routineRepository: IRoutinesRepository
+    private val routineRepository: IRoutinesRepository,
+    private val plantsRepository: IPlantsRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(RoutineAddUiState())
     val state: StateFlow<RoutineAddUiState> = _state.asStateFlow()
+
+    private val _sortOrder = MutableStateFlow(SortOrder.NONE)
+    val sortOrder = _sortOrder.asStateFlow()
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery = _searchQuery.asStateFlow()
+
+//    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
+//    val state: StateFlow<RoutineAddUiState> = combine(
+//        _searchQuery.debounce(300L).distinctUntilChanged(),
+//        _sortOrder
+//    ) { query, sort -> query to sort }
+//        .flatMapLatest { (query, sort) ->
+//            plantsRepository.getSearchedPlantsSummaryWithSort(query, sort).map { filtered ->
+//                RoutineAddUiState(
+//
+//                )
+//                PlantsUiState(
+//                    plants = filtered,
+//                    isLoading = false
+//                )
+//            }
+//        }
+//        .stateIn(
+//            scope = viewModelScope,
+//            started = SharingStarted.WhileSubscribed(5000),
+//            initialValue = PlantsUiState()
+//        )
 
     private val _events = Channel<RoutineAddEvent>()
     val events = _events.receiveAsFlow()
@@ -45,12 +86,23 @@ class RoutineAddViewModel @Inject constructor(
         _state.update { it.copy(description = newDescription) }
     }
 
-    fun onActiveDaysChange(newActiveDays: Int) {
+    fun onActiveDaysChange(dayToChange: Int) {
+        val isChecked = (_state.value.activeDays and (1 shl dayToChange)) != 0
+        val newActiveDays = if (isChecked) {
+            _state.value.activeDays and (1 shl dayToChange).inv()
+        } else {
+            _state.value.activeDays or (1 shl dayToChange)
+        }
+
         _state.update { it.copy(activeDays = newActiveDays) }
     }
 
     fun onPlantsChange(newPlantsIds: List<Long>) {
         _state.update { it.copy(plantIds = newPlantsIds) }
+    }
+
+    fun onSearchQueryChange(query: String) {
+        _searchQuery.value = query
     }
 
     fun onBackClick() {
@@ -70,7 +122,7 @@ class RoutineAddViewModel @Inject constructor(
 
         viewModelScope.launch {
             val currentState = _state.value
-            // TODO no start date and end date used anywhere
+            // FIXME no start date and end date used anywhere
             val routine = Routine(
                 name = currentState.name,
                 description = currentState.description,

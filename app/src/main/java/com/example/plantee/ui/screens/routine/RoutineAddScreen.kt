@@ -11,6 +11,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
 import com.example.plantee.ui.components.base.DaysOfWeek
@@ -28,25 +31,42 @@ import com.example.plantee.ui.components.base.SectionHeader
 import com.example.plantee.ui.components.base.SimpleSearchBar
 import com.example.plantee.ui.components.shared.plantListItems_TODELETE
 import com.example.plantee.ui.theme.PlanteeTheme
+import com.example.plantee.ui.viewmodels.plant.PlantAddEvent
+import com.example.plantee.ui.viewmodels.plant.PlantAddViewModel
+import com.example.plantee.ui.viewmodels.routine.RoutineAddEvent
+import com.example.plantee.ui.viewmodels.routine.RoutineAddViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoutineAddScreen(
-    onAddRoutineClick: () -> Unit,
-    onBackClick: () -> Unit
+    viewModel: RoutineAddViewModel = hiltViewModel<RoutineAddViewModel>(),
+    onNavigate: (RoutineAddEvent) -> Unit
+//    onAddRoutineClick: () -> Unit,
+//    onBackClick: () -> Unit
 ) {
-    val selectedDays = listOf(0, 2, 3, 6)
-    var nameText by remember { mutableStateOf("") }
-    var descText by remember { mutableStateOf("") }
-    val state = rememberSearchBarState()
-    var query by remember { mutableStateOf("") }
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val text by viewModel.searchQuery.collectAsStateWithLifecycle()
+    val sort by viewModel.sortOrder.collectAsStateWithLifecycle()
+    val searchBarState = rememberSearchBarState()
+
+//    val selectedDays = listOf(0, 2, 3, 6)
+//    var nameText by remember { mutableStateOf("") }
+//    var descText by remember { mutableStateOf("") }
+//    val state = rememberSearchBarState()
+//    var query by remember { mutableStateOf("") }
+
+    LaunchedEffect(viewModel.events) {
+        viewModel.events.collect { event ->
+            onNavigate(event)
+        }
+    }
 
     Scaffold(
         topBar = {
-            BackTopBar(stringResource(R.string.routine_add_title), onBackClick = onBackClick)
+            BackTopBar(stringResource(R.string.routine_add_title), onBackClick = { viewModel.onBackClick() })
         },
         floatingActionButton = {
-            PrimaryFloatingButton(text = stringResource(R.string.routine_add_btn_save), onClick = onAddRoutineClick)
+            PrimaryFloatingButton(text = stringResource(R.string.routine_add_btn_save), onClick = { viewModel.saveRoutine() })
         }
     ) { innerPadding ->
         LazyColumn(
@@ -60,8 +80,8 @@ fun RoutineAddScreen(
             item {
                 InputTextField(
                     title = stringResource(R.string.routine_add_label_name),
-                    value = nameText,
-                    onValueChange = { nameText = it },
+                    value = state.name,
+                    onValueChange = { viewModel.onNameChange(it) },
                     supportingText = stringResource(R.string.routine_add_support_name)
                 )
             }
@@ -70,8 +90,8 @@ fun RoutineAddScreen(
             item {
                 InputTextField(
                     title = stringResource(R.string.routine_add_label_description),
-                    value = descText,
-                    onValueChange = { descText = it },
+                    value = state.description,
+                    onValueChange = { viewModel.onDescriptionChange(it) },
                     supportingText = stringResource(R.string.routine_add_support_description)
                 )
             }
@@ -79,8 +99,8 @@ fun RoutineAddScreen(
             // --- DAYS OF THE WEEK ---
             item {
                 DaysOfWeek(
-                    selectedDays = selectedDays,
-                    onDayClick = { }
+                    selectedDays = state.activeDays,
+                    onDayClick = { viewModel.onActiveDaysChange(it) }
                 )
             }
 
@@ -91,9 +111,9 @@ fun RoutineAddScreen(
 
             item {
                 SimpleSearchBar(
-                    query = query,
-                    onQueryChange = { query = it },
-                    state = state,
+                    query = text,
+                    onQueryChange = { viewModel.onSearchQueryChange(it) },
+                    state = searchBarState,
                     placeholder = stringResource(R.string.routines_search_bar_placeholder),
                     onExpandedChange = { },
                     expanded = false,
@@ -105,10 +125,10 @@ fun RoutineAddScreen(
                 Spacer(modifier = Modifier.height(4.dp))
             }
 
-            plantListItems_TODELETE(
-                plants = List(6) {"Plant no. $it"},
-                onPlantClick = {}
-            )
+//            plantListItems_TODELETE(
+//                plants = List(6) {"Plant no. $it"},
+//                onPlantClick = {}
+//            )
         }
     }
 }
@@ -120,8 +140,9 @@ fun RoutineAddScreen(
 fun RoutineAddPreview() {
     PlanteeTheme {
         RoutineAddScreen(
-            onAddRoutineClick = {},
-            onBackClick = {}
+            onNavigate = { }
+//            onAddRoutineClick = {},
+//            onBackClick = {}
         )
     }
 }

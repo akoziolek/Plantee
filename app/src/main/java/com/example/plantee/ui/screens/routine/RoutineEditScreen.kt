@@ -35,7 +35,7 @@ fun RoutineEditScreen(
     onSaveRoutineClick: () -> Unit,
     onBackClick: () -> Unit
 ) {
-    val selectedDays = listOf(0, 2, 3, 6)
+    val selectedDays = 64
     var nameText by remember { mutableStateOf("Routine name") }
     var descText by remember { mutableStateOf("Routine description") }
     val state = rememberSearchBarState()

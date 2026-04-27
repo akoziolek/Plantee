@@ -104,7 +104,7 @@ fun InputSlider(
 
 @Composable
 fun DaysOfWeek(
-    selectedDays: List<Int>,
+    selectedDays: Int,
     modifier: Modifier = Modifier,
     title: String = stringResource(R.string.input_label_weekdays),
     onDayClick: (Int) -> Unit
@@ -119,7 +119,7 @@ fun DaysOfWeek(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             daysOfWeek.forEachIndexed { index, day ->
-                val isSelected = selectedDays.contains(index)
+                val isSelected = (selectedDays and (1 shl index)) != 0
 
                 FilterChip(
                     selected = isSelected,
@@ -168,7 +168,7 @@ fun InputsPreview() {
                 {}
             )
             DaysOfWeek(
-                selectedDays = listOf(0, 3, 5),
+                selectedDays = 12,
                 onDayClick = { }
             )
         }

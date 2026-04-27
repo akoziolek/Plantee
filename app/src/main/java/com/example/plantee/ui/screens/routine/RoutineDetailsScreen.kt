@@ -33,7 +33,7 @@ fun RoutineDetailsScreen(
     onPlantClick: (Long) -> Unit,
     onBackClick: () -> Unit
 ) {
-    val selectedDays = listOf(0, 2, 3, 6)
+    val selectedDays = 64
 
     Scaffold(
         topBar = {
