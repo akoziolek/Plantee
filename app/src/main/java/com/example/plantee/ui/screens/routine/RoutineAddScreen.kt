@@ -41,19 +41,11 @@ import com.example.plantee.ui.viewmodels.routine.RoutineAddViewModel
 fun RoutineAddScreen(
     viewModel: RoutineAddViewModel = hiltViewModel<RoutineAddViewModel>(),
     onNavigate: (RoutineAddEvent) -> Unit
-//    onAddRoutineClick: () -> Unit,
-//    onBackClick: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val text by viewModel.searchQuery.collectAsStateWithLifecycle()
     val sort by viewModel.sortOrder.collectAsStateWithLifecycle()
     val searchBarState = rememberSearchBarState()
-
-//    val selectedDays = listOf(0, 2, 3, 6)
-//    var nameText by remember { mutableStateOf("") }
-//    var descText by remember { mutableStateOf("") }
-//    val state = rememberSearchBarState()
-//    var query by remember { mutableStateOf("") }
 
     LaunchedEffect(viewModel.events) {
         viewModel.events.collect { event ->
@@ -125,10 +117,10 @@ fun RoutineAddScreen(
                 Spacer(modifier = Modifier.height(4.dp))
             }
 
-//            plantListItems_TODELETE(
-//                plants = List(6) {"Plant no. $it"},
-//                onPlantClick = {}
-//            )
+            plantListItems_TODELETE(
+                plants = List(6) {"Plant no. $it"},
+                onPlantClick = {}
+            )
         }
     }
 }
@@ -141,8 +133,6 @@ fun RoutineAddPreview() {
     PlanteeTheme {
         RoutineAddScreen(
             onNavigate = { }
-//            onAddRoutineClick = {},
-//            onBackClick = {}
         )
     }
 }

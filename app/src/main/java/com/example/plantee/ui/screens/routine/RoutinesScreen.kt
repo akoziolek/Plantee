@@ -50,16 +50,11 @@ import com.example.plantee.utils.SortOrder
 fun RoutinesScreen(
     viewModel: RoutinesViewModel = hiltViewModel<RoutinesViewModel>(),
     onNavigate: (RoutinesEvent) -> Unit
-//    onRoutineClick: (Long) -> Unit,
-//    onRoutineAddClick: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val text by viewModel.searchQuery.collectAsStateWithLifecycle()
     val sort by viewModel.sortOrder.collectAsStateWithLifecycle()
     val searchBarState = rememberSearchBarState()
-//    val state = rememberSearchBarState()
-//    var query by remember { mutableStateOf("") }
-//    var selectedItem by remember { mutableIntStateOf(2) }
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
@@ -119,10 +114,6 @@ fun RoutinesScreen(
                     onRoutineClick = { viewModel.onRoutineClick(it) }
                 )
 
-//                routinesSection_TODELETE(
-//                    routines = List(6) { "Routine $it" },
-//                    onRoutineClick = onRoutineClick
-//                )
             }
         }
     }

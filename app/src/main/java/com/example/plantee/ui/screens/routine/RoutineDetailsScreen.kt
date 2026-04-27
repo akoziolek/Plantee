@@ -47,11 +47,8 @@ fun RoutineDetailsScreen(
         }
     ),
     onNavigate: (RoutineDetailsEvent) -> Unit
-//    onPlantClick: (Long) -> Unit,
-//    onBackClick: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-//    val selectedDays = 64
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
@@ -64,6 +61,7 @@ fun RoutineDetailsScreen(
             BackTopBar(
                 stringResource(R.string.routine_details_title),
                 onBackClick = { viewModel.onBackClick() },
+                // TODO actions for buttons
                 actions = {
                     IconButton(onClick = { /* action 1 */ }) {
                         Icon(Icons.Default.BookmarkBorder, "Add to favourites")
@@ -154,8 +152,6 @@ fun RoutineDetailsPreview() {
         RoutineDetailsScreen(
             routineId = 1L,
             onNavigate = {}
-//            onBackClick = {},
-//            onPlantClick = {}
         )
     }
 }
