@@ -51,6 +51,9 @@ data class RoutinesUiState(
 class RoutinesViewModel @Inject constructor(
     private val routinesRepository: IRoutinesRepository
 ) : ViewModel() {
+    private val _currentDay = MutableStateFlow<DayOfWeek>(LocalDate.now().dayOfWeek)
+    val currentDay = _currentDay.asStateFlow()
+
     init {
         viewModelScope.launch {
             while (true) {
@@ -71,8 +74,7 @@ class RoutinesViewModel @Inject constructor(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
 
-    private val _currentDay = MutableStateFlow<DayOfWeek>(LocalDate.now().dayOfWeek)
-    val currentDay = _currentDay.asStateFlow()
+
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     private val searchFlow = combine(

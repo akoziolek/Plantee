@@ -12,6 +12,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.automirrored.filled.Sort
+import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Home
@@ -51,6 +54,7 @@ import com.example.plantee.ui.nav.Screen
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.theme.extendedLight
 import com.example.plantee.ui.theme.titleLargeBold
+import com.example.plantee.utils.SortOrder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -196,7 +200,8 @@ fun NavBar(
 fun FilterBar(
     onFilterClick: () -> Unit,
     onViewModeClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    sort: SortOrder
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -215,8 +220,13 @@ fun FilterBar(
                 bottom = 8.dp
             )
         ) {
+            val icon = when (sort) {
+                SortOrder.NONE -> Icons.AutoMirrored.Filled.Sort
+                SortOrder.ASCENDING -> Icons.Default.ArrowUpward
+                SortOrder.DESCENDING -> Icons.Default.ArrowDownward
+            }
             Icon(
-                imageVector = Icons.Default.SwapVert,
+                imageVector = icon,
                 contentDescription = null,
             )
             Spacer(Modifier.width(4.dp))
@@ -227,6 +237,7 @@ fun FilterBar(
         }
 
         IconButton(
+            // TODO filter by days of the week (drop down list)
             onClick = onViewModeClick,
         ) {
             Icon(
@@ -292,7 +303,7 @@ fun TopBarsPreview() {
                 expanded = false,
                 onExpandedChange = { }
             )
-            FilterBar({}, {})
+            FilterBar({}, {}, sort = SortOrder.NONE)
             //NavBar()
 
         }

@@ -42,6 +42,7 @@ import com.example.plantee.ui.viewmodels.plant.PlantsEvent
 import com.example.plantee.ui.viewmodels.plant.PlantsViewModel
 import com.example.plantee.ui.viewmodels.routine.RoutinesEvent
 import com.example.plantee.ui.viewmodels.routine.RoutinesViewModel
+import com.example.plantee.utils.SortOrder
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -99,7 +100,7 @@ fun RoutinesScreen(
                 item {
                     SectionHeader(stringResource(R.string.routines_label_for_today))
                 }
-                // ewentualnie bardziej odsunac od gory
+                // TODO ewentualnie bardziej odsunac od gory
                 todayRoutinesSection(
                     routines = state.todayRoutines,
                     onCheckboxClick = { viewModel.onCheckboxClick(it)},
@@ -110,7 +111,7 @@ fun RoutinesScreen(
 
                 item {
                     SectionHeader(stringResource(R.string.routines_label_all))
-                    FilterBar({}, {})
+                    FilterBar({}, {}, sort = SortOrder.NONE)
                 }
 
                 routinesSection(
