@@ -7,6 +7,7 @@ import com.example.plantee.domain.model.Routine
 import com.example.plantee.domain.repositories.IPlantsRepository
 import com.example.plantee.domain.repositories.IRoutinesRepository
 import com.example.plantee.utils.SortOrder
+import com.example.plantee.utils.toLocalDate
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -39,6 +40,8 @@ data class RoutineEditUiState(
     val nameError: Boolean = false,
     val description: String = "",
     val activeDays: Int = 0,
+    val startDate: LocalDate? = null,
+    val endDate: LocalDate? = null,
     val lastlyDoneAt: LocalDate? = null,
     val plants: List<PlantSummary> = emptyList(),
     val plantIds: List<Long> = emptyList(),
@@ -127,6 +130,13 @@ class RoutineEditViewModel @AssistedInject constructor(
         _state.update { it.copy(activeDays = newActiveDays) }
     }
 
+    fun onDateRangeSelected(start: Long?, end: Long?) {
+        _state.update { it.copy(
+            startDate = start?.toLocalDate(),
+            endDate = end?.toLocalDate()
+        ) }
+    }
+
     fun onPlantClick(plantId: Long) {
         _state.update { currentState ->
             val newPlantIds = if (currentState.plantIds.contains(plantId)) {
@@ -164,6 +174,8 @@ class RoutineEditViewModel @AssistedInject constructor(
                 name = currentState.name,
                 description = currentState.description,
                 activeDays = currentState.activeDays,
+                startDate = currentState.startDate,
+                endDate = currentState.endDate,
                 lastlyDoneAt = currentState.lastlyDoneAt,
                 plantsIds = currentState.plantIds
 

@@ -139,6 +139,8 @@ class RoutineAddViewModel @Inject constructor(
                 name = currentState.name,
                 description = currentState.description,
                 activeDays = currentState.activeDays,
+                startDate = currentState.startDate,
+                endDate = currentState.endDate,
                 plantsIds = currentState.plantIds
             )
             val id = routineRepository.addRoutine(routine)

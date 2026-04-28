@@ -153,8 +153,9 @@ fun DateRangeField(
     endDate: LocalDate?,
     onDateRangeSelected: (Pair<Long?, Long?>) -> Unit,
     modifier: Modifier = Modifier,
+    active: Boolean = true,
     title: String = stringResource(R.string.input_label_date_field),
-    fieldText: String = stringResource(R.string.input_label_date_field),
+    fieldText: String = stringResource(R.string.date_field_placeholder),
     modalMessage: String = stringResource(R.string.routine_edit_label_dates_choice),
     confirmText: String = stringResource(R.string.dialog_confirm),
     dismissText: String = stringResource(R.string.dialog_cancel)
@@ -177,10 +178,9 @@ fun DateRangeField(
             supportingText = { Text(stringResource(R.string.date_field_supporting_text)) },
             onValueChange = { },
             readOnly = true,
-            label = { Text(stringResource(R.string.input_label_date_picker))},
+            label = { Text(stringResource(R.string.input_label_date_field))},
             modifier = modifier
-                .fillMaxWidth()
-                .clickable { showModal = true },
+                .fillMaxWidth(),
             enabled = false,
             colors = OutlinedTextFieldDefaults.colors(
                 disabledTextColor = MaterialTheme.colorScheme.onSurface,
@@ -190,7 +190,7 @@ fun DateRangeField(
                 disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
             ),
             trailingIcon = {
-                IconButton(onClick = { showModal = true }) {
+                IconButton(onClick = { if (active) showModal = true }) {
                     Icon(Icons.Default.CalendarToday, contentDescription = null)
                 }
 

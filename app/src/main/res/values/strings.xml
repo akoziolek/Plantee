@@ -41,10 +41,11 @@
     <string name="routine_edit_label_name">Name</string>
     <string name="routine_edit_label_description">Description</string>
     <string name="input_label_weekdays">Weekdays</string>
-    <string name="input_label_date_picker">Date range</string>
-    <string name="input_label_date_field">Choose dates</string>
+    <string name="input_label_date_field">Date range</string>
+    <string name="date_field_placeholder">Choose dates</string>
+    <string name="date_field_no_dates_placeholder">No dates selected</string>
     <string name="date_field_supporting_text">YYYY-MM-DD</string>
-    <string name="routine_edit_label_dates_choice">Choose start and end date for your routine</string>
+    <string name="routine_edit_label_dates_choice">Choose date range for your routine</string>
     <string name="routine_edit_label_plant_choice">Choose plants</string>
     <string name="routine_edit_support_name">How do you want to name your routine?</string>
     <string name="routine_edit_support_description">Give a short description of the routine</string>

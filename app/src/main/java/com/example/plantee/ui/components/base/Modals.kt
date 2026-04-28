@@ -6,17 +6,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DateRangePicker
-import androidx.compose.material3.DateRangePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.plantee.R
-import com.example.plantee.utils.toLocalDate
+import com.example.plantee.utils.toMillis
 import java.time.LocalDate
 
 @Composable
@@ -57,8 +54,8 @@ fun DateRangePickerModal(
     dismissText: String
 ) {
     val dateRangePickerState = rememberDateRangePickerState(
-        initialSelectedStartDate = startDate,
-        initialSelectedEndDate = endDate
+        initialSelectedStartDateMillis = startDate?.toMillis(),
+        initialSelectedEndDateMillis = endDate?.toMillis()
     )
 
     DatePickerDialog(

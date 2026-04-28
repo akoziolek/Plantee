@@ -26,6 +26,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
+import com.example.plantee.ui.components.base.DateRangeField
 import com.example.plantee.ui.components.base.DaysOfWeek
 import com.example.plantee.ui.components.base.DeleteConfirmationDialog
 import com.example.plantee.ui.components.base.InfoSection
@@ -135,6 +136,17 @@ fun RoutineDetailsScreen(
                             selectedDays = routine.activeDays ?: 0,
                             onDayClick = { },
                             modifier = Modifier.padding(top = 8.dp)
+                        )
+                    }
+
+                    // --- START AND END DATE ---
+                    item {
+                        DateRangeField(
+                            startDate = routine.startDate,
+                            endDate = routine.endDate,
+                            onDateRangeSelected = { },
+                            active = false,
+                            fieldText = stringResource(R.string.date_field_no_dates_placeholder)
                         )
                     }
 
