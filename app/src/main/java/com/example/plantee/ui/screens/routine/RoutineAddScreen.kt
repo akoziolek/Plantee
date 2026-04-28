@@ -120,8 +120,9 @@ fun RoutineAddScreen(
 
             plantListItems(
                 plants = state.plants,
-                onPlantClick = {  }, // TODO select plant
-                onPlantBookmarkClick = {  }
+                onPlantClick = { viewModel.onPlantClick(it) },
+                onPlantBookmarkClick = {  },
+                selectedPlantIds = state.plantIds
             )
 
         }

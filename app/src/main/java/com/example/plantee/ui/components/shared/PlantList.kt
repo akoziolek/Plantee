@@ -26,7 +26,8 @@ fun LazyListScope.plantListItems_TODELETE(
 fun LazyListScope.plantListItems(
     plants: List<PlantSummary>,
     onPlantClick: (Long) -> Unit,
-    onPlantBookmarkClick: (Long) -> Unit
+    onPlantBookmarkClick: (Long) -> Unit,
+    selectedPlantIds: List<Long> = emptyList()
 ) {
     if (plants.isEmpty()) {
         item {
@@ -44,6 +45,7 @@ fun LazyListScope.plantListItems(
                 title = plant.name,
                 description = plant.description ?: "",
                 isBookmarked = plant.isFavourite,
+                isSelected = selectedPlantIds.contains(plant.id),
                 onClick = { onPlantClick(plant.id) },
                 onBookmarkClick = { onPlantBookmarkClick(plant.id) }
             )

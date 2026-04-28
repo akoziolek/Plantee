@@ -15,10 +15,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -55,22 +55,23 @@ class RoutineAddViewModel @Inject constructor(
     val searchQuery = _searchQuery.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-    val state: StateFlow<RoutineAddUiState> = _searchQuery
+    private val _filteredPlants = _searchQuery
         .debounce(300L)
         .distinctUntilChanged()
         .flatMapLatest { query ->
-            plantsRepository.getSearchedPlantsSummaryWithSort(query, SortOrder.NONE).map { filtered ->
-                RoutineAddUiState(
-                    plants = filtered,
-                    isLoading = false
-                )
-            }
+            plantsRepository.getSearchedPlantsSummaryWithSort(query, SortOrder.NONE)
         }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = RoutineAddUiState()
+
+    val state: StateFlow<RoutineAddUiState> = combine(_state, _filteredPlants) { currentState, filteredPlants ->
+        currentState.copy(
+            plants = filteredPlants,
+            isLoading = false
         )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = RoutineAddUiState()
+    )
 
     private val _events = Channel<RoutineAddEvent>()
     val events = _events.receiveAsFlow()
@@ -95,13 +96,14 @@ class RoutineAddViewModel @Inject constructor(
     }
 
     fun onPlantClick(plantId: Long) {
-        val newPlantsIds: List<Long> = if (_state.value.plantIds.contains(plantId)) {
-            _state.value.plantIds.filterNot { it == plantId }
-        } else {
-            _state.value.plantIds + plantId
+        _state.update { currentState ->
+            val newPlantIds = if (currentState.plantIds.contains(plantId)) {
+                currentState.plantIds.filterNot { it == plantId }
+            } else {
+                currentState.plantIds + plantId
+            }
+            currentState.copy(plantIds = newPlantIds)
         }
-
-        _state.update { it.copy(plantIds = newPlantsIds) }
     }
 
     fun onSearchQueryChange(query: String) {
@@ -124,8 +126,7 @@ class RoutineAddViewModel @Inject constructor(
         if (!validate()) return
 
         viewModelScope.launch {
-            val currentState = _state.value
-            // FIXME no start date and end date used anywhere
+            val currentState = state.value
             val routine = Routine(
                 name = currentState.name,
                 description = currentState.description,
@@ -143,3 +144,5 @@ class RoutineAddViewModel @Inject constructor(
         _searchQuery.value = ""
     }
 }
+
+// FIXME no start and end date used

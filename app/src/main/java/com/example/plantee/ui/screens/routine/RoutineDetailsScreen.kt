@@ -6,13 +6,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BookmarkBorder
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -37,7 +32,7 @@ import com.example.plantee.ui.components.base.InfoSection
 import com.example.plantee.ui.components.base.OverflowAction
 import com.example.plantee.ui.components.base.OverflowMenu
 import com.example.plantee.ui.components.base.SectionHeader
-import com.example.plantee.ui.components.shared.plantListItems_TODELETE
+import com.example.plantee.ui.components.shared.plantListItems
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.viewmodels.routine.RoutineDetailsEvent
 import com.example.plantee.ui.viewmodels.routine.RoutineDetailsUiState
@@ -108,6 +103,7 @@ fun RoutineDetailsScreen(
 
             is RoutineDetailsUiState.Success -> {
                 val routine = currentState.routine
+                val plants = currentState.connectedPlants
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
@@ -150,9 +146,10 @@ fun RoutineDetailsScreen(
                         )
                     }
 
-                    plantListItems_TODELETE(
-                        plants = List(6) { "Plant no. $it" },
-                        onPlantClick = { }
+                    plantListItems(
+                        plants = plants,
+                        onPlantClick = { viewModel.onPlantClick(it) },
+                        onPlantBookmarkClick = {  }
                     )
                 }
             }

@@ -90,6 +90,7 @@ fun PlantListItem(
     description: String,
     modifier: Modifier = Modifier,
     isBookmarked: Boolean = false,
+    isSelected: Boolean = false,
     onClick: () -> Unit = {},
     onBookmarkClick: () -> Unit = {}
 ) {
@@ -100,6 +101,7 @@ fun PlantListItem(
     )
     val bookmarkIcon = if(isBookmarked) Icons.Default.Bookmark else Icons.Default.BookmarkBorder
     val iconTint = if(isBookmarked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+    val containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant
 
     Surface(
         modifier = modifier
@@ -107,7 +109,7 @@ fun PlantListItem(
             .clip(RoundedCornerShape(10.dp))
             // TODO pass the Plant object, and the proper id?
             .clickable { onClick() },
-        color = MaterialTheme.colorScheme.surfaceVariant
+        color = containerColor
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
