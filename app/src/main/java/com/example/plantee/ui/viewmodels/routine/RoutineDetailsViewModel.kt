@@ -105,7 +105,7 @@ class RoutineDetailsViewModel @AssistedInject constructor(
         }
     }
 
-    fun deletePlant() {
+    fun deleteRoutine() {
         viewModelScope.launch {
             isDeleted.value = true
             routinesRepository.deleteRoutine(routineId)
