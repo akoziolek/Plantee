@@ -1,5 +1,6 @@
 package com.example.plantee.ui.viewmodels.routine
 
+import androidx.compose.runtime.currentCompositionErrors
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.plantee.domain.model.PlantSummary
@@ -168,10 +169,10 @@ class RoutineEditViewModel @AssistedInject constructor(
                 description = currentState.description,
                 activeDays = currentState.activeDays,
                 lastlyDoneAt = currentState.lastlyDoneAt,
+                plantsIds = currentState.plantIds
 
             )
             routinesRepository.updateRoutine(routine)
-            // TODO update plants for routine
             _events.send(RoutineEditEvent.RoutineUpdated)
         }
     }
