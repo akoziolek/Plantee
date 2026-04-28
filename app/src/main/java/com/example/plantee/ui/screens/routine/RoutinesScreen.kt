@@ -96,7 +96,11 @@ fun RoutinesScreen(
 
                 item {
                     SectionHeader(stringResource(R.string.routines_label_all))
-                    FilterBar({}, {}, sort = SortOrder.NONE)
+                    FilterBar(
+                        onFilterClick = { viewModel.toggleSortOrder() },
+                        onViewModeClick = {},
+                        sort = sort
+                    )
                 }
 
                 routinesSection(
