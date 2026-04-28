@@ -228,7 +228,7 @@ fun MainNavigation(
                                 viewModel.back()
                             }
                             RoutineDetailsEvent.NavigateBack -> {
-                                viewModel.back()
+                                viewModel.navigate(Screen.Routines)
                             }
                         }
                     }
