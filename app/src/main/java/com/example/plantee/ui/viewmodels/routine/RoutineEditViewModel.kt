@@ -1,6 +1,5 @@
 package com.example.plantee.ui.viewmodels.routine
 
-import androidx.compose.runtime.currentCompositionErrors
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.plantee.domain.model.PlantSummary
@@ -59,9 +58,6 @@ class RoutineEditViewModel @AssistedInject constructor(
     }
 
     private val _state = MutableStateFlow(RoutineEditUiState())
-
-    private val _sortOrder = MutableStateFlow(SortOrder.NONE)
-    val sortOrder = _sortOrder.asStateFlow()
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()

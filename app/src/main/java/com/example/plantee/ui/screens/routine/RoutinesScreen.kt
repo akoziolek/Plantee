@@ -33,7 +33,6 @@ import com.example.plantee.ui.components.shared.todayRoutinesSection
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.viewmodels.routine.RoutinesEvent
 import com.example.plantee.ui.viewmodels.routine.RoutinesViewModel
-import com.example.plantee.utils.SortOrder
 
 
 @OptIn(ExperimentalMaterial3Api::class)

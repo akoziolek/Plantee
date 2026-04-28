@@ -2,15 +2,9 @@ package com.example.plantee.ui.viewmodels.routine
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.util.query
-import com.example.plantee.data.local.entities.RoutineEntity
-import com.example.plantee.domain.model.PlantSummary
 import com.example.plantee.domain.model.Routine
 import com.example.plantee.domain.model.RoutineSummary
-import com.example.plantee.domain.repositories.IPlantsRepository
 import com.example.plantee.domain.repositories.IRoutinesRepository
-import com.example.plantee.ui.viewmodels.plant.PlantsEvent
-import com.example.plantee.ui.viewmodels.plant.PlantsUiState
 import com.example.plantee.utils.SortOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -25,11 +19,9 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.time.delay
 import java.time.DayOfWeek
 import java.time.LocalDate
 import javax.inject.Inject
@@ -140,6 +132,7 @@ class RoutinesViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
+            // TODO Why unused variable?
             val currentState = state.value
             routinesRepository.toggleRoutineDone(routineId, date)
         }

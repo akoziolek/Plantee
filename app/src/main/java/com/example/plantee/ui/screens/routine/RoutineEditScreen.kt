@@ -27,7 +27,6 @@ import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.base.SectionHeader
 import com.example.plantee.ui.components.base.SimpleSearchBar
 import com.example.plantee.ui.components.shared.plantListItems
-import com.example.plantee.ui.components.shared.plantListItems_TODELETE
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.viewmodels.routine.RoutineEditEvent
 import com.example.plantee.ui.viewmodels.routine.RoutineEditViewModel

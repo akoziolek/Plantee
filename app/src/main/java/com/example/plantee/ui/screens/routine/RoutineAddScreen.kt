@@ -13,9 +13,6 @@ import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,10 +27,7 @@ import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.base.SectionHeader
 import com.example.plantee.ui.components.base.SimpleSearchBar
 import com.example.plantee.ui.components.shared.plantListItems
-import com.example.plantee.ui.components.shared.plantListItems_TODELETE
 import com.example.plantee.ui.theme.PlanteeTheme
-import com.example.plantee.ui.viewmodels.plant.PlantAddEvent
-import com.example.plantee.ui.viewmodels.plant.PlantAddViewModel
 import com.example.plantee.ui.viewmodels.routine.RoutineAddEvent
 import com.example.plantee.ui.viewmodels.routine.RoutineAddViewModel
 
@@ -45,7 +39,6 @@ fun RoutineAddScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val text by viewModel.searchQuery.collectAsStateWithLifecycle()
-    val sort by viewModel.sortOrder.collectAsStateWithLifecycle()
     val searchBarState = rememberSearchBarState()
 
     LaunchedEffect(viewModel.events) {

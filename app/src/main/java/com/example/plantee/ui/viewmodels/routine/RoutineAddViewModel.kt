@@ -48,9 +48,6 @@ class RoutineAddViewModel @Inject constructor(
 ) : ViewModel() {
     private val _state = MutableStateFlow(RoutineAddUiState())
 
-    private val _sortOrder = MutableStateFlow(SortOrder.NONE)
-    val sortOrder = _sortOrder.asStateFlow()
-
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
 
