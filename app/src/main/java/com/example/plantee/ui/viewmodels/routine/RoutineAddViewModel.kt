@@ -94,7 +94,13 @@ class RoutineAddViewModel @Inject constructor(
         _state.update { it.copy(activeDays = newActiveDays) }
     }
 
-    fun onPlantsChange(newPlantsIds: List<Long>) {
+    fun onPlantClick(plantId: Long) {
+        val newPlantsIds: List<Long> = if (_state.value.plantIds.contains(plantId)) {
+            _state.value.plantIds.filterNot { it == plantId }
+        } else {
+            _state.value.plantIds + plantId
+        }
+
         _state.update { it.copy(plantIds = newPlantsIds) }
     }
 
