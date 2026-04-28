@@ -4,6 +4,7 @@ import com.example.plantee.domain.model.Routine
 import com.example.plantee.domain.model.RoutineSummary
 import com.example.plantee.utils.SortOrder
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 
 interface IRoutinesRepository {
     fun getAllRoutines(): Flow<List<Routine>>
@@ -14,6 +15,6 @@ interface IRoutinesRepository {
 
     suspend fun addRoutine(routine: Routine): Long
     suspend fun updateRoutine(routine: Routine)
-    suspend fun toggleRoutineDone(id: Long)
+    suspend fun toggleRoutineDone(id: Long, date: LocalDate?)
     suspend fun deleteRoutine(id: Long)
 }

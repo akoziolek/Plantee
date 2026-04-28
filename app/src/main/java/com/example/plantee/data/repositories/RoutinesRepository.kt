@@ -86,8 +86,8 @@ class RoutinesRepository @Inject constructor(
         plantRoutinesDao.clearAndInsertNewForRoutine(routine.id, routine.plantsIds)
     }
 
-    override suspend fun toggleRoutineDone(id: Long) {
-        routinesDao.updateLastlyDoneAt(id)
+    override suspend fun toggleRoutineDone(id: Long, date: LocalDate?) {
+        routinesDao.updateLastlyDoneAt(id, date)
     }
 
 

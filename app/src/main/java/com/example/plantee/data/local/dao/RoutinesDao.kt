@@ -21,7 +21,7 @@ interface RoutinesDao {
     suspend fun update(routine: RoutineEntity)
 
     @Query("UPDATE routines SET lastly_done_at = :date WHERE id = :id")
-    suspend fun updateLastlyDoneAt(id: Long, date: LocalDate = LocalDate.now())
+    suspend fun updateLastlyDoneAt(id: Long, date: LocalDate? = LocalDate.now())
 
     @Delete
     suspend fun delete(routine: RoutineEntity)

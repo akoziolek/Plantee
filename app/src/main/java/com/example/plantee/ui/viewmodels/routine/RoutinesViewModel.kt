@@ -131,9 +131,17 @@ class RoutinesViewModel @Inject constructor(
     }
 
     fun onCheckboxClick(routineId: Long) {
+        val routine = state.value.todayRoutines.find { it.id == routineId }
+
+        var date = LocalDate.now()
+
+        if (routine?.lastlyDoneAt == date) {
+            date = null
+        }
+
         viewModelScope.launch {
             val currentState = state.value
-            routinesRepository.toggleRoutineDone(routineId)
+            routinesRepository.toggleRoutineDone(routineId, date)
         }
     }
 }
