@@ -67,6 +67,8 @@ interface RoutinesDao {
     @Query("SELECT * FROM routines WHERE name LIKE '%' || :searchQuery || '%' ORDER BY name DESC")
     fun searchRoutinesDesc(searchQuery: String): Flow<List<RoutineEntity>>
 
+    // TODO WHERE (value & :mask) <> 0
+
     @Transaction
     @Query("""
         SELECT r.*, rs.id_diagnosis AS id_diagnosis

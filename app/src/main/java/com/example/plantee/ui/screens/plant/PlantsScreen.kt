@@ -50,7 +50,6 @@ fun PlantsScreen(
 
     Scaffold(
         topBar = {
-            // FIXME gap between search bar and list
             SimpleSearchBar(
                 query = text,
                 onQueryChange = { viewModel.onSearchQueryChange(it) },
@@ -61,7 +60,6 @@ fun PlantsScreen(
                 onSearch = { },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .safeDrawingPadding()
                     .padding(horizontal = 16.dp),
             )
         },

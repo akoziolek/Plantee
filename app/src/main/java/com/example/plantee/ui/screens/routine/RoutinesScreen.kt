@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,10 +16,6 @@ import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -33,13 +28,9 @@ import com.example.plantee.ui.components.base.FilterBar
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.base.SectionHeader
 import com.example.plantee.ui.components.base.SimpleSearchBar
-import com.example.plantee.ui.components.shared.plantListItems
 import com.example.plantee.ui.components.shared.routinesSection
-import com.example.plantee.ui.components.shared.routinesSection_TODELETE
 import com.example.plantee.ui.components.shared.todayRoutinesSection
 import com.example.plantee.ui.theme.PlanteeTheme
-import com.example.plantee.ui.viewmodels.plant.PlantsEvent
-import com.example.plantee.ui.viewmodels.plant.PlantsViewModel
 import com.example.plantee.ui.viewmodels.routine.RoutinesEvent
 import com.example.plantee.ui.viewmodels.routine.RoutinesViewModel
 import com.example.plantee.utils.SortOrder
@@ -74,7 +65,6 @@ fun RoutinesScreen(
                 onSearch = { },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .safeDrawingPadding()
                     .padding(horizontal = 16.dp),
             )
         },
@@ -125,8 +115,6 @@ fun RoutinesPreview() {
     PlanteeTheme {
         RoutinesScreen(
             onNavigate = {}
-//            onRoutineAddClick = { println("Kliknięto dodaj rutynę") },
-//            onRoutineClick = { id -> println("Kliknięto rutynę $id") }
         )
     }
 }
