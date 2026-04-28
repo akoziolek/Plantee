@@ -19,8 +19,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,13 +35,10 @@ import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.shared.FilterSectionHeader
 import com.example.plantee.ui.components.shared.LinkHeader
 import com.example.plantee.ui.components.shared.plantListItems
-import com.example.plantee.ui.components.shared.plantListItems_TODELETE
 import com.example.plantee.ui.components.shared.todayRoutinesSection
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.viewmodels.home.HomeEvent
 import com.example.plantee.ui.viewmodels.home.HomeViewModel
-import com.example.plantee.ui.viewmodels.plant.PlantsEvent
-import com.example.plantee.ui.viewmodels.plant.PlantsViewModel
 import com.example.plantee.utils.SortOrder
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,6 +49,12 @@ fun HomeScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val sort by viewModel.sortOrder.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            onNavigate(event)
+        }
+    }
 
     Scaffold(
         topBar = {
