@@ -49,6 +49,9 @@ class RoutineEditViewModel @AssistedInject constructor(
     private val _state = MutableStateFlow(RoutineEditUiState())
     val state: StateFlow<RoutineEditUiState> = _state.asStateFlow()
 
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery = _searchQuery.asStateFlow()
+
     private val _events = Channel<RoutineEditEvent>()
     val events = _events.receiveAsFlow()
 
@@ -84,12 +87,23 @@ class RoutineEditViewModel @AssistedInject constructor(
         _state.update { it.copy(description = newDescription) }
     }
 
-    fun onActiveDaysChange(newActiveDays: Int) {
+    fun onActiveDaysChange(dayToChange: Int) {
+        val isChecked = (_state.value.activeDays and (1 shl dayToChange)) != 0
+        val newActiveDays = if (isChecked) {
+            _state.value.activeDays and (1 shl dayToChange).inv()
+        } else {
+            _state.value.activeDays or (1 shl dayToChange)
+        }
+
         _state.update { it.copy(activeDays = newActiveDays) }
     }
 
     fun onPlantIdsChange(newPlantIds: List<Long>) {
         _state.update { it.copy(plantIds = newPlantIds) }
+    }
+
+    fun onSearchQueryChange(query: String) {
+        _searchQuery.value = query
     }
 
     fun onBackClick() {
