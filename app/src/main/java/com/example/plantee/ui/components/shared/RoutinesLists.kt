@@ -16,13 +16,15 @@ import java.time.LocalDate
 fun LazyListScope.todayRoutinesSection(
     routines: List<Routine>,
     onItemClick: (Long) -> Unit,
-    onCheckboxClick: (Long) -> Unit
+    onCheckboxClick: (Long) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     if (routines.isEmpty()) {
         item {
             EmptySectionPlaceholder(
                 text = stringResource(R.string.label_no_routines_found),
-                modifier = Modifier.fillParentMaxSize()
+                modifier = modifier,
+                minHeight = 100.dp
             )
         }
     } else {
