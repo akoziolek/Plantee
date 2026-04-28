@@ -11,10 +11,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,28 +28,29 @@ import com.example.plantee.ui.components.base.SectionHeader
 import com.example.plantee.ui.components.base.SimpleSearchBar
 import com.example.plantee.ui.components.shared.plantListItems_TODELETE
 import com.example.plantee.ui.theme.PlanteeTheme
-import com.example.plantee.ui.viewmodels.routine.RoutineAddEvent
-import com.example.plantee.ui.viewmodels.routine.RoutineAddViewModel
 import com.example.plantee.ui.viewmodels.routine.RoutineEditEvent
 import com.example.plantee.ui.viewmodels.routine.RoutineEditViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoutineEditScreen(
-    viewModel: RoutineEditViewModel = hiltViewModel<RoutineEditViewModel>(),
+    routineId: Long,
+    viewModel: RoutineEditViewModel = hiltViewModel(
+        creationCallback = { factory: RoutineEditViewModel.Factory ->
+            factory.create(routineId)
+        }
+    ),
     onNavigate: (RoutineEditEvent) -> Unit
-//    onSaveRoutineClick: () -> Unit,
-//    onBackClick: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val text by viewModel.searchQuery.collectAsStateWithLifecycle()
     val searchBarState = rememberSearchBarState()
 
-//    val selectedDays = 64
-//    var nameText by remember { mutableStateOf("Routine name") }
-//    var descText by remember { mutableStateOf("Routine description") }
-//    val state = rememberSearchBarState()
-//    var query by remember { mutableStateOf("") }
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            onNavigate(event)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -132,9 +131,8 @@ fun RoutineEditScreen(
 fun RoutineEditPreview() {
     PlanteeTheme {
         RoutineEditScreen(
-            onNavigate = {},
-//            onSaveRoutineClick = {},
-//            onBackClick = {}
+            routineId = 1L,
+            onNavigate = {}
         )
     }
 }

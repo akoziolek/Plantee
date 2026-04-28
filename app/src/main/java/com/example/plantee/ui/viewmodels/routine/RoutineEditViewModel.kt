@@ -43,7 +43,7 @@ class RoutineEditViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(plantId: Long): RoutineEditViewModel
+        fun create(routineId: Long): RoutineEditViewModel
     }
 
     private val _state = MutableStateFlow(RoutineEditUiState())
