@@ -13,34 +13,45 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.MainTopBar
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.shared.FilterSectionHeader
 import com.example.plantee.ui.components.shared.LinkHeader
+import com.example.plantee.ui.components.shared.plantListItems
 import com.example.plantee.ui.components.shared.plantListItems_TODELETE
 import com.example.plantee.ui.components.shared.todayRoutinesSection
 import com.example.plantee.ui.theme.PlanteeTheme
+import com.example.plantee.ui.viewmodels.home.HomeEvent
+import com.example.plantee.ui.viewmodels.home.HomeViewModel
+import com.example.plantee.ui.viewmodels.plant.PlantsEvent
+import com.example.plantee.ui.viewmodels.plant.PlantsViewModel
 import com.example.plantee.utils.SortOrder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    onRoutineClick: (Long) -> Unit,
-    onPlantClick: (Long) -> Unit,
-    onAddPlantClick: () -> Unit,
-    onRoutinesClick: () -> Unit
+    viewModel: HomeViewModel = hiltViewModel<HomeViewModel>(),
+    onNavigate: (HomeEvent) -> Unit
 ) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val sort by viewModel.sortOrder.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -54,54 +65,63 @@ fun HomeScreen(
             })
         },
         floatingActionButton = {
-            PrimaryFloatingButton(text = stringResource(R.string.home_btn_add), onClick = onAddPlantClick)
+            PrimaryFloatingButton(text = stringResource(R.string.home_btn_add), onClick = { viewModel.onAddPlantClick() })
         }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-
-            item {
-                Box(
-                    modifier = Modifier
-                        .background(MaterialTheme.colorScheme.outlineVariant)
-                        .height(170.dp)
-                        .fillMaxWidth()
-                ) { }
+        if (state.isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
             }
-            item{
-                LinkHeader(
-                    title = stringResource(R.string.home_label_today_routines),
-                    onClick = onRoutinesClick
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+
+                item {
+                    Box(
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.outlineVariant)
+                            .height(170.dp)
+                            .fillMaxWidth()
+                    ) { }
+                }
+                item {
+                    LinkHeader(
+                        title = stringResource(R.string.home_label_today_routines),
+                        onClick = { viewModel.onRoutinesClick() }
+                    )
+                }
+
+                todayRoutinesSection(
+                    routines = state.todayRoutines,
+                    onCheckboxClick = { viewModel.onCheckboxClick(it) },
+                    onItemClick = { viewModel.onRoutineClick(it) }
                 )
-            }
 
-//            todayRoutinesSection(
-//                routines = List(3) { "Routine $it" },
-//                onItemClick = onRoutineClick
-//            )
+                item {
+                    Spacer(modifier = Modifier.height(4.dp))
+                }
 
-            item {
-                Spacer(modifier = Modifier.height(4.dp))
-            }
+                item {
+                    FilterSectionHeader(
+                        title = stringResource(R.string.plants_label_your_plants),
+                        filterTitle = stringResource(R.string.home_label_filter_plants),
+                        onClick = { viewModel.toggleSortOrder() },
+                        sort = sort
+                    )
+                }
 
-            item {
-                FilterSectionHeader(
-                    title = stringResource(R.string.home_label_your_plants),
-                    filterTitle = stringResource(R.string.home_label_filter_plants),
-                    onClick = { },
-                    sort = SortOrder.NONE
+                plantListItems(
+                    plants = state.plants,
+                    onPlantClick = { viewModel.onPlantClick(it) },
+                    onPlantBookmarkClick = { viewModel.onPlantBookmarkClick(it) }
                 )
-            }
 
-            plantListItems_TODELETE(
-                plants = List(10) {"Plant no. $it"},
-                onPlantClick = onPlantClick
-            )
+            }
         }
     }
 }
@@ -113,10 +133,7 @@ fun HomeScreen(
 fun HomeScreenPreview() {
     PlanteeTheme {
         HomeScreen(
-            onRoutineClick = { id -> println("Kliknięto rutynę $id") },
-            onPlantClick = { id -> println("Kliknięto planta $id") },
-            onAddPlantClick = { println("Kliknięto dodaj planta") },
-            onRoutinesClick = { println("Kliknięto lista rutyn") }
+            onNavigate = {},
         )
     }
 }

@@ -25,6 +25,7 @@ import com.example.plantee.ui.screens.routine.RoutinesScreen
 import com.example.plantee.ui.viewmodels.diagnosis.DiagnosePlantEvent
 import com.example.plantee.ui.viewmodels.diagnosis.DiagnosisDetailsEvent
 import com.example.plantee.ui.viewmodels.diagnosis.DiagnosisResultsEvent
+import com.example.plantee.ui.viewmodels.home.HomeEvent
 import com.example.plantee.ui.viewmodels.plant.PlantEditEvent
 import com.example.plantee.ui.viewmodels.plant.PlantsEvent
 import com.example.plantee.ui.viewmodels.routine.RoutineAddEvent
@@ -50,17 +51,21 @@ fun MainNavigation(
 
             entry<Screen.Home> {
                 HomeScreen(
-                    onRoutineClick = { id ->
-                        viewModel.navigate(Screen.RoutineDetails(id))
-                    },
-                    onPlantClick = { id ->
-                        viewModel.navigate(Screen.PlantDetails(id))
-                    },
-                    onAddPlantClick = {
-                        viewModel.navigate(Screen.PlantAdd)
-                    },
-                    onRoutinesClick = {
-                        viewModel.navigate(Screen.Routines)
+                    onNavigate = { event ->
+                        when(event) {
+                            is HomeEvent.NavigateToRoutines -> {
+                                viewModel.navigate(Screen.Routines)
+                            }
+                            is HomeEvent.NavigateToRoutine -> {
+                                viewModel.navigate(Screen.RoutineDetails(event.routineId))
+                            }
+                            is HomeEvent.NavigateToPlant -> {
+                                viewModel.navigate(Screen.PlantDetails(event.plantId))
+                            }
+                            HomeEvent.NavigateToPlantAdd -> {
+                                viewModel.navigate(Screen.PlantAdd)
+                            }
+                        }
                     }
                 )
 
