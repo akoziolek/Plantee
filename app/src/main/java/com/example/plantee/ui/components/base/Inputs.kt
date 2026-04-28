@@ -1,6 +1,5 @@
 package com.example.plantee.ui.components.base
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,11 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.example.plantee.R
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.utils.convertLocalDateToDateString
-import com.example.plantee.utils.convertMillisToDateString
-import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.util.Date
-import java.util.Locale
 
 @Composable
 fun InputTextField(
