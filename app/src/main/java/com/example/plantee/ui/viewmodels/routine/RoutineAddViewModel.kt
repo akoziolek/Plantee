@@ -7,6 +7,7 @@ import com.example.plantee.domain.model.Routine
 import com.example.plantee.domain.repositories.IPlantsRepository
 import com.example.plantee.domain.repositories.IRoutinesRepository
 import com.example.plantee.utils.SortOrder
+import com.example.plantee.utils.toLocalDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -23,6 +24,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 sealed class RoutineAddEvent {
@@ -35,6 +37,8 @@ data class RoutineAddUiState(
     val nameError: Boolean = false,
     val description: String = "",
     val activeDays: Int = 0,
+    val startDate: LocalDate? = null,
+    val endDate: LocalDate? = null,
     val plants: List<PlantSummary> = emptyList(),
     val plantIds: List<Long> = emptyList(),
     val isLoading: Boolean = true,
@@ -90,6 +94,13 @@ class RoutineAddViewModel @Inject constructor(
         }
 
         _state.update { it.copy(activeDays = newActiveDays) }
+    }
+
+    fun onDateRangeSelected(start: Long?, end: Long?) {
+        _state.update { it.copy(
+            startDate = start?.toLocalDate(),
+            endDate = end?.toLocalDate()
+        ) }
     }
 
     fun onPlantClick(plantId: Long) {

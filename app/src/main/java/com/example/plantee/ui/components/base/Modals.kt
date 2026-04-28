@@ -7,13 +7,17 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.DateRangePickerState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.plantee.R
+import com.example.plantee.utils.toLocalDate
+import java.time.LocalDate
 
 @Composable
 fun DeleteConfirmationDialog(
@@ -41,14 +45,22 @@ fun DeleteConfirmationDialog(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateRangePickerModal(
-    state: DateRangePickerState,
-    modifier: Modifier = Modifier,
-    title: String = stringResource(R.string.input_label_date_picker),
+    startDate: LocalDate?,
+    endDate: LocalDate?,
     onDateRangeSelected: (Pair<Long?, Long?>) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    message: String,
+    confirmText: String,
+    dismissText: String
 ) {
+    val dateRangePickerState = rememberDateRangePickerState(
+        initialSelectedStartDate = startDate,
+        initialSelectedEndDate = endDate
+    )
+
     DatePickerDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
@@ -56,27 +68,27 @@ fun DateRangePickerModal(
                 onClick = {
                     onDateRangeSelected(
                         Pair(
-                            state.selectedStartDateMillis,
-                            state.selectedEndDateMillis
+                            dateRangePickerState.selectedStartDateMillis,
+                            dateRangePickerState.selectedEndDateMillis
                         )
                     )
                     onDismiss()
                 }
             ) {
-                Text("OK")
+                Text(text = confirmText)
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(text = dismissText)
             }
         }
     ) {
         DateRangePicker(
-            state = state,
+            state = dateRangePickerState,
             title = {
                 Text(
-                    text = "Select date range"
+                    text = message
                 )
             },
             showModeToggle = false,
@@ -86,5 +98,4 @@ fun DateRangePickerModal(
                 .padding(16.dp)
         )
     }
-
 }
