@@ -19,11 +19,11 @@ fun Long.toLocalDate(): LocalDate {
 }
 
 fun convertMillisToDateString(millis: Long): String {
-    val formatter = SimpleDateFormat("yyyy-mm-dd", Locale.getDefault())
+    val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     return formatter.format(Date(millis))
 }
 
 fun convertLocalDateToDateString(date: LocalDate): String {
-    val formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd", Locale.getDefault())
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault())
     return date.format(formatter)
 }
