@@ -185,7 +185,7 @@ fun DateRangeField(
                 disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
             ),
             trailingIcon = {
-                IconButton(onClick = { if (active) showModal = true }) {
+                IconButton(enabled = active, onClick = { if (active) showModal = true }) {
                     Icon(Icons.Default.CalendarToday, contentDescription = null)
                 }
 
