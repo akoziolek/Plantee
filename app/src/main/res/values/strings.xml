@@ -96,4 +96,7 @@
     <string name="navbar_label_routines">Routines</string>
     <string name="home_menu_change_mode_dark">Change to dark mode</string>
     <string name="home_menu_change_mode_light">Change to light mode</string>
+    <string name="routine_status_filter_label">Filter status</string>
+    <string name="routine_weekdays_filter_label">Weekdays</string>
+    <string name="routine_weekdays_filter_all">Select all</string>
 </resources>

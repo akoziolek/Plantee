@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.plantee.domain.model.Routine
 import com.example.plantee.domain.model.RoutineSummary
 import com.example.plantee.domain.repositories.IRoutinesRepository
+import com.example.plantee.utils.DayBitmaskHelper
+import com.example.plantee.utils.RoutineStatus
 import com.example.plantee.utils.SortOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,6 +23,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -37,6 +40,11 @@ data class RoutinesUiState(
     val todayRoutines: List<Routine> = emptyList(),
     val isLoading: Boolean = true,
     val searchQuery: String = ""
+)
+
+data class FilterState(
+    val status: RoutineStatus = RoutineStatus.Active,
+    val selectedDays: Int = DayBitmaskHelper.allDaysMask()
 )
 
 @HiltViewModel
@@ -95,6 +103,29 @@ class RoutinesViewModel @Inject constructor(
         initialValue = RoutinesUiState()
     )
 
+    private val _filterState = MutableStateFlow(FilterState())
+    val filterState = _filterState.asStateFlow()
+
+    fun updateFilterStatus(status: RoutineStatus) {
+        _filterState.update { it.copy(status = status) }
+    }
+
+    fun toggleFilterDay(day: DayOfWeek) {
+        _filterState.update { current ->
+            val isCurrentDaySelected = DayBitmaskHelper.isSelected(current.selectedDays, day)
+            val selectedCount = DayBitmaskHelper.selectedDaysCount(current.selectedDays)
+
+            if (isCurrentDaySelected && selectedCount <= 1) {
+                current
+            } else {
+                current.copy(selectedDays = DayBitmaskHelper.toggleBit(current.selectedDays, day))
+            }
+        }
+    }
+
+    fun selectAllDays() {
+        _filterState.update { it.copy(selectedDays = DayBitmaskHelper.allDaysMask()) }
+    }
 
     fun onSearchQueryChange(query: String) {
         _searchQuery.value = query

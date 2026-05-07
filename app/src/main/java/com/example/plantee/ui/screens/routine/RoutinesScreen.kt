@@ -15,7 +15,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -25,6 +29,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.FilterBar
+import com.example.plantee.ui.components.base.FilterBottomSheet
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.base.SectionHeader
 import com.example.plantee.ui.components.base.SimpleSearchBar
@@ -34,6 +39,7 @@ import com.example.plantee.ui.components.shared.todayRoutinesSection
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.viewmodels.routine.RoutinesEvent
 import com.example.plantee.ui.viewmodels.routine.RoutinesViewModel
+import com.example.plantee.utils.DayBitmaskHelper
 import java.time.LocalDate
 
 
@@ -47,6 +53,8 @@ fun RoutinesScreen(
     val text by viewModel.searchQuery.collectAsStateWithLifecycle()
     val sort by viewModel.sortOrder.collectAsStateWithLifecycle()
     val searchBarState = rememberSearchBarState()
+    val filterState by viewModel.filterState.collectAsState()
+    var showFilters by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
@@ -96,21 +104,29 @@ fun RoutinesScreen(
 
                     item { Spacer(modifier = Modifier.height(24.dp)) }
 
-                    item {
-                        SectionHeader(stringResource(R.string.routines_label_all))
-                        FilterBar(
-                            onFilterClick = { viewModel.toggleSortOrder() },
-                            onViewModeClick = {},
-                            sort = sort
-                        )
-                    }
-
-                    routinesSection(
-                        routines = state.routines,
-                        onRoutineClick = { viewModel.onRoutineClick(it) }
+                item {
+                    SectionHeader(stringResource(R.string.routines_label_all))
+                    FilterBar(
+                        onFilterClick = { viewModel.toggleSortOrder() },
+                        onViewModeClick = { showFilters = true },
+                        sort = sort
                     )
-
                 }
+
+                routinesSection(
+                    routines = state.routines,
+                    onRoutineClick = { viewModel.onRoutineClick(it) }
+                )
+            }
+
+            if (showFilters) {
+                FilterBottomSheet(
+                    filterState = filterState,
+                    onStatusSelected = viewModel::updateFilterStatus,
+                    onDayToggled = viewModel::toggleFilterDay,
+                    onSelectAllDays = viewModel::selectAllDays,
+                    onDismiss = { showFilters = false }
+                )
             }
         }
     }

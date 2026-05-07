@@ -11,3 +11,5 @@ enum class SortOrder{
         }
     }
 }
+
+enum class RoutineStatus { Active, All }
