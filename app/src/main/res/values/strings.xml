@@ -99,4 +99,6 @@
     <string name="routine_status_filter_label">Filter status</string>
     <string name="routine_weekdays_filter_label">Weekdays</string>
     <string name="routine_weekdays_filter_all">Select all</string>
+    <string name="main_notification_title">Remember about your plants!</string>
+    <string name="main_notification_text">You have remaining routines for today</string>
 </resources>
