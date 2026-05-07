@@ -2,6 +2,7 @@ package com.example.plantee.domain.repositories
 
 import com.example.plantee.domain.model.Routine
 import com.example.plantee.domain.model.RoutineSummary
+import com.example.plantee.ui.viewmodels.routine.FilterState
 import com.example.plantee.utils.SortOrder
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
@@ -9,7 +10,7 @@ import java.time.LocalDate
 interface IRoutinesRepository {
     fun getAllRoutines(): Flow<List<Routine>>
     fun getTodayRoutines(): Flow<List<Routine>>
-    fun getSearchedRoutinesWithSortSummary(query: String, sort: SortOrder): Flow<List<RoutineSummary>>
+    fun getSearchedRoutinesWithSortAndFilterSummary(query: String, sort: SortOrder, filter: FilterState): Flow<List<RoutineSummary>>
     fun getRoutinesForWeekdaySummary(weekday: Int): Flow<List<Routine>>
     fun getRoutine(id: Long): Flow<Routine?>
 

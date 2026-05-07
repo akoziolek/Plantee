@@ -1,5 +1,6 @@
 package com.example.plantee.data.local.dao
 
+import android.R
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -70,16 +71,37 @@ interface RoutinesDao {
     """)
     fun getRoutinesForWeekday(dayBitmap: Int): Flow<List<RoutineEntity>>
 
-    @Query("SELECT * FROM routines WHERE name LIKE '%' || :searchQuery || '%'")
-    fun searchRoutines(searchQuery: String): Flow<List<RoutineEntity>>
+    @Query("""SELECT * FROM routines 
+        WHERE 
+            name LIKE '%' || :searchQuery || '%'
+            AND
+            (:filterActive = 0 OR (start_date <= :today <= end_date))
+            AND
+            ((active_days & :selectedDays) != 0)
+    """)
+    fun searchRoutines(searchQuery: String, filterActive: Int, today: LocalDate, selectedDays: Int): Flow<List<RoutineEntity>>
 
-    @Query("SELECT * FROM routines WHERE name LIKE '%' || :searchQuery || '%' ORDER BY name ASC")
-    fun searchRoutinesAsc(searchQuery: String): Flow<List<RoutineEntity>>
+    @Query("""SELECT * FROM routines 
+        WHERE 
+            name LIKE '%' || :searchQuery || '%'
+            AND
+            (:filterActive = 0 OR (start_date <= :today <= end_date))
+            AND
+            ((active_days & :selectedDays) != 0)
+        ORDER BY name ASC
+    """)
+    fun searchRoutinesAsc(searchQuery: String, filterActive: Int, today: LocalDate, selectedDays: Int): Flow<List<RoutineEntity>>
 
-    @Query("SELECT * FROM routines WHERE name LIKE '%' || :searchQuery || '%' ORDER BY name DESC")
-    fun searchRoutinesDesc(searchQuery: String): Flow<List<RoutineEntity>>
-
-    // TODO WHERE (value & :mask) <> 0
+    @Query("""SELECT * FROM routines 
+        WHERE 
+            name LIKE '%' || :searchQuery || '%'
+            AND
+            (:filterActive = 0 OR (start_date <= :today <= end_date))
+            AND
+            ((active_days & :selectedDays) != 0)
+        ORDER BY name DESC
+    """)
+    fun searchRoutinesDesc(searchQuery: String, filterActive: Int, today: LocalDate, selectedDays: Int): Flow<List<RoutineEntity>>
 
     @Transaction
     @Query("""

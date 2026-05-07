@@ -74,13 +74,17 @@ class RoutinesViewModel @Inject constructor(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
 
+    private val _filterState = MutableStateFlow(FilterState())
+    val filterState = _filterState.asStateFlow()
+
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     private val searchFlow = combine(
         _searchQuery.debounce(300L).distinctUntilChanged(),
-        _sortOrder
-    ) { query, sort -> query to sort }
-        .flatMapLatest { (query, sort) ->
-            routinesRepository.getSearchedRoutinesWithSortSummary(query, sort) }
+        _sortOrder,
+        _filterState
+    ) { query, sort, filter -> Triple(query, sort, filter) }
+        .flatMapLatest { (query, sort, filter) ->
+            routinesRepository.getSearchedRoutinesWithSortAndFilterSummary(query, sort, filter) }
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     private val todayFlow = _currentDay.flatMapLatest { day ->
@@ -102,9 +106,6 @@ class RoutinesViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = RoutinesUiState()
     )
-
-    private val _filterState = MutableStateFlow(FilterState())
-    val filterState = _filterState.asStateFlow()
 
     fun updateFilterStatus(status: RoutineStatus) {
         _filterState.update { it.copy(status = status) }

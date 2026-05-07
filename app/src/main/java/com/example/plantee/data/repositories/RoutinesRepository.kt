@@ -11,6 +11,8 @@ import com.example.plantee.data.mappers.toSummaryDomainList
 import com.example.plantee.domain.model.Routine
 import com.example.plantee.domain.model.RoutineSummary
 import com.example.plantee.domain.repositories.IRoutinesRepository
+import com.example.plantee.ui.viewmodels.routine.FilterState
+import com.example.plantee.utils.RoutineStatus
 import com.example.plantee.utils.SortOrder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -30,19 +32,23 @@ class RoutinesRepository @Inject constructor(
         return routinesDao.getRoutinesWithDate(today).map { it.toDomainList() }
     }
 
-    override fun getSearchedRoutinesWithSortSummary(
+    override fun getSearchedRoutinesWithSortAndFilterSummary(
         query: String,
-        sort: SortOrder
+        sort: SortOrder,
+        filter: FilterState
     ): Flow<List<RoutineSummary>> {
+        val isActiveOnly = if (filter.status == RoutineStatus.Active) 1 else 0
+        val today = LocalDate.now()
+
         return when (sort) {
-            SortOrder.NONE -> {
-                routinesDao.searchRoutines(query).map { it.toSummaryDomainList() }
+            SortOrder.NONE -> {6
+                routinesDao.searchRoutines(query, isActiveOnly, today, filter.selectedDays).map { it.toSummaryDomainList() }
             }
             SortOrder.ASCENDING -> {
-                routinesDao.searchRoutinesAsc(query).map { it.toSummaryDomainList() }
+                routinesDao.searchRoutinesAsc(query, isActiveOnly, today, filter.selectedDays).map { it.toSummaryDomainList() }
             }
             else -> {
-                routinesDao.searchRoutinesDesc(query).map { it.toSummaryDomainList() }
+                routinesDao.searchRoutinesDesc(query, isActiveOnly, today, filter.selectedDays).map { it.toSummaryDomainList() }
             }
         }
     }
