@@ -11,42 +11,54 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
+import com.example.plantee.ui.components.base.DateRangeField
 import com.example.plantee.ui.components.base.DaysOfWeek
 import com.example.plantee.ui.components.base.InputTextField
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.base.SectionHeader
 import com.example.plantee.ui.components.base.SimpleSearchBar
-import com.example.plantee.ui.components.shared.plantListItems_TODELETE
+import com.example.plantee.ui.components.shared.plantListItems
 import com.example.plantee.ui.theme.PlanteeTheme
+import com.example.plantee.ui.viewmodels.routine.RoutineEditEvent
+import com.example.plantee.ui.viewmodels.routine.RoutineEditViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoutineEditScreen(
-    onSaveRoutineClick: () -> Unit,
-    onBackClick: () -> Unit
+    routineId: Long,
+    viewModel: RoutineEditViewModel = hiltViewModel(
+        creationCallback = { factory: RoutineEditViewModel.Factory ->
+            factory.create(routineId)
+        }
+    ),
+    onNavigate: (RoutineEditEvent) -> Unit
 ) {
-    val selectedDays = listOf(0, 2, 3, 6)
-    var nameText by remember { mutableStateOf("Routine name") }
-    var descText by remember { mutableStateOf("Routine description") }
-    val state = rememberSearchBarState()
-    var query by remember { mutableStateOf("") }
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val text by viewModel.searchQuery.collectAsStateWithLifecycle()
+    val searchBarState = rememberSearchBarState()
+
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            onNavigate(event)
+        }
+    }
 
     Scaffold(
         topBar = {
-            BackTopBar(stringResource(R.string.routine_edit_title), onBackClick = onBackClick)
+            BackTopBar(stringResource(R.string.routine_edit_title), onBackClick = { viewModel.onBackClick() })
         },
         floatingActionButton = {
-            PrimaryFloatingButton(text = stringResource(R.string.routine_edit_btn_save), onClick = onSaveRoutineClick)
+            PrimaryFloatingButton(text = stringResource(R.string.routine_edit_btn_save), onClick = { viewModel.updateRoutine() })
         }
     ) { innerPadding ->
         LazyColumn(
@@ -60,8 +72,8 @@ fun RoutineEditScreen(
             item {
                 InputTextField(
                     title = stringResource(R.string.routine_edit_label_name),
-                    value = nameText,
-                    onValueChange = { nameText = it },
+                    value = state.name,
+                    onValueChange = { viewModel.onNameChange(it) },
                     supportingText = stringResource(R.string.routine_edit_support_name)
                 )
             }
@@ -70,8 +82,8 @@ fun RoutineEditScreen(
             item {
                 InputTextField(
                     title = stringResource(R.string.routine_edit_label_description),
-                    value = descText,
-                    onValueChange = { descText = it },
+                    value = state.description,
+                    onValueChange = { viewModel.onDescriptionChange(it) },
                     supportingText = stringResource(R.string.routine_edit_support_description)
                 )
             }
@@ -79,8 +91,17 @@ fun RoutineEditScreen(
             // --- DAYS OF THE WEEK ---
             item {
                 DaysOfWeek(
-                    selectedDays = selectedDays,
-                    onDayClick = { }
+                    selectedDays = state.activeDays,
+                    onDayClick = { viewModel.onActiveDaysChange(it) }
+                )
+            }
+
+            // --- START AND END DATE ---
+            item {
+                DateRangeField(
+                    startDate = state.startDate,
+                    endDate = state.endDate,
+                    onDateRangeSelected = { pair -> viewModel.onDateRangeSelected(pair.first, pair.second) }
                 )
             }
 
@@ -91,9 +112,9 @@ fun RoutineEditScreen(
 
             item {
                 SimpleSearchBar(
-                    query = query,
-                    onQueryChange = { query = it },
-                    state = state,
+                    query = text,
+                    onQueryChange = { viewModel.onSearchQueryChange(it) },
+                    state = searchBarState,
                     placeholder = stringResource(R.string.plants_search_bar_placeholder),
                     expanded = false,
                     onExpandedChange = { },
@@ -105,9 +126,11 @@ fun RoutineEditScreen(
                 Spacer(modifier = Modifier.height(4.dp))
             }
 
-            plantListItems_TODELETE(
-                plants = List(6) {"Plant no. $it"},
-                onPlantClick = {}
+            plantListItems(
+                plants = state.plants,
+                onPlantClick = { viewModel.onPlantClick(it) },
+                onPlantBookmarkClick = {  },
+                selectedPlantIds = state.plantIds
             )
         }
     }
@@ -120,8 +143,8 @@ fun RoutineEditScreen(
 fun RoutineEditPreview() {
     PlanteeTheme {
         RoutineEditScreen(
-            onSaveRoutineClick = {},
-            onBackClick = {}
+            routineId = 1L,
+            onNavigate = {}
         )
     }
 }

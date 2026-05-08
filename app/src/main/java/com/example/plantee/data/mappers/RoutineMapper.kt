@@ -1,8 +1,11 @@
 package com.example.plantee.data.mappers
 
+import com.example.plantee.data.local.entities.PlantEntity
 import com.example.plantee.data.local.relations.RoutineWithDetails
 import com.example.plantee.data.local.entities.RoutineEntity
+import com.example.plantee.domain.model.PlantSummary
 import com.example.plantee.domain.model.Routine
+import com.example.plantee.domain.model.RoutineSummary
 
 fun RoutineWithDetails?.toDomain(): Routine? {
     if (this == null) return null
@@ -32,6 +35,30 @@ fun List<RoutineWithDetails>.toDomainList(): List<Routine> {
             lastlyDoneAt = entity.routine.lastlyDoneAt,
             diagnosisId = entity.idDiagnosis,
             plantsIds = entity.plantRoutines.map { it.idPlant }
+        )
+    }
+}
+
+fun List<RoutineEntity>.toDomainListSimple(): List<Routine> {
+    return this.map { entity ->
+        Routine(
+            id = entity.id,
+            name = entity.name,
+            description = entity.description,
+            startDate = entity.startDate,
+            endDate = entity.endDate,
+            activeDays = entity.activeDays,
+            lastlyDoneAt = entity.lastlyDoneAt
+        )
+    }
+}
+
+fun List<RoutineEntity>.toSummaryDomainList(): List<RoutineSummary> {
+    return this.map { entity ->
+        RoutineSummary(
+            id = entity.id,
+            name = entity.name,
+            description = entity.description
         )
     }
 }

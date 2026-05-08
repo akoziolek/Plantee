@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,6 +37,8 @@ fun PlantsScreen(
     onNavigate: (PlantsEvent) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val text by viewModel.searchQuery.collectAsStateWithLifecycle()
+    val sort by viewModel.sortOrder.collectAsStateWithLifecycle()
     val searchBarState = rememberSearchBarState()
 
     LaunchedEffect(Unit) {
@@ -49,7 +50,7 @@ fun PlantsScreen(
     Scaffold(
         topBar = {
             SimpleSearchBar(
-                query = state.searchQuery,
+                query = text,
                 onQueryChange = { viewModel.onSearchQueryChange(it) },
                 state = searchBarState,
                 placeholder = stringResource(R.string.plants_search_bar_placeholder),
@@ -58,7 +59,6 @@ fun PlantsScreen(
                 onSearch = { },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .safeDrawingPadding()
                     .padding(horizontal = 16.dp),
             )
         },
@@ -80,8 +80,8 @@ fun PlantsScreen(
                 FilterSectionHeader(
                     title = stringResource(R.string.plants_label_your_plants),
                     filterTitle = stringResource(R.string.home_label_filter_plants),
-                    onClick = { //TODO add logic
-                    }
+                    onClick = { viewModel.toggleSortOrder() },
+                    sort = sort
                 )
 
                 LazyColumn(

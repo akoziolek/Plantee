@@ -43,6 +43,12 @@ interface PlantsDao {
     @Query("SELECT * FROM plants WHERE name LIKE '%' || :searchQuery || '%'")
     fun searchPlants(searchQuery: String): Flow<List<PlantEntity>>
 
+    @Query("SELECT * FROM plants WHERE name LIKE '%' || :searchQuery || '%' ORDER BY name ASC")
+    fun searchPlantsAsc(searchQuery: String): Flow<List<PlantEntity>>
+
+    @Query("SELECT * FROM plants WHERE name LIKE '%' || :searchQuery || '%' ORDER BY name DESC")
+    fun searchPlantsDesc(searchQuery: String): Flow<List<PlantEntity>>
+
     @Query("SELECT * FROM plants WHERE id = :id")
     fun getPlant(id: Long): Flow<PlantEntity?>
 

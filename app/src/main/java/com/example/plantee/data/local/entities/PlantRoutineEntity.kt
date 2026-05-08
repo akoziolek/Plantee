@@ -19,7 +19,7 @@ import androidx.room.PrimaryKey
             entity = PlantEntity::class,
             parentColumns = ["id"],
             childColumns = ["id_plant"],
-            onDelete = ForeignKey.RESTRICT
+            onDelete = ForeignKey.CASCADE
         )
     ],
     indices = [

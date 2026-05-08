@@ -4,13 +4,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.plantee.domain.model.PlantSummary
 import com.example.plantee.domain.repositories.IPlantsRepository
+import com.example.plantee.utils.SortOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -35,33 +42,37 @@ class PlantsViewModel @Inject constructor(
     private val _events = Channel<PlantsEvent>()
     val events = _events.receiveAsFlow()
 
-    // FIXME filtering plus better querying
-    // now it is on viewmodel level, but maybe should be at the db level
+    private val _sortOrder = MutableStateFlow(SortOrder.NONE)
+    val sortOrder = _sortOrder.asStateFlow()
     private val _searchQuery = MutableStateFlow("")
+    val searchQuery = _searchQuery.asStateFlow()
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     val state: StateFlow<PlantsUiState> = combine(
-        _searchQuery,
-        plantsRepository.getAllPlantsSummary()
-    ) { query,  plants ->
-        val filteredPlants = plants.filter { plant ->
-            plant.name.contains(query, ignoreCase = true)
+        _searchQuery.debounce(300L).distinctUntilChanged(),
+        _sortOrder
+    ) { query, sort -> query to sort }
+        .flatMapLatest { (query, sort) ->
+            plantsRepository.getSearchedPlantsSummaryWithSort(query, sort).map { filtered ->
+                PlantsUiState(
+                    plants = filtered,
+                    isLoading = false
+                )
+            }
         }
-        PlantsUiState(
-            plants = filteredPlants,
-            searchQuery = query,
-            isLoading = false
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = PlantsUiState()
         )
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = PlantsUiState()
-    )
 
     fun onSearchQueryChange(query: String) {
         _searchQuery.value = query
     }
 
+    fun toggleSortOrder() {
+        _sortOrder.value = _sortOrder.value.next()
+    }
 
     fun onPlantClick(plantId: Long) {
         viewModelScope.launch {

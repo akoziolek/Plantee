@@ -7,22 +7,39 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.plantee.R
+import com.example.plantee.domain.model.Routine
 import com.example.plantee.domain.model.RoutineSummary
 import com.example.plantee.ui.components.base.RoutinesListItem
+import java.time.LocalDate
 
 fun LazyListScope.todayRoutinesSection(
-    routines: List<String>, // Instead of string there will be routine object
-    onItemClick: (Long) -> Unit
+    routines: List<Routine>,
+    onItemClick: (Long) -> Unit,
+    onCheckboxClick: (Long) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    items(routines.size) { index ->
-        RoutinesListItem(
-            headlineText = routines[index],
-            supportingText = "Description for routine no. $index",
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-            onCheckedChange = {},
-            // TODO change to routine id
-            onClick = { onItemClick(1) }
-        )
+    if (routines.isEmpty()) {
+        item {
+            EmptySectionPlaceholder(
+                text = stringResource(R.string.label_no_routines_found),
+                modifier = modifier,
+                minHeight = 100.dp
+            )
+        }
+    } else {
+        items(
+            items = routines,
+            key = { routine -> "today_${routine.id}" }
+        ) { routine ->
+            RoutinesListItem(
+                headlineText = routine.name,
+                supportingText = routine.description ?: "",
+                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                checked = routine.lastlyDoneAt == LocalDate.now(),
+                onCheckedChange = { onCheckboxClick(routine.id) },
+                onClick = { onItemClick(routine.id) }
+            )
+        }
     }
 }
 
@@ -59,7 +76,7 @@ fun LazyListScope.routinesSection(
     else {
         items(
             items = routines,
-            key = { routine -> routine.id }
+            key = { routine -> "all_${routine.id}" }
         ) { routine ->
             RoutinesListItem(
                 headlineText = routine.name,

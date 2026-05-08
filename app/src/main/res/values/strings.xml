@@ -41,6 +41,11 @@
     <string name="routine_edit_label_name">Name</string>
     <string name="routine_edit_label_description">Description</string>
     <string name="input_label_weekdays">Weekdays</string>
+    <string name="input_label_date_field">Date range</string>
+    <string name="date_field_placeholder">Choose dates</string>
+    <string name="date_field_no_dates_placeholder">No dates selected</string>
+    <string name="date_field_supporting_text">YYYY-MM-DD</string>
+    <string name="routine_edit_label_dates_choice">Choose date range for your routine</string>
     <string name="routine_edit_label_plant_choice">Choose plants</string>
     <string name="routine_edit_support_name">How do you want to name your routine?</string>
     <string name="routine_edit_support_description">Give a short description of the routine</string>
@@ -69,11 +74,13 @@
     <string name="plant_details_label_routines">Connected routines</string>
     <string name="plant_details_btn_diagnose">Diagnose</string>
     <string name="plant_details_label_health_journal">Health journal</string>
-    <string name="filter_menu_label">Filter</string>
+    <string name="filter_menu_label">Name</string>
     <string name="plant_form_error_required">This field is required</string>
     <string name="plant_form_error_name">Name is required</string>
     <string name="delete_plant_dialog_title">Delete Plant</string>
     <string name="delete_plant_dialog_message">Are you sure you want to delete this plant? Connected diagnosis and routines will be lost. This action cannot be undone.</string>
+    <string name="delete_routine_dialog_title">Delete Routine</string>
+    <string name="delete_routine_dialog_message">Are you sure you want to delete this routine? Connection with diagnosis and plants will be lost. This action cannot be undone.</string>
     <string name="dialog_confirm">Confirm</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="menu_edit">Edit</string>

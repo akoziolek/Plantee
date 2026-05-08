@@ -25,8 +25,13 @@ import com.example.plantee.ui.screens.routine.RoutinesScreen
 import com.example.plantee.ui.viewmodels.diagnosis.DiagnosePlantEvent
 import com.example.plantee.ui.viewmodels.diagnosis.DiagnosisDetailsEvent
 import com.example.plantee.ui.viewmodels.diagnosis.DiagnosisResultsEvent
+import com.example.plantee.ui.viewmodels.home.HomeEvent
 import com.example.plantee.ui.viewmodels.plant.PlantEditEvent
 import com.example.plantee.ui.viewmodels.plant.PlantsEvent
+import com.example.plantee.ui.viewmodels.routine.RoutineAddEvent
+import com.example.plantee.ui.viewmodels.routine.RoutineDetailsEvent
+import com.example.plantee.ui.viewmodels.routine.RoutineEditEvent
+import com.example.plantee.ui.viewmodels.routine.RoutinesEvent
 
 @Composable
 fun MainNavigation(
@@ -46,17 +51,21 @@ fun MainNavigation(
 
             entry<Screen.Home> {
                 HomeScreen(
-                    onRoutineClick = { id ->
-                        viewModel.navigate(Screen.RoutineDetails(id))
-                    },
-                    onPlantClick = { id ->
-                        viewModel.navigate(Screen.PlantDetails(id))
-                    },
-                    onAddPlantClick = {
-                        viewModel.navigate(Screen.PlantAdd)
-                    },
-                    onRoutinesClick = {
-                        viewModel.navigate(Screen.Routines)
+                    onNavigate = { event ->
+                        when(event) {
+                            is HomeEvent.NavigateToRoutines -> {
+                                viewModel.navigate(Screen.Routines)
+                            }
+                            is HomeEvent.NavigateToRoutine -> {
+                                viewModel.navigate(Screen.RoutineDetails(event.routineId))
+                            }
+                            is HomeEvent.NavigateToPlant -> {
+                                viewModel.navigate(Screen.PlantDetails(event.plantId))
+                            }
+                            HomeEvent.NavigateToPlantAdd -> {
+                                viewModel.navigate(Screen.PlantAdd)
+                            }
+                        }
                     }
                 )
 
@@ -193,42 +202,69 @@ fun MainNavigation(
 
             entry<Screen.Routines> {
                 RoutinesScreen(
-                    onRoutineClick = { id ->
-                        viewModel.navigate(Screen.RoutineDetails(id))
-                    },
-                    onRoutineAddClick = {
-                        viewModel.navigate(Screen.RoutineAdd)
+                    onNavigate = { event ->
+                        when(event) {
+                            is RoutinesEvent.NavigateToDetails -> {
+                                viewModel.navigate(Screen.RoutineDetails(event.routineId))
+                            }
+                            is RoutinesEvent.NavigateToAdd -> {
+                                viewModel.navigate(Screen.RoutineAdd)
+                            }
+                            RoutinesEvent.NavigateBack -> {
+                                viewModel.back()
+                            }
+                        }
                     }
                 )
             }
 
             entry<Screen.RoutineDetails> { route ->
                 RoutineDetailsScreen (
-                    onPlantClick = { id ->
-                        viewModel.navigate(Screen.PlantDetails(id))
-                    },
-                    onBackClick = {
-                        viewModel.back()
+                    routineId = route.routineId,
+                    onNavigate = { event ->
+                        when (event) {
+                            is RoutineDetailsEvent.NavigateToPlant -> {
+                                viewModel.navigate(Screen.PlantDetails(event.plantId))
+                            }
+                            is RoutineDetailsEvent.NavigateToEdit -> {
+                                viewModel.navigate(Screen.RoutineEdit(event.routineId))
+                            }
+                            is RoutineDetailsEvent.RoutineDeleted -> {
+                                viewModel.back()
+                            }
+                            RoutineDetailsEvent.NavigateBack -> {
+                                viewModel.back()
+                            }
+                        }
                     }
                 )
             }
 
             entry<Screen.RoutineAdd> {
                 RoutineAddScreen(
-                    onAddRoutineClick = {
-                        viewModel.replace(Screen.RoutineDetails(1))
-                    },
-                    onBackClick = {
-                        viewModel.back()
+                    onNavigate = { event ->
+                        when(event) {
+                            is RoutineAddEvent.NavigateToDetails -> {
+                                viewModel.replace(Screen.RoutineDetails(event.routineId))
+                            }
+                            RoutineAddEvent.NavigateBack -> {
+                                viewModel.back()
+                            }
+                        }
                     }
                 )
             }
 
             entry<Screen.RoutineEdit> { route ->
                 RoutineEditScreen(
-                    onSaveRoutineClick = {},
-                    onBackClick = {
-                        viewModel.back()
+                    routineId = route.routineId,
+                    onNavigate = { event ->
+                        when(event) {
+                            is RoutineEditEvent.RoutineUpdated -> {
+                                viewModel.popUpTo(Screen.RoutineDetails(route.routineId), inclusive = false)
+                            }
+                            RoutineEditEvent.NavigateBack -> viewModel.back()
+                        }
                     }
                 )
             }
