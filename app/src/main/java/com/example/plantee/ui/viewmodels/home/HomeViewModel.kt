@@ -1,5 +1,7 @@
 package com.example.plantee.ui.viewmodels.home
 
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.plantee.domain.model.PlantSummary
@@ -89,6 +91,7 @@ class HomeViewModel @Inject constructor(
             initialValue = HomeUiState()
         )
 
+
     fun toggleSortOrder() {
         _sortOrder.value = _sortOrder.value.next()
     }
@@ -137,5 +140,10 @@ class HomeViewModel @Inject constructor(
             val currentState = state.value
             plantsRepository.togglePlantFavourite(plantId)
         }
+    }
+
+    fun changeLanguage(langCode: String) {
+        val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(langCode)
+        AppCompatDelegate.setApplicationLocales(appLocale)
     }
 }

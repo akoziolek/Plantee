@@ -1,5 +1,6 @@
 package com.example.plantee.ui.screens.home
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,6 +32,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.MainTopBar
+import com.example.plantee.ui.components.base.OverflowAction
+import com.example.plantee.ui.components.base.OverflowMenu
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.shared.FilterSectionHeader
 import com.example.plantee.ui.components.shared.LinkHeader
@@ -57,14 +60,30 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            MainTopBar(stringResource(R.string.home_title), actions = {
-                IconButton(onClick = { /* action 1 */ }) {
-                    Icon(Icons.Default.NotificationsNone, "Notifications")
+            MainTopBar(
+                title = stringResource(R.string.home_title),
+                actions = {
+                    IconButton(onClick = { /* action 1 */ }) {
+                        Icon(Icons.Default.NotificationsNone, "Notifications")
+                    }
+                    OverflowMenu(
+                        actions = listOf(
+                            OverflowAction(
+                                text = "Change mode",
+                                onClick = { }
+                            ),
+                            OverflowAction(
+                                text = "English",
+                                onClick = { viewModel.changeLanguage("en") }
+                            ),
+                            OverflowAction(
+                                text = "Polski",
+                                onClick = { viewModel.changeLanguage("pl") }
+                            )
+                        )
+                    )
                 }
-                IconButton(onClick = { /* action 2 */ }) {
-                    Icon(Icons.Default.Settings, "Settings")
-                }
-            })
+            )
         },
         floatingActionButton = {
             PrimaryFloatingButton(text = stringResource(R.string.home_btn_add), onClick = { viewModel.onAddPlantClick() })
