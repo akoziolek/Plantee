@@ -12,34 +12,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.plantee.R
 import com.example.plantee.domain.model.DiagnosisSummary
+import com.example.plantee.ui.components.base.EmptySectionPlaceholder
 import java.time.format.DateTimeFormatter
-
-fun LazyListScope.diagnosisListItems_TODELETE(
-    diagnosis: List<String>,
-    onDiagnosisClick: (Long) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    diagnosis.forEachIndexed { index, item ->
-        item {
-            DiagnosisListItem(
-                headlineText = item,
-                modifier = modifier,
-                supportingText = "Longer description duis aute irure dolor $index",
-                // TODO change to diagnosis idx
-                onClick = { onDiagnosisClick(1) }
-            )
-        }
-
-        if (index < diagnosis.size - 1) {
-            item {
-                HorizontalDivider(
-                    modifier = modifier,
-                    color = MaterialTheme.colorScheme.outlineVariant
-                )
-            }
-        }
-    }
-}
 
 
 fun LazyListScope.diagnosisListItems(
