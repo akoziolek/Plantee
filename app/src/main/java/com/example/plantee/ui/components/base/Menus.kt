@@ -46,7 +46,7 @@ fun OverflowMenu(
                         expanded = false
                         action.onClick()
                     },
-                    leadingIcon = action.icon?.let {
+                    trailingIcon = action.icon?.let {
                         { Icon(it, contentDescription = null) }
                     }
                 )

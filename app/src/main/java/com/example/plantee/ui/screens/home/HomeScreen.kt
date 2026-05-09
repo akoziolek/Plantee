@@ -1,6 +1,6 @@
 package com.example.plantee.ui.screens.home
 
-import android.content.Context
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.NotificationsNone
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -66,6 +66,9 @@ fun HomeScreen(
                     IconButton(onClick = { /* action 1 */ }) {
                         Icon(Icons.Default.NotificationsNone, "Notifications")
                     }
+                    
+                    val currentLang = AppCompatDelegate.getApplicationLocales().toLanguageTags()
+                    
                     OverflowMenu(
                         actions = listOf(
                             OverflowAction(
@@ -74,10 +77,12 @@ fun HomeScreen(
                             ),
                             OverflowAction(
                                 text = "English",
+                                icon = if (currentLang == "en") Icons.Default.Check else null,
                                 onClick = { viewModel.changeLanguage("en") }
                             ),
                             OverflowAction(
                                 text = "Polski",
+                                icon = if (currentLang == "pl") Icons.Default.Check else null,
                                 onClick = { viewModel.changeLanguage("pl") }
                             )
                         )
