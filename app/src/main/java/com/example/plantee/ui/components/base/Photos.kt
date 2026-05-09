@@ -40,12 +40,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import coil.compose.AsyncImage
 import com.example.plantee.R
 import com.example.plantee.ui.theme.PlanteeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun PhotoPicker(
     selectedUri: Uri?,
@@ -68,7 +69,7 @@ fun PhotoPicker(
             .height(220.dp)
             .fillMaxWidth()
     ) {
-        PhotoViewer(selectedUri)
+        PhotoViewer(selectedUri, canOpenFullScreen = true)
         PrimaryButton(
             icon = if (selectedUri == null) Icons.Default.Add else Icons.Default.Edit,
             onClick = {
@@ -128,17 +129,43 @@ fun PhotoPicker(
 
 @Composable
 fun PhotoViewer(
-    selectedUri: Uri?
+    selectedUri: Uri?,
+    canOpenFullScreen: Boolean = false
 ) {
     // TODO - loading 8k photos
+    var isFullScreenVisible by remember { mutableStateOf(false) }
 
     if(selectedUri != null) {
         AsyncImage(
             model = selectedUri,
             contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable { isFullScreenVisible = true },
             contentScale = ContentScale.Crop
         )
+
+        if(canOpenFullScreen && isFullScreenVisible) {
+            Dialog(
+                onDismissRequest = { isFullScreenVisible = false },
+                properties = DialogProperties(usePlatformDefaultWidth = false)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black)
+                        .clickable {isFullScreenVisible = false},
+                    contentAlignment = Alignment.Center
+                ) {
+                    AsyncImage(
+                        model = selectedUri,
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Fit
+                    )
+                }
+            }
+        }
 
     }
     else {
