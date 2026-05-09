@@ -6,5 +6,7 @@
         <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
         <item name="windowSplashScreenBackground">@color/brand_primary</item>
         <item name="postSplashScreenTheme">@style/Theme.Plantee</item>
+        <item name="android:windowBackground">@color/white</item>
     </style>
+
 </resources>

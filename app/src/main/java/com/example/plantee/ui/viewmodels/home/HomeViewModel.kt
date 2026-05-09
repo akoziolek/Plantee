@@ -142,7 +142,13 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    // FIXME screen blink
     fun changeLanguage(langCode: String) {
+        val currentLocales = AppCompatDelegate.getApplicationLocales()
+        if (currentLocales.toLanguageTags() == langCode) {
+            return
+        }
+
         val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(langCode)
         AppCompatDelegate.setApplicationLocales(appLocale)
     }
