@@ -1,21 +1,28 @@
 package com.example.plantee.data.repositories
 
+import androidx.room.withTransaction
+import com.example.plantee.data.local.AppDatabase
+import com.example.plantee.data.local.dao.MediaDao
 import com.example.plantee.data.local.dao.PlantsDao
 import com.example.plantee.data.mappers.toDomain
 import com.example.plantee.data.mappers.toDomainList
 import com.example.plantee.data.mappers.toSummaryDomainList
 import com.example.plantee.data.mappers.toEntity
 import com.example.plantee.data.mappers.toSummaryDomain
+import com.example.plantee.domain.model.Media
 import com.example.plantee.domain.model.Plant
 import com.example.plantee.domain.model.PlantSummary
 import com.example.plantee.domain.repositories.IPlantsRepository
 import com.example.plantee.utils.SortOrder
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class PlantsRepository @Inject constructor(
-    private val plantsDao: PlantsDao
+    private val database: AppDatabase,
+    private val plantsDao: PlantsDao,
+    private val mediaDao: MediaDao
 ) : IPlantsRepository {
     override fun getAllPlants(): Flow<List<Plant>> {
         return plantsDao.getAllFullPlants().map { it.toDomainList() }
@@ -58,10 +65,22 @@ class PlantsRepository @Inject constructor(
 
     override suspend fun createPlant(plant: Plant): Long {
         val entity = plant.toEntity() ?: return -1L
-
         val newId = plantsDao.insert(entity)
-
         return newId
+    }
+
+
+    override suspend fun createPlantWithMedia(plant: Plant, media: Media?): Long {
+        return database.withTransaction {
+            val mediaId = media?.let {
+                mediaDao.insert(it.toEntity() ?: return@withTransaction -1L)
+            }
+
+            val plantEntity = plant.copy(mediaId = mediaId).toEntity()
+                ?: return@withTransaction -1L
+
+            plantsDao.insert(plantEntity)
+        }
     }
 
     override suspend fun updatePlant(plant: Plant) {
@@ -69,6 +88,26 @@ class PlantsRepository @Inject constructor(
 
         plantsDao.update(entity)
     }
+
+    override suspend fun updatePlantMedia(id: Long, media: Media?) {
+        database.withTransaction {
+            // FIXME firstOrNull??
+            val plant = getPlant(id).firstOrNull() ?: return@withTransaction
+
+            val oldMediaId = plant.mediaId
+            if (oldMediaId != null) {
+                mediaDao.deleteById(oldMediaId)
+            }
+
+            val newMediaId = media?.let {
+                val entity = it.toEntity() ?: return@withTransaction
+                mediaDao.insert(entity)
+            }
+
+            plantsDao.updateMediaId(id, newMediaId)
+        }
+    }
+
 
     override suspend fun togglePlantFavourite(id: Long) {
         plantsDao.updateFavouriteStatus(id)

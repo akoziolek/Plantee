@@ -36,7 +36,6 @@ data class PlantAddUiState(
 @HiltViewModel
 class PlantAddViewModel @Inject constructor(
     private val plantsRepository: IPlantsRepository,
-    private val mediaRepository: IMediaRepository,
     private val photosRepository: IPhotosRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(PlantAddUiState())
@@ -86,20 +85,20 @@ class PlantAddViewModel @Inject constructor(
                 photosRepository.saveImage(it)
             }
 
-            // TODO - inne zapisywanie, z transakcja, poprawne uri
-            val media = Media(
-                filePath = currentState.imageUri.toString(),
-                createdAt = java.time.LocalDateTime.now()
-            )
-            val mediaId = mediaRepository.createMedia(media)
+            val media = internalImageUri?.let {
+                Media(
+                    filePath = it,
+                    createdAt = java.time.LocalDateTime.now()
+                )
+            }
+
             val plant = Plant(
                 name = currentState.name,
                 species = currentState.species,
                 description = currentState.description,
-                isFavourite = currentState.isFavourite,
-                mediaId = mediaId
+                isFavourite = currentState.isFavourite
             )
-            val id = plantsRepository.createPlant(plant)
+            val id = plantsRepository.createPlantWithMedia(plant, media)
             resetState()
             _events.send(PlantAddEvent.NavigateToDetails(plantId = id))
         }
