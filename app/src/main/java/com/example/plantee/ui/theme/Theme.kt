@@ -435,7 +435,7 @@ fun PlanteeTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> lightScheme//darkScheme
+        darkTheme -> darkScheme
         else -> lightScheme
     }
 
