@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.plantee.domain.model.Media
 import com.example.plantee.domain.model.Plant
 import com.example.plantee.domain.repositories.IMediaRepository
+import com.example.plantee.domain.repositories.IPhotosRepository
 import com.example.plantee.domain.repositories.IPlantsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -35,7 +36,8 @@ data class PlantAddUiState(
 @HiltViewModel
 class PlantAddViewModel @Inject constructor(
     private val plantsRepository: IPlantsRepository,
-    private val mediaRepository: IMediaRepository
+    private val mediaRepository: IMediaRepository,
+    private val photosRepository: IPhotosRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(PlantAddUiState())
     val state: StateFlow<PlantAddUiState> = _state.asStateFlow()
@@ -80,6 +82,10 @@ class PlantAddViewModel @Inject constructor(
 
         viewModelScope.launch {
             val currentState = _state.value
+            val internalImageUri = currentState.imageUri?.let {
+                photosRepository.saveImage(it)
+            }
+
             // TODO - inne zapisywanie, z transakcja, poprawne uri
             val media = Media(
                 filePath = currentState.imageUri.toString(),
