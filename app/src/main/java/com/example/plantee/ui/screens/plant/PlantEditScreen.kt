@@ -26,6 +26,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
+import com.example.plantee.ui.components.base.PhotoPicker
 import com.example.plantee.ui.components.base.PrimaryButtonFullWidth
 import com.example.plantee.ui.components.shared.PlantFormFields
 import com.example.plantee.ui.theme.PlanteeTheme
@@ -73,13 +74,10 @@ fun PlantEditScreen(
                     .padding(innerPadding)
                     .verticalScroll(rememberScrollState())
             ) {
-                // TODO real images
-                Box(
-                    modifier = Modifier
-                        .background(MaterialTheme.colorScheme.outlineVariant)
-                        .height(220.dp)
-                        .fillMaxWidth()
-                ) { }
+                PhotoPicker(
+                    selectedUri = state.imageUri,
+                    onPhotoSelected = { viewModel.onUriChange(it) }
+                )
 
                 Column(
                     modifier = Modifier

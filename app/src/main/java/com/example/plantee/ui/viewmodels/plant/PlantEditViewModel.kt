@@ -1,5 +1,6 @@
 package com.example.plantee.ui.viewmodels.plant
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.plantee.domain.model.Plant
@@ -29,7 +30,8 @@ data class PlantEditUiState(
     val species: String = "",
     val description: String = "",
     val isFavourite: Boolean = false,
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
+    val imageUri: Uri? = null
 )
 
 @HiltViewModel(assistedFactory = PlantEditViewModel.Factory::class)
@@ -84,6 +86,10 @@ class PlantEditViewModel @AssistedInject constructor(
         _state.update { it.copy(description = newDescription) }
     }
 
+    fun onUriChange(newUri: Uri?) {
+        _state.update { it.copy(imageUri = newUri) }
+    }
+
     fun onBackClick() {
         viewModelScope.launch {
             _events.send(PlantEditEvent.NavigateBack)
@@ -98,7 +104,7 @@ class PlantEditViewModel @AssistedInject constructor(
 
     fun updatePlant() {
         if (!validate()) return
-
+        // TODO zmiana zdjecia - usuniecie starego, dodanie nowego
         viewModelScope.launch {
             val currentState = _state.value
             val plant = Plant(

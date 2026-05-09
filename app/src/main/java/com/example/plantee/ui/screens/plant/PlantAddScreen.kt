@@ -61,7 +61,7 @@ fun PlantAddScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             PhotoPicker (
-                state.imageUri,
+                selectedUri = state.imageUri,
                 onPhotoSelected = { viewModel.onUriChange(it)}
             )
 

@@ -80,7 +80,7 @@ class PlantAddViewModel @Inject constructor(
 
         viewModelScope.launch {
             val currentState = _state.value
-            // TODO - inne zapisywanie, z transakcja
+            // TODO - inne zapisywanie, z transakcja, poprawne uri
             val media = Media(
                 filePath = currentState.imageUri.toString(),
                 createdAt = java.time.LocalDateTime.now()
