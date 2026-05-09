@@ -1,5 +1,6 @@
 package com.example.plantee.ui.components.base
 
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
@@ -9,10 +10,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,9 +27,10 @@ private val PrimaryButtonElevation = 8.dp
 
 @Composable
 fun PrimaryButton(
-    text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    text: String? = null,
+    icon: ImageVector? = null,
     enabled: Boolean = true
 ) {
     Button(
@@ -40,10 +44,18 @@ fun PrimaryButton(
         ),
         elevation = ButtonDefaults.buttonElevation(defaultElevation = PrimaryButtonElevation)
     ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelLarge
-        )
+        if(icon != null) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null
+            )
+        }
+        if(text != null) {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.labelLarge
+            )
+        }
     }
 }
 
