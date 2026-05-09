@@ -29,6 +29,7 @@ import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
 import com.example.plantee.ui.components.base.InputSlider
 import com.example.plantee.ui.components.base.InputTextField
+import com.example.plantee.ui.components.base.PhotoPicker
 import com.example.plantee.ui.components.base.PrimaryButtonFullWidth
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.viewmodels.diagnosis.DiagnosePlantEvent
@@ -70,13 +71,10 @@ fun DiagnosePlantScreen(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
         ) {
-            // TODO real images - remember about the extra button on top
-            Box(
-                modifier = Modifier
-                    .background(MaterialTheme.colorScheme.outlineVariant)
-                    .height(220.dp)
-                    .fillMaxWidth()
-            ) { }
+            PhotoPicker(
+                selectedUri = state.imageUri,
+                onPhotoSelected = { viewModel.onUriChange(it) }
+            )
 
             Column(
                 modifier = Modifier

@@ -1,5 +1,6 @@
 package com.example.plantee.ui.viewmodels.diagnosis
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.plantee.domain.model.Diagnosis
@@ -28,7 +29,8 @@ data class DiagnosePlantUiState(
     val moistureLevel: Float = 0.7f,
     val sunLevel: Float = 0.3f,
     val problemDescription: String = "",
-    val problemDescriptionError: Boolean = false
+    val problemDescriptionError: Boolean = false,
+    val imageUri: Uri? = null
 )
 
 @HiltViewModel(assistedFactory = DiagnosePlantViewModel.Factory::class)
@@ -60,6 +62,10 @@ class DiagnosePlantViewModel @AssistedInject constructor(
         _state.update { it.copy(problemDescription = newDescription, problemDescriptionError = false) }
     }
 
+    fun onUriChange(newImageUri: Uri?) {
+        _state.update { it.copy(imageUri = newImageUri) }
+    }
+
     fun onBackClick() {
         viewModelScope.launch {
             _events.send(DiagnosePlantEvent.NavigateBack)
@@ -76,6 +82,7 @@ class DiagnosePlantViewModel @AssistedInject constructor(
     fun onDiagnoseClick() {
         if(!validate()) return
         // TODO tu akurat chce sie upewnic, ze tak ma dzialc ten proces, DLA UWAGI KOMENTARZ PO POLSKU
+        // zapisywanie zdjecia!!
         viewModelScope.launch {
             val currentState = _state.value
             val diagnosis = Diagnosis(
