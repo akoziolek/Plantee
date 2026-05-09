@@ -91,4 +91,7 @@
     <string name="label_no_diagnoses_found">No diagnoses found</string>
     <string name="photo_picker_label_pick">Pick new photo</string>
     <string name="photo_picker_label_delete">Delete</string>
+    <string name="navbar_label_home">Home</string>
+    <string name="navbar_label_plants">Plants</string>
+    <string name="navbar_label_routines">Routines</string>
 </resources>

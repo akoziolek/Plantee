@@ -1,5 +1,6 @@
 package com.example.plantee.ui.components.base
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -184,10 +185,10 @@ fun StaticSearchBar(
         )
 }
 
-sealed class NavItem(val title: String, val icon: ImageVector, val screen: Screen) {
-    object Home : NavItem(title = "Home", Icons.Default.Home, screen = Screen.Home)
-    object Plants : NavItem(title = "Plants", Icons.Default.LocalFlorist, screen = Screen.Plants)
-    object Routines : NavItem(title = "Routines", Icons.Default.CalendarMonth, screen = Screen.Routines)
+sealed class NavItem(@StringRes val titleRes: Int, val icon: ImageVector, val screen: Screen) {
+    object Home : NavItem(titleRes = R.string.navbar_label_home, Icons.Default.Home, screen = Screen.Home)
+    object Plants : NavItem(titleRes = R.string.navbar_label_plants, Icons.Default.LocalFlorist, screen = Screen.Plants)
+    object Routines : NavItem(titleRes = R.string.navbar_label_routines, Icons.Default.CalendarMonth, screen = Screen.Routines)
 }
 @Composable
 fun NavBar(
@@ -210,12 +211,12 @@ fun NavBar(
                 },
                 label = {
                     Text(
-                        text = item.title,
+                        text = stringResource(item.titleRes),
                         style = MaterialTheme.typography.labelMedium
                     )
                 },
                 icon = {
-                    Icon(item.icon, contentDescription = item.title)
+                    Icon(item.icon, contentDescription = stringResource(item.titleRes))
                 },
                 colors = NavigationBarItemDefaults.colors(
                     indicatorColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.30f),

@@ -92,4 +92,7 @@
     <string name="label_no_diagnoses_found">Nie znaleziono diagnoz</string>
     <string name="photo_picker_label_pick">Wybierz nowe zdjęcie</string>
     <string name="photo_picker_label_delete">Usuń</string>
+    <string name="navbar_label_home">Dom</string>
+    <string name="navbar_label_plants">Rośliny</string>
+    <string name="navbar_label_routines">Rutyny</string>
 </resources>
