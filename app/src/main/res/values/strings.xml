@@ -89,4 +89,6 @@
     <string name="label_no_plants_found">No plants found</string>
     <string name="label_no_routines_found">No routines found</string>
     <string name="label_no_diagnoses_found">No diagnoses found</string>
+    <string name="photo_picker_label_pick">Pick new photo</string>
+    <string name="photo_picker_label_delete">Delete</string>
 </resources>

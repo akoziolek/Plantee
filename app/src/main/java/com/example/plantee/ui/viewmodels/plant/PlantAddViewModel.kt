@@ -1,8 +1,11 @@
 package com.example.plantee.ui.viewmodels.plant
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.plantee.domain.model.Media
 import com.example.plantee.domain.model.Plant
+import com.example.plantee.domain.repositories.IMediaRepository
 import com.example.plantee.domain.repositories.IPlantsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -25,12 +28,14 @@ data class PlantAddUiState(
     val nameError: Boolean = false,
     val species: String = "",
     val description: String = "",
-    val isFavourite: Boolean = false
+    val isFavourite: Boolean = false,
+    val imageUri: Uri? = null
 )
 
 @HiltViewModel
 class PlantAddViewModel @Inject constructor(
-    private val plantsRepository: IPlantsRepository
+    private val plantsRepository: IPlantsRepository,
+    private val mediaRepository: IMediaRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(PlantAddUiState())
     val state: StateFlow<PlantAddUiState> = _state.asStateFlow()
@@ -54,6 +59,10 @@ class PlantAddViewModel @Inject constructor(
         _state.update { it.copy(isFavourite = newFavourite) }
     }
 
+    fun onUriChange(newUri: Uri?) {
+        _state.update { it.copy(imageUri = newUri) }
+    }
+
     fun onBackClick() {
         viewModelScope.launch {
             _events.send(PlantAddEvent.NavigateBack)
@@ -71,11 +80,17 @@ class PlantAddViewModel @Inject constructor(
 
         viewModelScope.launch {
             val currentState = _state.value
+            val media = Media(
+                filePath = currentState.imageUri.toString(),
+                createdAt = java.time.LocalDateTime.now()
+            )
+            val mediaId = mediaRepository.createMedia(media)
             val plant = Plant(
                 name = currentState.name,
                 species = currentState.species,
                 description = currentState.description,
-                isFavourite = currentState.isFavourite
+                isFavourite = currentState.isFavourite,
+                mediaId = mediaId
             )
             val id = plantsRepository.createPlant(plant)
             resetState()

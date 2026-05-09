@@ -1,16 +1,11 @@
 package com.example.plantee.ui.screens.plant
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -20,11 +15,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
 import com.example.plantee.ui.components.base.LabeledSwitch
+import com.example.plantee.ui.components.base.PhotoPicker
 import com.example.plantee.ui.components.base.PrimaryButtonFullWidth
 import com.example.plantee.ui.components.shared.PlantFormFields
 import com.example.plantee.ui.theme.PlanteeTheme
@@ -65,13 +60,10 @@ fun PlantAddScreen(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
         ) {
-            // TODO real images - remember about the extra button on top
-            Box(
-                modifier = Modifier
-                    .background(MaterialTheme.colorScheme.outlineVariant)
-                    .height(220.dp)
-                    .fillMaxWidth()
-            ) { }
+            PhotoPicker (
+                state.imageUri,
+                onPhotoSelected = { viewModel.onUriChange(it)}
+            )
 
             Column(
                 modifier = Modifier
