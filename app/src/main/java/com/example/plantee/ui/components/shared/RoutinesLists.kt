@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.dp
 import com.example.plantee.R
 import com.example.plantee.domain.model.Routine
 import com.example.plantee.domain.model.RoutineSummary
+import com.example.plantee.ui.components.base.EmptySectionPlaceholder
 import com.example.plantee.ui.components.base.RoutinesListItem
 import java.time.LocalDate
 
@@ -40,22 +41,6 @@ fun LazyListScope.todayRoutinesSection(
                 onClick = { onItemClick(routine.id) }
             )
         }
-    }
-}
-
-fun LazyListScope.routinesSection_TODELETE(
-    routines: List<String>,
-    onRoutineClick: (Long) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    items(routines.size) { index ->
-        RoutinesListItem(
-            headlineText = routines[index],
-            supportingText = "Description for routine no. $index",
-            // TODO change to routine id
-            onClick = { onRoutineClick(1) },
-            modifier = modifier
-        )
     }
 }
 
