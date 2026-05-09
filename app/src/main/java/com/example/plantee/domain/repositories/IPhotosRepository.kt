@@ -4,4 +4,5 @@ import android.net.Uri
 
 interface IPhotosRepository {
     suspend fun saveImage(uri: Uri): String?
+    suspend fun deleteImage(filePath: String): Boolean
 }

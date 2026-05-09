@@ -37,4 +37,19 @@ class PhotosRepository @Inject constructor(
             }
         }
     }
+
+    override suspend fun deleteImage(filePath: String): Boolean {
+        return withContext(Dispatchers.IO) {
+            try {
+                val file = File(filePath)
+                if(file.exists()) {
+                    file.delete()
+                } else {
+                    false
+                }
+            } catch (e: Exception) {
+                false
+            }
+        }
+    }
 }
