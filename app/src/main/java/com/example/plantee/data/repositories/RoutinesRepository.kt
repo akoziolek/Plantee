@@ -71,9 +71,9 @@ class RoutinesRepository @Inject constructor(
 
         val newId =  routinesDao.insert(entity)
 
-        if (routine.plantsIds.isNotEmpty()) {
-            plantRoutinesDao.insertAll(routine.plantsIds.map { id ->
-                PlantRoutineEntity(idRoutine = newId, idPlant = id)
+        if (routine.plants.isNotEmpty()) {
+            plantRoutinesDao.insertAll(routine.plants.map { plant ->
+                PlantRoutineEntity(idRoutine = newId, idPlant = plant.id)
             })
         }
         return newId
@@ -83,7 +83,7 @@ class RoutinesRepository @Inject constructor(
         val entity = routine.toEntity() ?: return
 
         routinesDao.update(entity)
-        plantRoutinesDao.clearAndInsertNewForRoutine(routine.id, routine.plantsIds)
+        plantRoutinesDao.clearAndInsertNewForRoutine(routine.id, routine.plants.map { it.id })
     }
 
     override suspend fun toggleRoutineDone(id: Long, date: LocalDate?) {

@@ -122,6 +122,7 @@ fun RoutinesListItem(
     )
 }
 
+// TODO disable bookmark click
 @Composable
 fun PlantListItem(
     title: String,

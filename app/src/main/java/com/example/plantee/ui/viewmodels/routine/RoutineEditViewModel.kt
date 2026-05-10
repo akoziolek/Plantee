@@ -43,8 +43,8 @@ data class RoutineEditUiState(
     val startDate: LocalDate? = null,
     val endDate: LocalDate? = null,
     val lastlyDoneAt: LocalDate? = null,
-    val plants: List<PlantSummary> = emptyList(),
-    val plantIds: List<Long> = emptyList(),
+    val availablePlants: List<PlantSummary> = emptyList(),
+    val selectedPlants: List<PlantSummary> = emptyList(),
     val isLoading: Boolean = true,
     val searchQuery: String = ""
 )
@@ -78,7 +78,7 @@ class RoutineEditViewModel @AssistedInject constructor(
 
     val state: StateFlow<RoutineEditUiState> = combine(_state, _filteredPlants) { currentState, filteredPlants ->
         currentState.copy(
-            plants = filteredPlants,
+            availablePlants = filteredPlants,
             isLoading = false
         )
     }.stateIn(
@@ -101,8 +101,10 @@ class RoutineEditViewModel @AssistedInject constructor(
                             name = r.name,
                             description = r.description ?: "",
                             activeDays = r.activeDays ?: 0,
+                            startDate = r.startDate,
+                            endDate = r.endDate,
                             lastlyDoneAt = r.lastlyDoneAt,
-                            plantIds = r.plantsIds,
+                            selectedPlants = r.plants,
                             isLoading = false
                         )
                     }
@@ -139,12 +141,14 @@ class RoutineEditViewModel @AssistedInject constructor(
 
     fun onPlantClick(plantId: Long) {
         _state.update { currentState ->
-            val newPlantIds = if (currentState.plantIds.contains(plantId)) {
-                currentState.plantIds.filterNot { it == plantId }
+            val isAlreadySelected = currentState.selectedPlants.any { it.id == plantId }
+            val newSelectedPlants = if (isAlreadySelected) {
+                currentState.selectedPlants.filterNot { it.id == plantId }
             } else {
-                currentState.plantIds + plantId
+                val plant = currentState.availablePlants.find { it.id == plantId }
+                if (plant != null) currentState.selectedPlants + plant else currentState.selectedPlants
             }
-            currentState.copy(plantIds = newPlantIds)
+            currentState.copy(selectedPlants = newSelectedPlants)
         }
     }
 
@@ -177,8 +181,7 @@ class RoutineEditViewModel @AssistedInject constructor(
                 startDate = currentState.startDate,
                 endDate = currentState.endDate,
                 lastlyDoneAt = currentState.lastlyDoneAt,
-                plantsIds = currentState.plantIds
-
+                plants = currentState.selectedPlants
             )
             routinesRepository.updateRoutine(routine)
             _events.send(RoutineEditEvent.RoutineUpdated)

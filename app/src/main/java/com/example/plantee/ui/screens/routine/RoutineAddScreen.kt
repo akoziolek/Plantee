@@ -122,10 +122,10 @@ fun RoutineAddScreen(
             }
 
             plantListItems(
-                plants = state.plants,
+                plants = state.availablePlants,
                 onPlantClick = { viewModel.onPlantClick(it) },
                 onPlantBookmarkClick = {  },
-                selectedPlantIds = state.plantIds
+                selectedPlantIds = state.selectedPlants.map { it.id }
             )
 
         }

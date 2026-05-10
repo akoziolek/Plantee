@@ -1,9 +1,7 @@
 package com.example.plantee.data.mappers
 
-import com.example.plantee.data.local.entities.PlantEntity
-import com.example.plantee.data.local.relations.RoutineWithDetails
 import com.example.plantee.data.local.entities.RoutineEntity
-import com.example.plantee.domain.model.PlantSummary
+import com.example.plantee.data.local.relations.RoutineWithDetails
 import com.example.plantee.domain.model.Routine
 import com.example.plantee.domain.model.RoutineSummary
 
@@ -19,7 +17,7 @@ fun RoutineWithDetails?.toDomain(): Routine? {
         activeDays = routine.activeDays,
         lastlyDoneAt = routine.lastlyDoneAt,
         diagnosisId = this.idDiagnosis,
-        plantsIds = plantRoutines.map { it.idPlant }
+        plants = plants.toSummaryDomainList()
     )
 }
 
@@ -34,7 +32,7 @@ fun List<RoutineWithDetails>.toDomainList(): List<Routine> {
             activeDays = entity.routine.activeDays,
             lastlyDoneAt = entity.routine.lastlyDoneAt,
             diagnosisId = entity.idDiagnosis,
-            plantsIds = entity.plantRoutines.map { it.idPlant }
+            plants = entity.plants.toSummaryDomainList()
         )
     }
 }

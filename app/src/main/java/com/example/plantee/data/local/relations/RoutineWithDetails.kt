@@ -2,7 +2,9 @@ package com.example.plantee.data.local.relations
 
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
+import androidx.room.Junction
 import androidx.room.Relation
+import com.example.plantee.data.local.entities.PlantEntity
 import com.example.plantee.data.local.entities.PlantRoutineEntity
 import com.example.plantee.data.local.entities.RoutineEntity
 
@@ -11,9 +13,14 @@ data class RoutineWithDetails(
 
     @Relation(
         parentColumn = "id",
-        entityColumn = "id_routine"
+        entityColumn = "id",
+        associateBy = Junction(
+            value = PlantRoutineEntity::class,
+            parentColumn = "id_routine",
+            entityColumn = "id_plant"
+        )
     )
-    val plantRoutines: List<PlantRoutineEntity>,
+    val plants: List<PlantEntity>,
 
     @ColumnInfo(name = "id_diagnosis")
     val idDiagnosis: Long?,

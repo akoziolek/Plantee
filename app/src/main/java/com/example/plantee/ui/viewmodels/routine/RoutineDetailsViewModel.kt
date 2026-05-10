@@ -15,7 +15,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -61,18 +60,10 @@ class RoutineDetailsViewModel @AssistedInject constructor(
                 isDeleted.value -> flowOf(RoutineDetailsUiState.Deleted)
 
                 routine != null -> {
-                    val plantFlows = routine.plantsIds.map { plantsRepository.getPlantSummary(it) }
-
-                    if (plantFlows.isEmpty()) {
-                        flowOf(RoutineDetailsUiState.Success(routine, emptyList()))
-                    } else {
-                        combine(plantFlows) { plants ->
-                            RoutineDetailsUiState.Success(
-                                routine = routine,
-                                connectedPlants = plants.filterNotNull()
-                            )
-                        }
-                    }
+                    flowOf(RoutineDetailsUiState.Success(
+                        routine = routine,
+                        connectedPlants = routine.plants
+                    ))
                 }
 
                 else -> flowOf(RoutineDetailsUiState.Error("Routine not found"))

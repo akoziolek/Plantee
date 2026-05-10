@@ -39,8 +39,8 @@ data class RoutineAddUiState(
     val activeDays: Int = 0,
     val startDate: LocalDate? = null,
     val endDate: LocalDate? = null,
-    val plants: List<PlantSummary> = emptyList(),
-    val plantIds: List<Long> = emptyList(),
+    val availablePlants: List<PlantSummary> = emptyList(),
+    val selectedPlants: List<PlantSummary> = emptyList(),
     val isLoading: Boolean = true,
     val searchQuery: String = ""
 )
@@ -65,7 +65,7 @@ class RoutineAddViewModel @Inject constructor(
 
     val state: StateFlow<RoutineAddUiState> = combine(_state, _filteredPlants) { currentState, filteredPlants ->
         currentState.copy(
-            plants = filteredPlants,
+            availablePlants = filteredPlants,
             isLoading = false
         )
     }.stateIn(
@@ -105,12 +105,14 @@ class RoutineAddViewModel @Inject constructor(
 
     fun onPlantClick(plantId: Long) {
         _state.update { currentState ->
-            val newPlantIds = if (currentState.plantIds.contains(plantId)) {
-                currentState.plantIds.filterNot { it == plantId }
+            val isAlreadySelected = currentState.selectedPlants.any { it.id == plantId }
+            val newSelectedPlants = if (isAlreadySelected) {
+                currentState.selectedPlants.filterNot { it.id == plantId }
             } else {
-                currentState.plantIds + plantId
+                val plant = currentState.availablePlants.find { it.id == plantId }
+                if (plant != null) currentState.selectedPlants + plant else currentState.selectedPlants
             }
-            currentState.copy(plantIds = newPlantIds)
+            currentState.copy(selectedPlants = newSelectedPlants)
         }
     }
 
@@ -134,14 +136,14 @@ class RoutineAddViewModel @Inject constructor(
         if (!validate()) return
 
         viewModelScope.launch {
-            val currentState = state.value
+            val currentState = _state.value
             val routine = Routine(
                 name = currentState.name,
                 description = currentState.description,
                 activeDays = currentState.activeDays,
                 startDate = currentState.startDate,
                 endDate = currentState.endDate,
-                plantsIds = currentState.plantIds
+                plants = currentState.selectedPlants
             )
             val id = routineRepository.addRoutine(routine)
             resetState()
