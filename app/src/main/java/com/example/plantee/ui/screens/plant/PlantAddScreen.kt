@@ -82,8 +82,8 @@ fun PlantAddScreen(
 
                 LabeledSwitch(
                     label = stringResource(R.string.plant_add_switch_label),
-                    checked = state.isFavourite,
-                    onCheckedChange = { viewModel.onFavouriteChange(it) },
+                    checked = state.createFirstEntry,
+                    onCheckedChange = { viewModel.onCreateFirstEntryChange(it) },
                     modifier = Modifier.padding(horizontal = 6.dp)
                 )
             }

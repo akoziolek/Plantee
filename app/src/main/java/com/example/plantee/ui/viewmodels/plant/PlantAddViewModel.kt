@@ -20,6 +20,7 @@ import javax.inject.Inject
 
 sealed class PlantAddEvent {
     data class NavigateToDetails(val plantId: Long) : PlantAddEvent()
+    data class NavigateToDiagnose(val plantId: Long) : PlantAddEvent()
     object NavigateBack : PlantAddEvent()
 }
 
@@ -30,7 +31,8 @@ data class PlantAddUiState(
     val species: String = "",
     val description: String = "",
     val isFavourite: Boolean = false,
-    val imageUri: Uri? = null
+    val imageUri: Uri? = null,
+    val createFirstEntry: Boolean = false
 )
 
 @HiltViewModel
@@ -70,6 +72,10 @@ class PlantAddViewModel @Inject constructor(
         }
     }
 
+    fun onCreateFirstEntryChange(newCreateFirstEntry: Boolean) {
+        _state.update { it.copy(createFirstEntry = newCreateFirstEntry) }
+    }
+
     private fun validate(): Boolean {
         val nameIsBlank = _state.value.name.isBlank()
         _state.update { it.copy(nameError = nameIsBlank) }
@@ -99,8 +105,10 @@ class PlantAddViewModel @Inject constructor(
                 isFavourite = currentState.isFavourite
             )
             val id = plantsRepository.createPlantWithMedia(plant, media)
+            val event = if (currentState.createFirstEntry) PlantAddEvent.NavigateToDiagnose(plantId = id)
+                else PlantAddEvent.NavigateToDetails(plantId = id)
+            _events.send(event)
             resetState()
-            _events.send(PlantAddEvent.NavigateToDetails(plantId = id))
         }
     }
 

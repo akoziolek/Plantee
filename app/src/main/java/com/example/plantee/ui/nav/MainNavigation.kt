@@ -175,9 +175,11 @@ fun MainNavigation(
                 PlantAddScreen(
                     onNavigate = { event ->
                         when (event) {
-                            // TODO if 'Create first entry is enabled' route to AddEntry
                             is PlantAddEvent.NavigateToDetails -> {
                                 viewModel.replace(Screen.PlantDetails(event.plantId))
+                            }
+                            is PlantAddEvent.NavigateToDiagnose -> {
+                                viewModel.replace(Screen.DiagnosePlant(event.plantId))
                             }
                             PlantAddEvent.NavigateBack -> viewModel.back()
                         }
