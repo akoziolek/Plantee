@@ -10,6 +10,7 @@ data class Diagnosis(
     val moistureLevel: Int,
     val diagnosedAt: LocalDateTime,
     val response: String? = null,
+    // TODO summaries
     val listOfMedia: List<Long> = emptyList(),
     val routinesIds: List<Long> = emptyList()
 )
