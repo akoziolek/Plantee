@@ -159,8 +159,7 @@ fun RoutineDetailsScreen(
 
                     plantListItems(
                         plants = plants,
-                        onPlantClick = { viewModel.onPlantClick(it) },
-                        onPlantBookmarkClick = {  }
+                        onPlantClick = { viewModel.onPlantClick(it) }
                     )
                 }
             }

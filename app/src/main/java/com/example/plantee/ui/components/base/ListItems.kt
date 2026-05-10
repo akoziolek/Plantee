@@ -122,7 +122,6 @@ fun RoutinesListItem(
     )
 }
 
-// TODO disable bookmark click
 @Composable
 fun PlantListItem(
     title: String,
@@ -131,7 +130,7 @@ fun PlantListItem(
     isBookmarked: Boolean = false,
     isSelected: Boolean = false,
     onClick: () -> Unit = {},
-    onBookmarkClick: () -> Unit = {}
+    onBookmarkClick: (() -> Unit)? = null
 ) {
     val scale by animateFloatAsState(
         targetValue = if (isBookmarked) 1.2f else 1f,
@@ -181,15 +180,15 @@ fun PlantListItem(
                         text = title,
                         style = MaterialTheme.typography.titleMedium
                     )
-                    IconButton(onClick = {
-                        onBookmarkClick()
-
-                    }) {
+                    IconButton(
+                        onClick = { onBookmarkClick?.invoke() },
+                        enabled = onBookmarkClick != null
+                    ) {
                         Icon(
                             imageVector = bookmarkIcon,
                             tint = iconTint,
                             contentDescription = "Toggle favourite",
-                            modifier = Modifier.scale(scale)
+                            modifier = if (onBookmarkClick != null) Modifier.scale(scale) else Modifier
                         )
                     }
                 }

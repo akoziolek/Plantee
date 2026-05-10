@@ -129,7 +129,6 @@ fun RoutineEditScreen(
             plantListItems(
                 plants = state.availablePlants,
                 onPlantClick = { viewModel.onPlantClick(it) },
-                onPlantBookmarkClick = {  },
                 selectedPlantIds = state.selectedPlants.map { it.id }
             )
         }

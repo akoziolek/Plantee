@@ -12,7 +12,7 @@ import com.example.plantee.ui.components.base.PlantListItem
 fun LazyListScope.plantListItems(
     plants: List<PlantSummary>,
     onPlantClick: (Long) -> Unit,
-    onPlantBookmarkClick: (Long) -> Unit,
+    onPlantBookmarkClick: ((Long) -> Unit)? = null,
     selectedPlantIds: List<Long> = emptyList()
 ) {
     if (plants.isEmpty()) {
@@ -33,7 +33,9 @@ fun LazyListScope.plantListItems(
                 isBookmarked = plant.isFavourite,
                 isSelected = selectedPlantIds.contains(plant.id),
                 onClick = { onPlantClick(plant.id) },
-                onBookmarkClick = { onPlantBookmarkClick(plant.id) }
+                onBookmarkClick = if (onPlantBookmarkClick != null) {
+                    { onPlantBookmarkClick(plant.id) }
+                } else null
             )
         }
     }
