@@ -1,5 +1,7 @@
 package com.example.plantee.ui.components.base
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -29,16 +31,23 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.plantee.ui.theme.PlanteeTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun RoutinesListItem(
@@ -50,12 +59,40 @@ fun RoutinesListItem(
     containerColor: Color = MaterialTheme.colorScheme.surfaceVariant,
     onClick: () -> Unit = {}
 ) {
+    var isFirstComposition by remember { mutableStateOf(true) }
+    val animScaleX = remember { Animatable(1f) }
+
+    LaunchedEffect(checked) {
+        if (isFirstComposition) {
+            isFirstComposition = false
+            return@LaunchedEffect
+        }
+
+        if (checked) {
+            launch {
+                animScaleX.animateTo(0.96f, spring(stiffness = Spring.StiffnessMediumLow))
+                animScaleX.animateTo(1f, spring(stiffness = Spring.StiffnessLow, dampingRatio = 0.5f))
+            }
+        }
+    }
+
+
     ListItem(
         headlineContent = {
-            Text(text = headlineText, style = MaterialTheme.typography.titleMedium)
+            Text(
+                text = headlineText,
+                style = MaterialTheme.typography.titleMedium.copy(
+                    textDecoration = if (checked) TextDecoration.LineThrough else TextDecoration.None
+                )
+            )
         },
         supportingContent = if (supportingText.isNotEmpty()) {
-            { Text(text = supportingText, style = MaterialTheme.typography.bodyMedium) }
+            {
+                Text(
+                    text = supportingText,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         } else null,
         leadingContent = if (onCheckedChange != null) {
             {
@@ -65,21 +102,22 @@ fun RoutinesListItem(
                     colors = CheckboxDefaults.colors(
                         checkedColor = MaterialTheme.colorScheme.primary,
                         checkmarkColor = MaterialTheme.colorScheme.onPrimary,
-                        uncheckedColor = MaterialTheme.colorScheme.outline                    )
+                        uncheckedColor = MaterialTheme.colorScheme.outline
+                    )
                 )
             }
         } else null,
         trailingContent = {
             Icon(imageVector = Icons.AutoMirrored.Filled.ArrowRight, contentDescription = null)
         },
-        colors = ListItemDefaults.colors(
-            containerColor = containerColor
-        ),
+        colors = ListItemDefaults.colors(containerColor),
         modifier = modifier
             .fillMaxWidth()
+            .graphicsLayer(
+                scaleX = animScaleX.value
+            )
             .heightIn(min = 72.dp)
             .clip(RoundedCornerShape(8.dp))
-            // TODO pass the Routine object, and the proper id?
             .clickable { onClick() }
     )
 }
@@ -107,14 +145,12 @@ fun PlantListItem(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(10.dp))
-            // TODO pass the Plant object, and the proper id?
             .clickable { onClick() },
         color = containerColor
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // TODO real photos
             Box(
                 modifier = Modifier
                     .size(100.dp)
