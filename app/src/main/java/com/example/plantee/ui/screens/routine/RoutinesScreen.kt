@@ -28,11 +28,13 @@ import com.example.plantee.ui.components.base.FilterBar
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.base.SectionHeader
 import com.example.plantee.ui.components.base.SimpleSearchBar
+import com.example.plantee.ui.components.shared.CelebrationWrapper
 import com.example.plantee.ui.components.shared.routinesSection
 import com.example.plantee.ui.components.shared.todayRoutinesSection
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.viewmodels.routine.RoutinesEvent
 import com.example.plantee.ui.viewmodels.routine.RoutinesViewModel
+import java.time.LocalDate
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -76,37 +78,39 @@ fun RoutinesScreen(
                 CircularProgressIndicator()
             }
         } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize().padding(innerPadding),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                item {
-                    SectionHeader(stringResource(R.string.routines_label_for_today))
-                }
-                // TODO ewentualnie bardziej odsunac od gory
-                todayRoutinesSection(
-                    routines = state.todayRoutines,
-                    onCheckboxClick = { viewModel.onCheckboxClick(it)},
-                    onItemClick = { viewModel.onRoutineClick(it) }
-                )
-
-                item { Spacer(modifier = Modifier.height(24.dp)) }
-
-                item {
-                    SectionHeader(stringResource(R.string.routines_label_all))
-                    FilterBar(
-                        onFilterClick = { viewModel.toggleSortOrder() },
-                        onViewModeClick = {},
-                        sort = sort
+            CelebrationWrapper(isAllDone = state.todayRoutines.all { it.lastlyDoneAt == LocalDate.now() }) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize().padding(innerPadding),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    item {
+                        SectionHeader(stringResource(R.string.routines_label_for_today))
+                    }
+                    // TODO ewentualnie bardziej odsunac od gory
+                    todayRoutinesSection(
+                        routines = state.todayRoutines,
+                        onCheckboxClick = { viewModel.onCheckboxClick(it) },
+                        onItemClick = { viewModel.onRoutineClick(it) }
                     )
+
+                    item { Spacer(modifier = Modifier.height(24.dp)) }
+
+                    item {
+                        SectionHeader(stringResource(R.string.routines_label_all))
+                        FilterBar(
+                            onFilterClick = { viewModel.toggleSortOrder() },
+                            onViewModeClick = {},
+                            sort = sort
+                        )
+                    }
+
+                    routinesSection(
+                        routines = state.routines,
+                        onRoutineClick = { viewModel.onRoutineClick(it) }
+                    )
+
                 }
-
-                routinesSection(
-                    routines = state.routines,
-                    onRoutineClick = { viewModel.onRoutineClick(it) }
-                )
-
             }
         }
     }

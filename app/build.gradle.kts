@@ -72,4 +72,5 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.3.0")
     ksp(libs.room.compiler)
     coreLibraryDesugaring(libs.android.desugarJdkLibs)
+    implementation("nl.dionsegijn:konfetti-compose:2.0.5")
 }

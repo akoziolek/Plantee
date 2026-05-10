@@ -36,6 +36,7 @@ import com.example.plantee.ui.components.base.MainTopBar
 import com.example.plantee.ui.components.base.OverflowAction
 import com.example.plantee.ui.components.base.OverflowMenu
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
+import com.example.plantee.ui.components.shared.CelebrationWrapper
 import com.example.plantee.ui.components.shared.FilterSectionHeader
 import com.example.plantee.ui.components.shared.LinkHeader
 import com.example.plantee.ui.components.shared.plantListItems
@@ -43,6 +44,7 @@ import com.example.plantee.ui.components.shared.todayRoutinesSection
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.viewmodels.home.HomeEvent
 import com.example.plantee.ui.viewmodels.home.HomeViewModel
+import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -105,54 +107,56 @@ fun HomeScreen(
                 CircularProgressIndicator()
             }
         } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
+            CelebrationWrapper(isAllDone = state.todayRoutines.all { it.lastlyDoneAt == LocalDate.now() }) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
 
-                item {
-                    Box(
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.outlineVariant)
-                            .height(170.dp)
-                            .fillMaxWidth()
-                    ) { }
-                }
-                item {
-                    LinkHeader(
-                        title = stringResource(R.string.home_label_today_routines),
-                        onClick = { viewModel.onRoutinesClick() }
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .background(MaterialTheme.colorScheme.outlineVariant)
+                                .height(170.dp)
+                                .fillMaxWidth()
+                        ) { }
+                    }
+                    item {
+                        LinkHeader(
+                            title = stringResource(R.string.home_label_today_routines),
+                            onClick = { viewModel.onRoutinesClick() }
+                        )
+                    }
+
+                    todayRoutinesSection(
+                        routines = state.todayRoutines,
+                        onCheckboxClick = { viewModel.onCheckboxClick(it) },
+                        onItemClick = { viewModel.onRoutineClick(it) }
                     )
-                }
 
-                todayRoutinesSection(
-                    routines = state.todayRoutines,
-                    onCheckboxClick = { viewModel.onCheckboxClick(it) },
-                    onItemClick = { viewModel.onRoutineClick(it) }
-                )
+                    item {
+                        Spacer(modifier = Modifier.height(4.dp))
+                    }
 
-                item {
-                    Spacer(modifier = Modifier.height(4.dp))
-                }
+                    item {
+                        FilterSectionHeader(
+                            title = stringResource(R.string.plants_label_your_plants),
+                            filterTitle = stringResource(R.string.home_label_filter_plants),
+                            onClick = { viewModel.toggleSortOrder() },
+                            sort = sort
+                        )
+                    }
 
-                item {
-                    FilterSectionHeader(
-                        title = stringResource(R.string.plants_label_your_plants),
-                        filterTitle = stringResource(R.string.home_label_filter_plants),
-                        onClick = { viewModel.toggleSortOrder() },
-                        sort = sort
+                    plantListItems(
+                        plants = state.plants,
+                        onPlantClick = { viewModel.onPlantClick(it) },
+                        onPlantBookmarkClick = { viewModel.onPlantBookmarkClick(it) }
                     )
+
                 }
-
-                plantListItems(
-                    plants = state.plants,
-                    onPlantClick = { viewModel.onPlantClick(it) },
-                    onPlantBookmarkClick = { viewModel.onPlantBookmarkClick(it) }
-                )
-
             }
         }
     }
