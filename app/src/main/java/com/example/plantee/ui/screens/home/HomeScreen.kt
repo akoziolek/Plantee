@@ -119,7 +119,7 @@ fun HomeScreen(
 
                     item {
                         StreakWidget(
-                            streakDays = 12, //state.streakDays,
+                            streakDays = state.streakDays,
                             progress = state.streakProgress
 
                         )
@@ -131,6 +131,7 @@ fun HomeScreen(
                         )
                     }
 
+                    // FIXME - routines that are out of date range should not be displayed!!!!
                     todayRoutinesSection(
                         routines = state.todayRoutines,
                         onCheckboxClick = { viewModel.onCheckboxClick(it) },

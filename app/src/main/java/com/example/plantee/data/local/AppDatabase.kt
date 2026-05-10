@@ -10,6 +10,7 @@ import com.example.plantee.data.local.dao.MediaDao
 import com.example.plantee.data.local.dao.PlantRoutinesDao
 import com.example.plantee.data.local.dao.PlantsDao
 import com.example.plantee.data.local.dao.RoutineSourcesDao
+import com.example.plantee.data.local.dao.RoutinesStatisticsDao
 import com.example.plantee.data.local.dao.RoutinesDao
 import com.example.plantee.data.local.entities.DiagnosisEntity
 import com.example.plantee.data.local.entities.DiagnosisMediaEntity
@@ -18,6 +19,7 @@ import com.example.plantee.data.local.entities.PlantEntity
 import com.example.plantee.data.local.entities.PlantRoutineEntity
 import com.example.plantee.data.local.entities.RoutineEntity
 import com.example.plantee.data.local.entities.RoutineSourceEntity
+import com.example.plantee.data.local.entities.RoutinesStatisticsEntity
 
 @Database(
     entities = [
@@ -27,9 +29,10 @@ import com.example.plantee.data.local.entities.RoutineSourceEntity
         PlantEntity::class,
         PlantRoutineEntity::class,
         RoutineEntity::class,
-        RoutineSourceEntity::class
+        RoutineSourceEntity::class,
+        RoutinesStatisticsEntity::class
     ],
-    version = 5
+    version = 6
 )
 @TypeConverters(DateConverter::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -40,4 +43,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun plantRoutinesDao(): PlantRoutinesDao
     abstract fun routinesDao(): RoutinesDao
     abstract fun routineSourcesDao(): RoutineSourcesDao
+    abstract fun routinesStatisticsDao(): RoutinesStatisticsDao
 }

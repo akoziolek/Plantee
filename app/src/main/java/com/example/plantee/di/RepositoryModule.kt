@@ -5,12 +5,14 @@ import com.example.plantee.data.repositories.MediaRepository
 import com.example.plantee.data.repositories.PhotosRepository
 import com.example.plantee.data.repositories.PlantsRepository
 import com.example.plantee.data.repositories.RoutinesRepository
+import com.example.plantee.data.repositories.RoutinesStatisticsRepository
 import com.example.plantee.data.repositories.UserPreferencesRepository
 import com.example.plantee.domain.repositories.IDiagnosesRepository
 import com.example.plantee.domain.repositories.IMediaRepository
 import com.example.plantee.domain.repositories.IPhotosRepository
 import com.example.plantee.domain.repositories.IPlantsRepository
 import com.example.plantee.domain.repositories.IRoutinesRepository
+import com.example.plantee.domain.repositories.IRoutinesStatisticsRepository
 import com.example.plantee.domain.repositories.IUserPreferencesRepository
 import dagger.Binds
 import dagger.Module
@@ -57,4 +59,11 @@ abstract class RepositoryModule {
     abstract fun bindUserPreferencesRepository(
         userPreferencesRepository: UserPreferencesRepository
     ): IUserPreferencesRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindRoutineStatisticsRepository(
+        routineStatisticsRepository: RoutinesStatisticsRepository
+    ): IRoutinesStatisticsRepository
+
 }

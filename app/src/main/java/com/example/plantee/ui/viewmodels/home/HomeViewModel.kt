@@ -8,6 +8,7 @@ import com.example.plantee.domain.model.PlantSummary
 import com.example.plantee.domain.model.Routine
 import com.example.plantee.domain.repositories.IPlantsRepository
 import com.example.plantee.domain.repositories.IRoutinesRepository
+import com.example.plantee.domain.repositories.IRoutinesStatisticsRepository
 import com.example.plantee.domain.repositories.IUserPreferencesRepository
 import com.example.plantee.utils.SortOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +21,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -40,14 +40,16 @@ data class HomeUiState(
     val plants: List<PlantSummary> = emptyList(),
     val todayRoutines: List<Routine> = emptyList(),
     val isLoading: Boolean = true,
-    val streakProgress: Float? = null
+    val streakProgress: Float? = null,
+    val streakDays: Int? = null
 )
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val plantsRepository: IPlantsRepository,
     private val routinesRepository: IRoutinesRepository,
-    private val userPreferencesRepository: IUserPreferencesRepository
+    private val userPreferencesRepository: IUserPreferencesRepository,
+    private val routinesStatisticsRepository: IRoutinesStatisticsRepository
 ) : ViewModel() {
     private val _currentDay = MutableStateFlow<DayOfWeek>(LocalDate.now().dayOfWeek)
     val currentDay = _currentDay.asStateFlow()
@@ -62,6 +64,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            routinesStatisticsRepository.syncStreak()
             while (true) {
                 val now = LocalDate.now().dayOfWeek
                 if (_currentDay.value != now) {
@@ -89,8 +92,9 @@ class HomeViewModel @Inject constructor(
 
     val state: StateFlow<HomeUiState> = combine(
         plantsFlow,
-        todayRoutinesFlow
-    ) { sortResults, todayRoutines ->
+        todayRoutinesFlow,
+        routinesStatisticsRepository.getEffectiveStreak()
+    ) { sortResults, todayRoutines, currentStreak ->
         val totalRoutines = todayRoutines.size
         val completedRoutines = todayRoutines.count { it.lastlyDoneAt == LocalDate.now() }
 
@@ -104,7 +108,8 @@ class HomeViewModel @Inject constructor(
             plants = sortResults,
             todayRoutines = todayRoutines,
             isLoading = false,
-            streakProgress = progress
+            streakProgress = progress,
+            streakDays = currentStreak
         )
     }
         .stateIn(
@@ -137,17 +142,12 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onCheckboxClick(routineId: Long) {
-        val routine = state.value.todayRoutines.find { it.id == routineId }
-
-        var date = LocalDate.now()
-
-        if (routine?.lastlyDoneAt == date) {
-            date = null
-        }
-
         viewModelScope.launch {
-            val currentState = state.value
-            routinesRepository.toggleRoutineDone(routineId, date)
+            val routine = state.value.todayRoutines.find { it.id == routineId }
+            val today = LocalDate.now()
+            val newDate = if (routine?.lastlyDoneAt == today) null else today
+
+            routinesRepository.toggleRoutineDone(routineId, newDate)
         }
     }
 

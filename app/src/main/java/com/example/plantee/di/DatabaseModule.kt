@@ -10,6 +10,7 @@ import com.example.plantee.data.local.dao.PlantRoutinesDao
 import com.example.plantee.data.local.dao.PlantsDao
 import com.example.plantee.data.local.dao.RoutineSourcesDao
 import com.example.plantee.data.local.dao.RoutinesDao
+import com.example.plantee.data.local.dao.RoutinesStatisticsDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -66,5 +67,10 @@ object DatabaseModule {
     @Provides
     fun provideRoutineSourcesDao(database: AppDatabase): RoutineSourcesDao {
         return database.routineSourcesDao()
+    }
+
+    @Provides
+    fun provideRoutinesStatisticsDao(database: AppDatabase): RoutinesStatisticsDao {
+        return database.routinesStatisticsDao()
     }
 }

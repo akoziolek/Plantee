@@ -51,6 +51,18 @@ interface RoutinesDao {
     """)
     fun getRoutinesWithDate(date: LocalDate): Flow<List<RoutineWithDetails>>
 
+    @Transaction
+    @Query("""
+    SELECT r.*, rs.id_diagnosis AS id_diagnosis
+    FROM routines r
+    LEFT JOIN plant_routines pr ON pr.id_routine = r.id
+    LEFT JOIN routine_sources rs ON rs.id_plant_routine = pr.id
+    WHERE (r.active_days & :dayMask) != 0
+    AND (r.start_date IS NULL OR r.start_date <= :date)
+    AND (r.end_date IS NULL OR r.end_date >= :date)
+""")
+    fun getRoutinesRequiredForDate(date: LocalDate, dayMask: Int): Flow<List<RoutineWithDetails>>
+
     @Query("""
         SELECT *
         FROM routines
@@ -81,4 +93,11 @@ interface RoutinesDao {
 
     @Query("SELECT * FROM routines WHERE id = :id")
     fun getRoutine(id: Long): Flow<RoutineEntity?>
+
+    @Query("""
+    SELECT * FROM routines 
+    WHERE (start_date IS NULL OR start_date <= :endDate) 
+    AND (end_date IS NULL OR end_date >= :startDate)
+""")
+    suspend fun getRoutinesActiveInPeriod(startDate: LocalDate, endDate: LocalDate): List<RoutineEntity>
 }
