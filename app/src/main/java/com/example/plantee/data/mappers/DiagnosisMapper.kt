@@ -3,6 +3,8 @@ package com.example.plantee.data.mappers
 import com.example.plantee.data.local.entities.DiagnosisEntity
 import com.example.plantee.data.local.relations.DiagnosisWithDetails
 import com.example.plantee.domain.model.Diagnosis
+import com.example.plantee.domain.model.RoutineSummary
+
 fun DiagnosisWithDetails?.toDomain(): Diagnosis? {
     if (this == null) return null
 
@@ -14,8 +16,14 @@ fun DiagnosisWithDetails?.toDomain(): Diagnosis? {
         moistureLevel = diagnosis.moistureLevel,
         diagnosedAt = diagnosis.diagnosedAt,
         plantId = diagnosis.idPlant,
-        listOfMedia = listOfMedia.map { it.id },
-        routinesIds = plantRoutines.map { it.idRoutine }
+        listOfMedia = listOfMedia.toDomainList(),
+        routines = plantRoutines.map {
+            RoutineSummary(
+                id = it.id,
+                name = it.name,
+                description = it.description
+            )
+        }
     )
 }
 
@@ -29,8 +37,14 @@ fun List<DiagnosisWithDetails>.toDomainList(): List<Diagnosis> {
             moistureLevel = entity.diagnosis.moistureLevel,
             diagnosedAt = entity.diagnosis.diagnosedAt,
             plantId = entity.diagnosis.idPlant,
-            listOfMedia = entity.listOfMedia.map { it.id },
-            routinesIds = entity.plantRoutines.map { it.idRoutine }
+            listOfMedia = entity.listOfMedia.toDomainList(),
+            routines = entity.plantRoutines.map {
+                RoutineSummary(
+                    id = it.id,
+                    name = it.name,
+                    description = it.description
+                )
+            }
         )
     }
 }

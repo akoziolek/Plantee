@@ -40,9 +40,9 @@ class DiagnosesRepository @Inject constructor(
         db.withTransaction {
             newId = diagnosisDao.insert(entity)
 
-            if (diagnosis.routinesIds.isNotEmpty()) {
-                val ids = plantRoutinesDao.insertAll(diagnosis.routinesIds.map { id ->
-                    PlantRoutineEntity(idRoutine = id, idPlant = diagnosis.plantId)
+            if (diagnosis.routines.isNotEmpty()) {
+                val ids = plantRoutinesDao.insertAll(diagnosis.routines.map { routine ->
+                    PlantRoutineEntity(idRoutine = routine.id, idPlant = diagnosis.plantId)
                 })
 
                 routineSourcesDao.insertAll(ids.map { id ->
@@ -51,8 +51,8 @@ class DiagnosesRepository @Inject constructor(
             }
 
             if (diagnosis.listOfMedia.isNotEmpty()) {
-                diagnosisMediaDao.insertAll(diagnosis.listOfMedia.map { id ->
-                    DiagnosisMediaEntity(idDiagnosis = newId, idMedia = id)
+                diagnosisMediaDao.insertAll(diagnosis.listOfMedia.map { media ->
+                    DiagnosisMediaEntity(idDiagnosis = newId, idMedia = media.id)
                 })
             }
         }
