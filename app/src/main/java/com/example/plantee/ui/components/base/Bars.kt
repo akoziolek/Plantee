@@ -155,36 +155,6 @@ fun SimpleSearchBar(
     )
 }
 
-// TODO to delete when confirmed that it is not necessary
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun StaticSearchBar(
-    query: String,
-    onQueryChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    placeholder: String = "Search"
-) {
-    OutlinedTextField(
-        value = query,
-        onValueChange = onQueryChange,
-        trailingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
-        placeholder = { Text(placeholder) },
-        singleLine = true,
-        modifier = modifier
-            .fillMaxWidth()
-            .statusBarsPadding(),
-        shape = RoundedCornerShape(50),
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-            disabledContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-            focusedBorderColor = Color.Transparent,
-            unfocusedBorderColor = Color.Transparent
-        )
-
-        )
-}
-
 sealed class NavItem(@StringRes val titleRes: Int, val icon: ImageVector, val screen: Screen) {
     object Home : NavItem(titleRes = R.string.navbar_label_home, Icons.Default.Home, screen = Screen.Home)
     object Plants : NavItem(titleRes = R.string.navbar_label_plants, Icons.Default.LocalFlorist, screen = Screen.Plants)
@@ -336,10 +306,6 @@ fun TopBarsPreview() {
                 onSearch = { },
                 expanded = false,
                 onExpandedChange = { }
-            )
-            StaticSearchBar(
-                query = "Our favourite plant",
-                onQueryChange = {  },
             )
             FilterBar({}, {}, sort = SortOrder.NONE)
             //NavBar()
