@@ -36,6 +36,7 @@ import com.example.plantee.ui.components.base.MainTopBar
 import com.example.plantee.ui.components.base.OverflowAction
 import com.example.plantee.ui.components.base.OverflowMenu
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
+import com.example.plantee.ui.components.base.StreakWidget
 import com.example.plantee.ui.components.shared.CelebrationWrapper
 import com.example.plantee.ui.components.shared.FilterSectionHeader
 import com.example.plantee.ui.components.shared.LinkHeader
@@ -117,12 +118,11 @@ fun HomeScreen(
                 ) {
 
                     item {
-                        Box(
-                            modifier = Modifier
-                                .background(MaterialTheme.colorScheme.outlineVariant)
-                                .height(170.dp)
-                                .fillMaxWidth()
-                        ) { }
+                        StreakWidget(
+                            streakDays = 12, //state.streakDays,
+                            progress = state.streakProgress
+
+                        )
                     }
                     item {
                         LinkHeader(

@@ -39,7 +39,8 @@ sealed class HomeEvent {
 data class HomeUiState(
     val plants: List<PlantSummary> = emptyList(),
     val todayRoutines: List<Routine> = emptyList(),
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
+    val streakProgress: Float? = null
 )
 
 @HiltViewModel
@@ -90,10 +91,20 @@ class HomeViewModel @Inject constructor(
         plantsFlow,
         todayRoutinesFlow
     ) { sortResults, todayRoutines ->
+        val totalRoutines = todayRoutines.size
+        val completedRoutines = todayRoutines.count { it.lastlyDoneAt == LocalDate.now() }
+
+        val progress = if (totalRoutines > 0) {
+            completedRoutines.toFloat() / totalRoutines
+        } else {
+            null
+        }
+
         HomeUiState(
             plants = sortResults,
             todayRoutines = todayRoutines,
-            isLoading = false
+            isLoading = false,
+            streakProgress = progress
         )
     }
         .stateIn(
