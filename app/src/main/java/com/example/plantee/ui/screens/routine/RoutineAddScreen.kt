@@ -124,7 +124,7 @@ fun RoutineAddScreen(
             plantListItems(
                 plants = state.availablePlants,
                 onPlantClick = { viewModel.onPlantClick(it) },
-                selectedPlantIds = state.selectedPlants.map { it.id }
+                selectedPlantIds = state.selectedPlants
             )
 
         }

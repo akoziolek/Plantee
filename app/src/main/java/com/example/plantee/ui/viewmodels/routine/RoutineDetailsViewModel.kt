@@ -41,7 +41,6 @@ sealed interface RoutineDetailsUiState {
 @HiltViewModel(assistedFactory = RoutineDetailsViewModel.Factory::class)
 class RoutineDetailsViewModel @AssistedInject constructor(
     private val routinesRepository: IRoutinesRepository,
-    private val plantsRepository: IPlantsRepository,
     @Assisted private val routineId: Long
 ) : ViewModel() {
 
