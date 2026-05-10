@@ -1,34 +1,50 @@
 package com.example.plantee
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.plantee.ui.MainViewModel
+import com.example.plantee.ui.ThemeState
 import com.example.plantee.ui.screens.MainAppScreen
 import com.example.plantee.ui.theme.PlanteeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen().apply {
-            //  eventual blocking of the splash view for the time of loading stuff
-        }
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+
+        splashScreen.setKeepOnScreenCondition {
+            viewModel.themeState.value is ThemeState.Loading
+        }
+
         enableEdgeToEdge()
         setContent {
-            PlanteeTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    MainAppScreen()
+            val state by viewModel.themeState.collectAsStateWithLifecycle()
+            if (state is ThemeState.Success) {
+                val isDarkThemePref = (state as ThemeState.Success).isDark
+                val darkTheme = isDarkThemePref ?: isSystemInDarkTheme()
+
+                PlanteeTheme(darkTheme = darkTheme) {
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        MainAppScreen()
+                    }
                 }
             }
         }

@@ -2,6 +2,7 @@ package com.example.plantee.ui.screens.home
 
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -51,6 +52,8 @@ fun HomeScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val sort by viewModel.sortOrder.collectAsStateWithLifecycle()
+    val isDarkThemePref by viewModel.isDarkTheme.collectAsStateWithLifecycle()
+    val isDark = isDarkThemePref ?: isSystemInDarkTheme()
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
@@ -72,8 +75,11 @@ fun HomeScreen(
                     OverflowMenu(
                         actions = listOf(
                             OverflowAction(
-                                text = "Change mode",
-                                onClick = { }
+                                text =
+                                    if (isDark)
+                                        stringResource(R.string.home_menu_change_mode_light)
+                                    else stringResource(R.string.home_menu_change_mode_dark),
+                                onClick = { viewModel.toggleTheme(isDark) }
                             ),
                             OverflowAction(
                                 text = "English",

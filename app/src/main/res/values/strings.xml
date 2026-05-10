@@ -94,4 +94,6 @@
     <string name="navbar_label_home">Home</string>
     <string name="navbar_label_plants">Plants</string>
     <string name="navbar_label_routines">Routines</string>
+    <string name="home_menu_change_mode_dark">Change to dark mode</string>
+    <string name="home_menu_change_mode_light">Change to light mode</string>
 </resources>

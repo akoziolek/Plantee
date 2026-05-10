@@ -8,6 +8,7 @@ import com.example.plantee.domain.model.PlantSummary
 import com.example.plantee.domain.model.Routine
 import com.example.plantee.domain.repositories.IPlantsRepository
 import com.example.plantee.domain.repositories.IRoutinesRepository
+import com.example.plantee.domain.repositories.IUserPreferencesRepository
 import com.example.plantee.utils.SortOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -43,10 +45,19 @@ data class HomeUiState(
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val plantsRepository: IPlantsRepository,
-    private val routinesRepository: IRoutinesRepository
+    private val routinesRepository: IRoutinesRepository,
+    private val userPreferencesRepository: IUserPreferencesRepository
 ) : ViewModel() {
     private val _currentDay = MutableStateFlow<DayOfWeek>(LocalDate.now().dayOfWeek)
     val currentDay = _currentDay.asStateFlow()
+
+
+    val isDarkTheme = userPreferencesRepository.isDarkTheme
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = null
+        )
 
     init {
         viewModelScope.launch {
@@ -139,6 +150,12 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             val currentState = state.value
             plantsRepository.togglePlantFavourite(plantId)
+        }
+    }
+
+    fun toggleTheme(currentlyDark: Boolean) {
+        viewModelScope.launch {
+            userPreferencesRepository.setDarkTheme(!currentlyDark)
         }
     }
 
