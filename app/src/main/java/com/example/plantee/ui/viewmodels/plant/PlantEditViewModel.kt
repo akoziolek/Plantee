@@ -22,7 +22,6 @@ sealed class PlantEditEvent {
     object PlantUpdated : PlantEditEvent()
 }
 
-// TODO images
 data class PlantEditUiState(
     val id: Long = 0L,
     val name: String = "",

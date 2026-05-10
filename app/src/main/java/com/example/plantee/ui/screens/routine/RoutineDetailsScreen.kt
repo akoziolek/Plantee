@@ -78,7 +78,6 @@ fun RoutineDetailsScreen(
             BackTopBar(
                 stringResource(R.string.routine_details_title),
                 onBackClick = { viewModel.onBackClick() },
-                // TODO actions for buttons
                 actions = {
                     OverflowMenu(
                         actions = listOf(

@@ -157,7 +157,6 @@ fun PlantDetailsScreen(
                         }
                     }
 
-                    // TODO placeholders, min height
                     routinesSection(
                         routines = plant.routines,
                         onRoutineClick = { id -> viewModel.onRoutineClick(id) },
