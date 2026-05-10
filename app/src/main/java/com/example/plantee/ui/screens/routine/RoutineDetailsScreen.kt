@@ -133,7 +133,6 @@ fun RoutineDetailsScreen(
                     item {
                         DaysOfWeek(
                             selectedDays = routine.activeDays ?: 0,
-                            onDayClick = { },
                             modifier = Modifier.padding(top = 8.dp)
                         )
                     }

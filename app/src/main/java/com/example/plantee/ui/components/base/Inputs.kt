@@ -117,8 +117,7 @@ fun DaysOfWeek(
     selectedDays: Int,
     modifier: Modifier = Modifier,
     title: String = stringResource(R.string.input_label_weekdays),
-    onDayClick: (Int) -> Unit
-
+    onDayClick: ((Int) -> Unit)? = null
 ) {
     val daysOfWeek = listOf("M", "T", "W", "T", "F", "S", "S")
 
@@ -133,7 +132,8 @@ fun DaysOfWeek(
 
                 FilterChip(
                     selected = isSelected,
-                    onClick = { onDayClick(index) },
+                    onClick = { onDayClick?.invoke(index) },
+                    enabled = onDayClick == null,
                     label = { Text(day) },
                     shape = CircleShape
                 )
