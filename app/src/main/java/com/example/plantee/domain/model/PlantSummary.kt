@@ -5,4 +5,5 @@ data class PlantSummary(
     val name: String,
     val description: String? = null,
     val isFavourite: Boolean,
+    val media: Media? = null
 )

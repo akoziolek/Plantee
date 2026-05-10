@@ -7,7 +7,7 @@ data class Plant(
     val species: String? = null,
     val state: String? = null,
     val isFavourite: Boolean,
-    val mediaId: Long? = null,
+    val media: Media? = null,
     val diagnoses: List<DiagnosisSummary> = emptyList(),
     val routines: List<RoutineSummary> = emptyList()
 )

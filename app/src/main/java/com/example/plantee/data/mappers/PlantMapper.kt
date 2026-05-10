@@ -17,7 +17,7 @@ fun PlantWithDetails?.toDomain(): Plant? {
         species = plant.species,
         state = plant.state,
         isFavourite = plant.isFavourite,
-        mediaId = plant.idMedia,
+        media = media.toDomain(),
         diagnoses = plantDiagnoses.map {
             DiagnosisSummary(
                 id = it.id,
@@ -71,6 +71,6 @@ fun Plant?.toEntity(): PlantEntity? {
         species = this.species,
         state = this.state,
         isFavourite = this.isFavourite,
-        idMedia = this.mediaId
+        idMedia = this.media?.id
     )
 }

@@ -72,12 +72,13 @@ class PlantsRepository @Inject constructor(
 
     override suspend fun createPlantWithMedia(plant: Plant, media: Media?): Long {
         return database.withTransaction {
-            val mediaId = media?.let {
+            val savedMediaId = media?.let {
                 mediaDao.insert(it.toEntity() ?: return@withTransaction -1L)
             }
 
-            val plantEntity = plant.copy(mediaId = mediaId).toEntity()
-                ?: return@withTransaction -1L
+            val plantEntity = plant.toEntity()?.copy(
+                idMedia = savedMediaId
+            ) ?: return@withTransaction -1L
 
             plantsDao.insert(plantEntity)
         }
@@ -94,7 +95,7 @@ class PlantsRepository @Inject constructor(
             // FIXME firstOrNull??
             val plant = getPlant(id).firstOrNull() ?: return@withTransaction
 
-            val oldMediaId = plant.mediaId
+            val oldMediaId = plant.media?.id
             if (oldMediaId != null) {
                 mediaDao.deleteById(oldMediaId)
             }
