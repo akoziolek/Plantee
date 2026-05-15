@@ -132,8 +132,6 @@ class RoutinesViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            // TODO Why unused variable?
-            val currentState = state.value
             routinesRepository.toggleRoutineDone(routineId, date)
         }
     }
