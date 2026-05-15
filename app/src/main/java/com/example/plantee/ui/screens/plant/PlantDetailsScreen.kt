@@ -134,6 +134,7 @@ fun PlantDetailsScreen(
                 ) {
                     item {
                         PlantImage(
+                            imagePath = plant.media?.filePath,
                             name = plant.name,
                             specie = plant.species,
                             state = plant.state,
