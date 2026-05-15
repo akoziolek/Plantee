@@ -141,6 +141,41 @@ fun PlantImage(
 }
 
 @Composable
+fun PlainPlantImage(
+    imagePath: String?,
+    name: String?,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .background(MaterialTheme.colorScheme.outlineVariant)
+            .height(220.dp)
+            .fillMaxWidth()
+    ) {
+        if (!imagePath.isNullOrEmpty()) {
+            AsyncImage(
+                model = imagePath,
+                contentDescription = name,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+        } else {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Image,
+                    contentDescription = null,
+                    modifier = Modifier.size(64.dp),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
+                )
+            }
+        }
+    }
+}
+
+@Composable
 fun SmallPlantImage(
     imagePath: String?,
     name: String?,
@@ -180,6 +215,10 @@ fun PlantImagePreview() {
             name = "My Plant",
             specie = "Philodendron",
             state = "Good"
+        )
+        PlainPlantImage(
+            imagePath = null,
+            name = "My Plant"
         )
     }
 }

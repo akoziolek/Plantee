@@ -28,6 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
 import com.example.plantee.ui.components.base.InfoSection
+import com.example.plantee.ui.components.base.PlainPlantImage
 import com.example.plantee.ui.components.base.RoutinesListItem
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.viewmodels.diagnosis.DiagnosisDetailsEvent
@@ -70,13 +71,12 @@ fun DiagnosisDetailsScreen(
                         .padding(innerPadding)
                         .verticalScroll(rememberScrollState())
                 ) {
-                    // TODO real images - remember about the extra button on top
-                    Box(
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.outlineVariant)
-                            .height(220.dp)
-                            .fillMaxWidth()
-                    ) { }
+                    // TODO change to currentState.diagnosis.media.filePath
+                    val imagePath = if (currentState.diagnosis.listOfMedia.isNotEmpty()) currentState.diagnosis.listOfMedia[0].filePath else null
+                    PlainPlantImage(
+                        imagePath = imagePath,
+                        name = null // TODO change to sth
+                    )
 
                     Column(
                         modifier = Modifier
