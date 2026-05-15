@@ -132,9 +132,14 @@ class RoutinesViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            // TODO Why unused variable?
-            val currentState = state.value
             routinesRepository.toggleRoutineDone(routineId, date)
+        }
+    }
+
+    fun checkIfAllRoutinesAreDone(): Boolean {
+        val currentState = state.value
+        return currentState.todayRoutines.isNotEmpty() && currentState.todayRoutines.all {
+            it.lastlyDoneAt == LocalDate.now()
         }
     }
 }
