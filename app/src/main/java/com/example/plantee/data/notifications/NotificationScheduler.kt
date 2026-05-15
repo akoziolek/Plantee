@@ -9,7 +9,7 @@ import com.example.plantee.data.workers.ReminderWorker
 import java.util.concurrent.TimeUnit
 
 object NotificationScheduler {
-    const val MORNING_HOUR = 11
+    const val MORNING_HOUR = 8
     const val EVENING_HOUR = 20
 
     const val TAG_MORNING = "morning_reminder"
@@ -23,8 +23,12 @@ object NotificationScheduler {
             set(Calendar.HOUR_OF_DAY, hour)
             set(Calendar.MINUTE, minute)
             set(Calendar.SECOND, 0)
-            if (before(currentDate)) {
-                add(Calendar.HOUR_OF_DAY, 24)
+            set(Calendar.MILLISECOND, 0)
+
+            while (timeInMillis <= currentDate.timeInMillis + 10_000) {
+                // 1-minute interval for debugging purposes
+                // TODO change to add(Calendar.DAY_OF_YEAR, 1)
+                add(Calendar.MINUTE, 1)
             }
         }
 
