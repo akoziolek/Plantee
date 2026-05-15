@@ -9,6 +9,7 @@ import androidx.room.Transaction
 import androidx.room.Update
 import com.example.plantee.data.local.relations.PlantWithDetails
 import com.example.plantee.data.local.entities.PlantEntity
+import com.example.plantee.data.local.relations.PlantWithMedia
 import kotlinx.coroutines.flow.Flow
 
 
@@ -44,13 +45,13 @@ interface PlantsDao {
     fun getPlantsByIds(ids: List<Long>): Flow<List<PlantWithDetails>>
 
     @Query("SELECT * FROM plants WHERE name LIKE '%' || :searchQuery || '%'")
-    fun searchPlants(searchQuery: String): Flow<List<PlantEntity>>
+    fun searchPlants(searchQuery: String): Flow<List<PlantWithMedia>>
 
     @Query("SELECT * FROM plants WHERE name LIKE '%' || :searchQuery || '%' ORDER BY name ASC")
-    fun searchPlantsAsc(searchQuery: String): Flow<List<PlantEntity>>
+    fun searchPlantsAsc(searchQuery: String): Flow<List<PlantWithMedia>>
 
     @Query("SELECT * FROM plants WHERE name LIKE '%' || :searchQuery || '%' ORDER BY name DESC")
-    fun searchPlantsDesc(searchQuery: String): Flow<List<PlantEntity>>
+    fun searchPlantsDesc(searchQuery: String): Flow<List<PlantWithMedia>>
 
     @Query("SELECT * FROM plants WHERE id = :id")
     fun getPlant(id: Long): Flow<PlantEntity?>
