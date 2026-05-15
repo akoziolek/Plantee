@@ -12,6 +12,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.example.plantee.data.notifications.NotificationScheduler
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.plantee.ui.MainViewModel
 import com.example.plantee.ui.ThemeState
@@ -48,5 +49,18 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        NotificationScheduler.scheduleDailyReminder(
+            this,
+            NotificationScheduler.MORNING_HOUR,
+            0,
+            NotificationScheduler.TAG_MORNING
+        )
+        NotificationScheduler.scheduleDailyReminder(
+            this,
+            NotificationScheduler.EVENING_HOUR,
+            0,
+            NotificationScheduler.TAG_EVENING
+        )
     }
 }

@@ -11,6 +11,7 @@ import com.example.plantee.domain.repositories.IPlantsRepository
 import com.example.plantee.domain.repositories.IRoutinesRepository
 import com.example.plantee.domain.repositories.IRoutinesStatisticsRepository
 import com.example.plantee.domain.repositories.IUserPreferencesRepository
+import com.example.plantee.domain.repositories.ISettingsRepository
 import com.example.plantee.utils.SortOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,10 +23,10 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -53,7 +54,8 @@ class HomeViewModel @Inject constructor(
     private val plantsRepository: IPlantsRepository,
     private val routinesRepository: IRoutinesRepository,
     private val userPreferencesRepository: IUserPreferencesRepository,
-    private val routinesStatisticsRepository: IRoutinesStatisticsRepository
+    private val routinesStatisticsRepository: IRoutinesStatisticsRepository,
+    private val settingsRepository: ISettingsRepository
 ) : ViewModel() {
     private val _currentDay = MutableStateFlow<DayOfWeek>(LocalDate.now().dayOfWeek)
     val currentDay = _currentDay.asStateFlow()
@@ -99,7 +101,7 @@ class HomeViewModel @Inject constructor(
     val state: StateFlow<HomeUiState> = combine(
         plantsFlow,
         todayRoutinesFlow,
-        _isNotificationsEnabled,
+        settingsRepository.getNotificationsEnabled(),
         routinesStatisticsRepository.getEffectiveStreak()
     ) { sortResults, todayRoutines, notificationsEnabled, currentStreak ->
         val totalRoutines = todayRoutines.size
@@ -194,13 +196,18 @@ class HomeViewModel @Inject constructor(
                 _events.send(HomeEvent.RequestNotificationPermission)
             }
         } else {
-            _isNotificationsEnabled.value = !_isNotificationsEnabled.value
-            Log.d("HomeViewModel", "Notifications toggled to: ${_isNotificationsEnabled.value}")
+            viewModelScope.launch {
+                val current = settingsRepository.getNotificationsEnabled().first()
+                settingsRepository.setNotificationsEnabled(!current)
+                Log.d("HomeViewModel", "Notifications toggled to: ${!current}")
+            }
         }
     }
 
     fun setNotificationsEnabled(enabled: Boolean) {
-        Log.d("HomeViewModel", "Explicitly setting notifications enabled: $enabled")
-        _isNotificationsEnabled.value = enabled
+        viewModelScope.launch {
+            Log.d("HomeViewModel", "Explicitly setting notifications enabled: $enabled")
+            settingsRepository.setNotificationsEnabled(enabled)
+        }
     }
 }

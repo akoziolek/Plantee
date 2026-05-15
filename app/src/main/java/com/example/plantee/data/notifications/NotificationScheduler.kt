@@ -2,15 +2,19 @@ package com.example.plantee.data.notifications
 
 import android.content.Context
 import android.icu.util.Calendar
-import android.icu.util.MeasureUnit
-import android.icu.util.TimeUnit
 import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.plantee.data.workers.ReminderWorker
+import java.util.concurrent.TimeUnit
 
 object NotificationScheduler {
+    const val MORNING_HOUR = 11
+    const val EVENING_HOUR = 20
+
+    const val TAG_MORNING = "morning_reminder"
+    const val TAG_EVENING = "evening_reminder"
+
     fun scheduleDailyReminder(context: Context, hour: Int, minute: Int, tag: String) {
         val workManager = WorkManager.getInstance(context)
 
@@ -27,7 +31,7 @@ object NotificationScheduler {
         val delay = dueDate.timeInMillis - currentDate.timeInMillis
 
         val dailyWorkRequest = OneTimeWorkRequestBuilder<ReminderWorker>()
-            .setInitialDelay(delay, java.util.concurrent.TimeUnit.MILLISECONDS)
+            .setInitialDelay(delay, TimeUnit.MILLISECONDS)
             .addTag(tag)
             .build()
 
