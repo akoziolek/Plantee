@@ -108,7 +108,7 @@ fun HomeScreen(
                 CircularProgressIndicator()
             }
         } else {
-            CelebrationWrapper(isAllDone = state.todayRoutines.all { it.lastlyDoneAt == LocalDate.now() }) {
+            CelebrationWrapper(isAllDone = viewModel.checkIfAllRoutinesAreDone()) {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
@@ -121,7 +121,6 @@ fun HomeScreen(
                         StreakWidget(
                             streakDays = state.streakDays,
                             progress = state.streakProgress
-
                         )
                     }
                     item {

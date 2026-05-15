@@ -78,7 +78,7 @@ fun RoutinesScreen(
                 CircularProgressIndicator()
             }
         } else {
-            CelebrationWrapper(isAllDone = state.todayRoutines.all { it.lastlyDoneAt == LocalDate.now() }) {
+            CelebrationWrapper(isAllDone = viewModel.checkIfAllRoutinesAreDone()) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize().padding(innerPadding),
                     contentPadding = PaddingValues(16.dp),
