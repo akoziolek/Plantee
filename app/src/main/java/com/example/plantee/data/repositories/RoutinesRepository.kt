@@ -41,7 +41,7 @@ class RoutinesRepository @Inject constructor(
         val today = LocalDate.now()
 
         return when (sort) {
-            SortOrder.NONE -> {6
+            SortOrder.NONE -> {
                 routinesDao.searchRoutines(query, isActiveOnly, today, filter.selectedDays).map { it.toSummaryDomainList() }
             }
             SortOrder.ASCENDING -> {
