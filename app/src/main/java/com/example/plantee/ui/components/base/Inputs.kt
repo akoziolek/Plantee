@@ -133,7 +133,7 @@ fun DaysOfWeek(
                 FilterChip(
                     selected = isSelected,
                     onClick = { onDayClick?.invoke(index) },
-                    enabled = onDayClick == null,
+                    enabled = onDayClick != null,
                     label = { Text(day) },
                     shape = CircleShape
                 )
@@ -243,7 +243,7 @@ fun InputsPreview() {
             )
             DaysOfWeek(
                 selectedDays = 12,
-                onDayClick = { }
+                onDayClick = { index -> println("Day $index clicked") }
             )
             DateRangeField(
                 onDateRangeSelected = { },
