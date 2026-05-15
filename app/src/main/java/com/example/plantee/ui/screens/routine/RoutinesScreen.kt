@@ -78,7 +78,9 @@ fun RoutinesScreen(
             )
         },
         floatingActionButton = {
-            PrimaryFloatingButton(text = stringResource(R.string.routines_btn_add), onClick = { viewModel.onAddClick() })
+            PrimaryFloatingButton(
+                text = stringResource(R.string.routines_btn_add),
+                onClick = { viewModel.onAddClick() })
         }
     ) { innerPadding ->
         if (state.isLoading) {
@@ -104,29 +106,30 @@ fun RoutinesScreen(
 
                     item { Spacer(modifier = Modifier.height(24.dp)) }
 
-                item {
-                    SectionHeader(stringResource(R.string.routines_label_all))
-                    FilterBar(
-                        onFilterClick = { viewModel.toggleSortOrder() },
-                        onViewModeClick = { showFilters = true },
-                        sort = sort
+                    item {
+                        SectionHeader(stringResource(R.string.routines_label_all))
+                        FilterBar(
+                            onFilterClick = { viewModel.toggleSortOrder() },
+                            onViewModeClick = { showFilters = true },
+                            sort = sort
+                        )
+                    }
+
+                    routinesSection(
+                        routines = state.routines,
+                        onRoutineClick = { viewModel.onRoutineClick(it) }
                     )
                 }
 
-                routinesSection(
-                    routines = state.routines,
-                    onRoutineClick = { viewModel.onRoutineClick(it) }
-                )
-            }
-
-            if (showFilters) {
-                FilterBottomSheet(
-                    filterState = filterState,
-                    onStatusSelected = viewModel::updateFilterStatus,
-                    onDayToggled = viewModel::toggleFilterDay,
-                    onSelectAllDays = viewModel::selectAllDays,
-                    onDismiss = { showFilters = false }
-                )
+                if (showFilters) {
+                    FilterBottomSheet(
+                        filterState = filterState,
+                        onStatusSelected = viewModel::updateFilterStatus,
+                        onDayToggled = viewModel::toggleFilterDay,
+                        onSelectAllDays = viewModel::selectAllDays,
+                        onDismiss = { showFilters = false }
+                    )
+                }
             }
         }
     }

@@ -82,6 +82,7 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
     private val _events = Channel<HomeEvent>()
     val events = _events.receiveAsFlow()
 
@@ -91,7 +92,8 @@ class HomeViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     private val plantsFlow = _sortOrder
         .flatMapLatest { sort ->
-            plantsRepository.getSearchedPlantsSummaryWithSort("", sort) }
+            plantsRepository.getSearchedPlantsSummaryWithSort("", sort)
+        }
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     private val todayRoutinesFlow = _currentDay.flatMapLatest { day ->
@@ -158,6 +160,7 @@ class HomeViewModel @Inject constructor(
             val newDate = if (routine?.lastlyDoneAt == today) null else today
 
             routinesRepository.toggleRoutineDone(routineId, newDate)
+        }
     }
 
     fun onAddPlantClick() {

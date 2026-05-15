@@ -244,7 +244,6 @@ fun HomeScreen(
             }
         }
     }
-}
 
 
 
