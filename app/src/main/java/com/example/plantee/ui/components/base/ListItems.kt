@@ -126,6 +126,7 @@ fun RoutinesListItem(
 fun PlantListItem(
     title: String,
     description: String,
+    imagePath: String?,
     modifier: Modifier = Modifier,
     isBookmarked: Boolean = false,
     isSelected: Boolean = false,
@@ -151,19 +152,23 @@ fun PlantListItem(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = Modifier
-                    .size(100.dp)
-                    .background(MaterialTheme.colorScheme.outlineVariant),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Image,
-                    contentDescription = null,
-                    modifier = Modifier.size(40.dp),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
+            SmallPlantImage(
+                imagePath = imagePath,
+                name = title
+            )
+//            Box(
+//                modifier = Modifier
+//                    .size(100.dp)
+//                    .background(MaterialTheme.colorScheme.outlineVariant),
+//                contentAlignment = Alignment.Center
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Default.Image,
+//                    contentDescription = null,
+//                    modifier = Modifier.size(40.dp),
+//                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+//                )
+//            }
 
             Column(
                 modifier = Modifier
@@ -270,17 +275,20 @@ fun ListItemsPreview() {
             PlantListItem(
                 title = "Spider lily",
                 description =  "Longer description duis aute irure dolor in reprehenderit in voluptate velit.",
-                onClick = { }
+                onClick = { },
+                imagePath = null
             )
             PlantListItem(
                 title = "Spider lily",
                 description =  "Longer description duis aute irure dolor in reprehenderit in voluptate velit.",
-                onClick = { }
+                onClick = { },
+                imagePath = null
             )
             PlantListItem(
                 title = "Spider lily",
                 description =  "Longer description duis aute.",
-                onClick = { }
+                onClick = { },
+                imagePath = null
             )
 
             DiagnosisListItem(

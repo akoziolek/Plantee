@@ -30,6 +30,7 @@ fun LazyListScope.plantListItems(
             PlantListItem(
                 title = plant.name,
                 description = plant.description ?: "",
+                imagePath = plant.media?.filePath,
                 isBookmarked = plant.isFavourite,
                 isSelected = selectedPlantIds.contains(plant.id),
                 onClick = { onPlantClick(plant.id) },

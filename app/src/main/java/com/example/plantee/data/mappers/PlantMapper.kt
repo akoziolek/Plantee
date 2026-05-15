@@ -1,8 +1,10 @@
 package com.example.plantee.data.mappers
 
+import com.example.plantee.data.local.entities.MediaEntity
 import com.example.plantee.data.local.entities.PlantEntity
 import com.example.plantee.data.local.relations.PlantWithDetails
 import com.example.plantee.domain.model.DiagnosisSummary
+import com.example.plantee.domain.model.Media
 import com.example.plantee.domain.model.Plant
 import com.example.plantee.domain.model.PlantSummary
 import com.example.plantee.domain.model.RoutineSummary
@@ -46,6 +48,16 @@ fun PlantEntity?.toSummaryDomain(): PlantSummary? {
         )
 }
 
+fun PlantEntity.toSummaryDomainWithMedia(media: Media?): PlantSummary {
+    return PlantSummary(
+        id = this.id,
+        name = this.name,
+        description = this.description,
+        isFavourite = this.isFavourite,
+        media = media
+    )
+}
+
 fun List<PlantWithDetails>.toDomainList(): List<Plant> {
     return this.mapNotNull { it.toDomain() }
 }
@@ -56,7 +68,8 @@ fun List<PlantEntity>.toSummaryDomainList(): List<PlantSummary> {
             id = entity.id,
             name = entity.name,
             description = entity.description,
-            isFavourite = entity.isFavourite
+            isFavourite = entity.isFavourite,
+            // TODO loadMedia !!!
         )
     }
 }

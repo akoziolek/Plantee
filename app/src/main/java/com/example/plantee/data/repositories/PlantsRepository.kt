@@ -9,6 +9,7 @@ import com.example.plantee.data.mappers.toDomainList
 import com.example.plantee.data.mappers.toSummaryDomainList
 import com.example.plantee.data.mappers.toEntity
 import com.example.plantee.data.mappers.toSummaryDomain
+import com.example.plantee.data.mappers.toSummaryDomainWithMedia
 import com.example.plantee.domain.model.Media
 import com.example.plantee.domain.model.Plant
 import com.example.plantee.domain.model.PlantSummary
@@ -53,6 +54,19 @@ class PlantsRepository @Inject constructor(
         return when (sort) {
             SortOrder.NONE -> {
                 plantsDao.searchPlants(query).map { it.toSummaryDomainList() }
+//                plantsDao.searchPlants(query).map { entities ->
+//                    entities.map { entity ->
+//                        if (entity.idMedia != null) {
+//                            val mediaEntity = mediaDao.getMedia(entity.idMedia)
+//                            val media = mediaEntity.
+//
+//
+//                            entity.toSummaryDomainWithMedia(media)
+//                        } else {
+//                            entity.toSummaryDomainWithMedia()
+//                        }
+//                    }
+//                }
             }
             SortOrder.ASCENDING -> {
                 plantsDao.searchPlantsAsc(query).map { it.toSummaryDomainList() }
