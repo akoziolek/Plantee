@@ -170,7 +170,7 @@ class RoutineEditViewModel @AssistedInject constructor(
         if (!validate()) return
 
         viewModelScope.launch {
-            val currentState = _state.value
+            val currentState = state.value
             val selectedPlantSummaries = currentState.availablePlants.filter {
                 currentState.selectedPlants.contains(it.id)
             }
