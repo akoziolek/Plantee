@@ -62,9 +62,10 @@ fun MainNavigation(
                             is HomeEvent.NavigateToPlant -> {
                                 viewModel.navigate(Screen.PlantDetails(event.plantId))
                             }
-                            HomeEvent.NavigateToPlantAdd -> {
+                            is HomeEvent.NavigateToPlantAdd -> {
                                 viewModel.navigate(Screen.PlantAdd)
                             }
+                            is HomeEvent.RequestNotificationPermission -> {}
                         }
                     }
                 )

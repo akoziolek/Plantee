@@ -2,6 +2,7 @@ package com.example.plantee.ui.viewmodels.home
 
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.plantee.domain.model.PlantSummary
@@ -24,6 +25,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -34,6 +36,7 @@ sealed class HomeEvent {
     data class NavigateToRoutine(val routineId: Long) : HomeEvent()
     object NavigateToRoutines : HomeEvent()
     object NavigateToPlantAdd : HomeEvent()
+    object RequestNotificationPermission : HomeEvent()
 }
 
 data class HomeUiState(
@@ -41,7 +44,8 @@ data class HomeUiState(
     val todayRoutines: List<Routine> = emptyList(),
     val isLoading: Boolean = true,
     val streakProgress: Float? = null,
-    val streakDays: Int? = null
+    val streakDays: Int? = null,
+    val isNotificationsEnabled: Boolean = false
 )
 
 @HiltViewModel
@@ -53,6 +57,8 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
     private val _currentDay = MutableStateFlow<DayOfWeek>(LocalDate.now().dayOfWeek)
     val currentDay = _currentDay.asStateFlow()
+
+    private val _isNotificationsEnabled = MutableStateFlow(false)
 
 
     val isDarkTheme = userPreferencesRepository.isDarkTheme
@@ -93,8 +99,9 @@ class HomeViewModel @Inject constructor(
     val state: StateFlow<HomeUiState> = combine(
         plantsFlow,
         todayRoutinesFlow,
+        _isNotificationsEnabled,
         routinesStatisticsRepository.getEffectiveStreak()
-    ) { sortResults, todayRoutines, currentStreak ->
+    ) { sortResults, todayRoutines, notificationsEnabled, currentStreak ->
         val totalRoutines = todayRoutines.size
         val completedRoutines = todayRoutines.count { it.lastlyDoneAt == LocalDate.now() }
 
@@ -108,6 +115,7 @@ class HomeViewModel @Inject constructor(
             plants = sortResults,
             todayRoutines = todayRoutines,
             isLoading = false,
+            isNotificationsEnabled = notificationsEnabled,
             streakProgress = progress,
             streakDays = currentStreak
         )
@@ -148,7 +156,6 @@ class HomeViewModel @Inject constructor(
             val newDate = if (routine?.lastlyDoneAt == today) null else today
 
             routinesRepository.toggleRoutineDone(routineId, newDate)
-        }
     }
 
     fun onAddPlantClick() {
@@ -159,7 +166,6 @@ class HomeViewModel @Inject constructor(
 
     fun onPlantBookmarkClick(plantId: Long) {
         viewModelScope.launch {
-            val currentState = state.value
             plantsRepository.togglePlantFavourite(plantId)
         }
     }
@@ -179,5 +185,22 @@ class HomeViewModel @Inject constructor(
 
         val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(langCode)
         AppCompatDelegate.setApplicationLocales(appLocale)
+    }
+
+    fun onNotificationIconClick(hasPermission: Boolean) {
+        Log.d("HomeViewModel", "Icon clicked. hasPermission: $hasPermission")
+        if (!hasPermission) {
+            viewModelScope.launch {
+                _events.send(HomeEvent.RequestNotificationPermission)
+            }
+        } else {
+            _isNotificationsEnabled.value = !_isNotificationsEnabled.value
+            Log.d("HomeViewModel", "Notifications toggled to: ${_isNotificationsEnabled.value}")
+        }
+    }
+
+    fun setNotificationsEnabled(enabled: Boolean) {
+        Log.d("HomeViewModel", "Explicitly setting notifications enabled: $enabled")
+        _isNotificationsEnabled.value = enabled
     }
 }
