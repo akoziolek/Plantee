@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.File
 
 sealed class PlantEditEvent {
     object NavigateBack : PlantEditEvent()
@@ -65,6 +66,7 @@ class PlantEditViewModel @AssistedInject constructor(
                             species = p.species ?: "",
                             description = p.description ?: "",
                             isFavourite = p.isFavourite,
+                            imageUri = if (p.media != null) Uri.fromFile(File(p.media.filePath)) else null,
                             isLoading = false
                         )
                     }
