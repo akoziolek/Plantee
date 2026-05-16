@@ -39,13 +39,6 @@ class MediaRepository @Inject constructor(
         return newId
     }
 
-    override suspend fun updateMedia(media: Media) {
-        // TODO("Do we need to update media? What can be updated?")
-        val entity = media.toEntity() ?: return
-
-        mediaDao.update(entity)
-    }
-
     override suspend fun deleteMedia(id: Long) {
         mediaDao.deleteById(id)
     }

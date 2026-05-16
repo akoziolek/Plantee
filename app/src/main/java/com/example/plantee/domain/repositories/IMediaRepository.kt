@@ -8,8 +8,5 @@ interface IMediaRepository {
     fun getMedia(id: Long): Flow<Media?>
 
     suspend fun createMedia(media: Media): Long
-
-    suspend fun updateMedia(media: Media)
-
     suspend fun deleteMedia(id: Long)
 }
