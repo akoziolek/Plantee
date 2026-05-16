@@ -10,6 +10,5 @@ data class Routine(
     val endDate: LocalDate? = null,
     val activeDays: Int? = null,
     val lastlyDoneAt: LocalDate? = null,
-    val diagnosisId: Long? = null,
     val plants: List<PlantSummary> = emptyList()
 )

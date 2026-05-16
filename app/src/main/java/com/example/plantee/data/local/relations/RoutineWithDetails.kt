@@ -1,6 +1,5 @@
 package com.example.plantee.data.local.relations
 
-import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
@@ -20,8 +19,5 @@ data class RoutineWithDetails(
             entityColumn = "id_plant"
         )
     )
-    val plants: List<PlantEntity>,
-
-    @ColumnInfo(name = "id_diagnosis")
-    val idDiagnosis: Long?,
+    val plants: List<PlantEntity>
 )

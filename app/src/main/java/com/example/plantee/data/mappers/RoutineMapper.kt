@@ -16,7 +16,6 @@ fun RoutineWithDetails?.toDomain(): Routine? {
         endDate = routine.endDate,
         activeDays = routine.activeDays,
         lastlyDoneAt = routine.lastlyDoneAt,
-        diagnosisId = this.idDiagnosis,
         plants = plants.toSummaryDomainList()
     )
 }
@@ -31,7 +30,6 @@ fun List<RoutineWithDetails>.toDomainList(): List<Routine> {
             endDate = entity.routine.endDate,
             activeDays = entity.routine.activeDays,
             lastlyDoneAt = entity.routine.lastlyDoneAt,
-            diagnosisId = entity.idDiagnosis,
             plants = entity.plants.toSummaryDomainList()
         )
     }
