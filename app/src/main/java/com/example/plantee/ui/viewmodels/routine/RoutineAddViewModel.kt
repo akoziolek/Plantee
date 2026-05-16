@@ -158,4 +158,3 @@ class RoutineAddViewModel @Inject constructor(
     }
 }
 
-// FIXME no start and end date used
