@@ -3,8 +3,10 @@ package com.example.plantee.ui.viewmodels.plant
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.plantee.domain.model.Media
 import com.example.plantee.domain.model.Plant
 import com.example.plantee.domain.repositories.IPlantsRepository
+import com.example.plantee.domain.use_cases.SavePlantImageUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -30,12 +32,14 @@ data class PlantEditUiState(
     val description: String = "",
     val isFavourite: Boolean = false,
     val isLoading: Boolean = true,
-    val imageUri: Uri? = null
+    val imageUri: Uri? = null,
+    val media: Media? = null
 )
 
 @HiltViewModel(assistedFactory = PlantEditViewModel.Factory::class)
 class PlantEditViewModel @AssistedInject constructor(
     private val plantsRepository: IPlantsRepository,
+    private val savePlantImageUseCase: SavePlantImageUseCase,
     @Assisted private val plantId: Long
 ) : ViewModel() {
 
@@ -65,7 +69,8 @@ class PlantEditViewModel @AssistedInject constructor(
                             species = p.species ?: "",
                             description = p.description ?: "",
                             isFavourite = p.isFavourite,
-                            isLoading = false
+                            isLoading = false,
+                            media = p.media
                         )
                     }
                 }
@@ -103,16 +108,27 @@ class PlantEditViewModel @AssistedInject constructor(
 
     fun updatePlant() {
         if (!validate()) return
-        // TODO zmiana zdjecia - usuniecie starego, dodanie nowego
+
         viewModelScope.launch {
             val currentState = _state.value
+            var currentMedia = currentState.media
+
+            if (currentState.imageUri != null) {
+                currentMedia = savePlantImageUseCase(
+                    newImageUri = currentState.imageUri,
+                    oldMedia = currentState.media
+                )
+            }
+
             val plant = Plant(
                 id = currentState.id,
                 name = currentState.name,
                 species = currentState.species,
                 description = currentState.description,
-                isFavourite = currentState.isFavourite
+                isFavourite = currentState.isFavourite,
+                media = currentMedia
             )
+
             plantsRepository.updatePlant(plant)
             _events.send(PlantEditEvent.PlantUpdated)
         }

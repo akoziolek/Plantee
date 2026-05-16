@@ -1,12 +1,13 @@
 package com.example.plantee.ui.viewmodels.diagnosis
 
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.plantee.domain.model.Diagnosis
 import com.example.plantee.domain.model.Media
 import com.example.plantee.domain.model.RoutineSummary
 import com.example.plantee.domain.repositories.IDiagnosesRepository
-import com.example.plantee.domain.repositories.IMediaRepository
+import com.example.plantee.domain.use_cases.SavePlantImageUseCase
 import com.example.plantee.ui.nav.DiagnosisInput
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -40,7 +41,7 @@ sealed interface DiagnosisResultsUiState {
 @HiltViewModel(assistedFactory = DiagnosisResultsViewModel.Factory::class)
 class DiagnosisResultsViewModel @AssistedInject constructor(
     private val diagnosesRepository: IDiagnosesRepository,
-    private val mediaRepository: IMediaRepository,
+    private val savePlantImageUseCase: SavePlantImageUseCase,
     @Assisted private val input: DiagnosisInput
 ) : ViewModel() {
 
@@ -119,14 +120,11 @@ class DiagnosisResultsViewModel @AssistedInject constructor(
             
             var mediaList = emptyList<Media>()
             input.imageUri?.let { uriString ->
-                val mediaId = mediaRepository.createMedia(
-                    Media(
-                        filePath = uriString,
-                        fileName = "diagnosis_${System.currentTimeMillis()}.jpg",
-                        createdAt = LocalDateTime.now()
-                    )
-                )
-                mediaList = listOf(Media(id = mediaId, filePath = uriString, createdAt = LocalDateTime.now()))
+                val uri = uriString.toUri()
+                val savedMedia = savePlantImageUseCase(uri)
+                if (savedMedia != null) {
+                    mediaList = listOf(savedMedia)
+                }
             }
 
             val diagnosisToSave = currentState.diagnosis.copy(

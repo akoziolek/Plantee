@@ -13,7 +13,7 @@ import androidx.room.PrimaryKey
             entity = MediaEntity::class,
             parentColumns = ["id"],
             childColumns = ["id_media"],
-            onDelete = ForeignKey.RESTRICT
+            onDelete = ForeignKey.SET_NULL
         )
     ],
     indices = [

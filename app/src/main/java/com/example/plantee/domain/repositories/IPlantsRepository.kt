@@ -15,7 +15,6 @@ interface IPlantsRepository {
     fun getSearchedPlantsSummaryWithSort(query: String, sort: SortOrder): Flow<List<PlantSummary>>
 
     suspend fun createPlant(plant: Plant): Long
-    suspend fun createPlantWithMedia(plant: Plant, media: Media?): Long
     suspend fun updatePlantMedia(id: Long, media: Media?)
 
     suspend fun updatePlant(plant: Plant)

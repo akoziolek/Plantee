@@ -32,7 +32,7 @@ import com.example.plantee.data.local.entities.RoutinesStatisticsEntity
         RoutineSourceEntity::class,
         RoutinesStatisticsEntity::class
     ],
-    version = 6
+    version = 7
 )
 @TypeConverters(DateConverter::class)
 abstract class AppDatabase : RoomDatabase() {
