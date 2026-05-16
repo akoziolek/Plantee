@@ -1,5 +1,7 @@
 package com.example.plantee.ui.components.shared
 
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
@@ -69,6 +71,9 @@ fun LazyListScope.routinesSection(
                 onClick = { onRoutineClick(routine.id) },
                 modifier = modifier
             )
+            if(routines.last() == routine) {
+                Spacer(modifier = Modifier.height(62.dp))
+            }
         }
     }
 }
