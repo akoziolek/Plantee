@@ -20,17 +20,20 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
 import com.example.plantee.ui.components.base.InfoSection
 import com.example.plantee.ui.components.base.LabeledSwitch
 import com.example.plantee.ui.components.base.PrimaryButtonFullWidth
 import com.example.plantee.ui.components.base.RoutinesListItem
+import com.example.plantee.ui.nav.DiagnosisInput
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.viewmodels.diagnosis.DiagnosisResultsEvent
 import com.example.plantee.ui.viewmodels.diagnosis.DiagnosisResultsUiState
@@ -40,9 +43,9 @@ import com.example.plantee.ui.viewmodels.diagnosis.DiagnosisResultsViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiagnosisResultsScreen(
-    diagnosisId: Long,
+    input: DiagnosisInput,
     viewModel: DiagnosisResultsViewModel = hiltViewModel<DiagnosisResultsViewModel, DiagnosisResultsViewModel.Factory> { factory ->
-        factory.create(diagnosisId)
+        factory.create(input)
     },
     onNavigate: (DiagnosisResultsEvent) -> Unit
 ) {
@@ -136,7 +139,7 @@ fun DiagnosisResultsScreen(
 fun DiagnosisResultsPreview() {
     PlanteeTheme {
         DiagnosisResultsScreen(
-            diagnosisId = 1L,
+            input = DiagnosisInput(1L, 0.7f, 0.3f, "Test", null),
             onNavigate = {}
         )
     }

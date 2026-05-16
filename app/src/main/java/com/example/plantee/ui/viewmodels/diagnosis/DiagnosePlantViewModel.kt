@@ -3,8 +3,7 @@ package com.example.plantee.ui.viewmodels.diagnosis
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.plantee.domain.model.Diagnosis
-import com.example.plantee.domain.repositories.IDiagnosesRepository
+import com.example.plantee.ui.nav.DiagnosisInput
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -16,10 +15,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
+import androidx.core.net.toUri
 
 sealed class DiagnosePlantEvent {
-    class NavigateToDiagnosis(val diagnosisId: Long) : DiagnosePlantEvent()
+    class NavigateToDiagnosis(val input: DiagnosisInput) : DiagnosePlantEvent()
     object NavigateBack : DiagnosePlantEvent()
 }
 
@@ -35,16 +34,26 @@ data class DiagnosePlantUiState(
 
 @HiltViewModel(assistedFactory = DiagnosePlantViewModel.Factory::class)
 class DiagnosePlantViewModel @AssistedInject constructor(
-    private val diagnosesRepository: IDiagnosesRepository,
-    @Assisted private val plantId: Long
+    @Assisted private val plantId: Long,
+    @Assisted private val initialInput: DiagnosisInput? = null
 ) : ViewModel() {
 
     @AssistedFactory
     interface Factory {
-        fun create(plantId: Long): DiagnosePlantViewModel
+        fun create(plantId: Long, initialInput: DiagnosisInput? = null): DiagnosePlantViewModel
     }
 
-    private val _state = MutableStateFlow(DiagnosePlantUiState(plantId = plantId))
+    private val _state = MutableStateFlow(
+        initialInput?.let {
+            DiagnosePlantUiState(
+                plantId = it.plantId,
+                moistureLevel = it.moistureLevel,
+                sunLevel = it.sunLevel,
+                problemDescription = it.problemDescription,
+                imageUri = it.imageUri?.toUri()
+            )
+        } ?: DiagnosePlantUiState(plantId = plantId)
+    )
     val state: StateFlow<DiagnosePlantUiState> = _state.asStateFlow()
 
     private val _events = Channel<DiagnosePlantEvent>()
@@ -81,21 +90,17 @@ class DiagnosePlantViewModel @AssistedInject constructor(
 
     fun onDiagnoseClick() {
         if(!validate()) return
-        // TODO tu akurat chce sie upewnic, ze tak ma dzialc ten proces, DLA UWAGI KOMENTARZ PO POLSKU
-        // zapisywanie zdjecia!!
         viewModelScope.launch {
             val currentState = _state.value
-            val diagnosis = Diagnosis(
-                plantId = currentState.plantId,
-                problemDescription = currentState.problemDescription,
-                moistureLevel = currentState.moistureLevel.toInt(),
-                sunLevel = currentState.sunLevel.toInt(),
-                diagnosedAt = LocalDateTime.now()
-            )
-            val diagnosisId = diagnosesRepository.createDiagnosis(diagnosis)
-            // TODO przekazywanie calego obiektu do diagnozy, do viewmodelu diagnose tez trzeba wtedy dodac diagnoze
-            // TODO usunac navbar z detali
-            _events.send(DiagnosePlantEvent.NavigateToDiagnosis(diagnosisId))
+            _events.send(DiagnosePlantEvent.NavigateToDiagnosis(
+                DiagnosisInput(
+                    plantId = currentState.plantId,
+                    moistureLevel = currentState.moistureLevel,
+                    sunLevel = currentState.sunLevel,
+                    problemDescription = currentState.problemDescription,
+                    imageUri = currentState.imageUri?.toString()
+                )
+            ))
         }
     }
 }

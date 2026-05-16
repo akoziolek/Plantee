@@ -74,10 +74,11 @@ fun MainNavigation(
             entry<Screen.DiagnosePlant> { route ->
                 DiagnosePlantScreen(
                     plantId = route.plantId,
+                    initialInput = route.initialInput,
                     onNavigate = { event ->
                         when(event) {
                             is DiagnosePlantEvent.NavigateToDiagnosis -> {
-                                viewModel.replace(Screen.DiagnosisResults(diagnosisId = event.diagnosisId))
+                                viewModel.replace(Screen.DiagnosisResults(input = event.input))
                             }
                             DiagnosePlantEvent.NavigateBack -> {
                                 viewModel.back()
@@ -105,21 +106,19 @@ fun MainNavigation(
 
             entry<Screen.DiagnosisResults> { route ->
                 DiagnosisResultsScreen(
-                    diagnosisId = route.diagnosisId,
+                    input = route.input,
                     onNavigate = { event ->
                         when(event) {
                             is DiagnosisResultsEvent.NavigateToRoutine -> {
                                 viewModel.navigate(Screen.RoutineDetails(event.routineId))
                             }
-                            is DiagnosisResultsEvent.NavigateBack -> {
-                                viewModel.back()
-                            }
                             is DiagnosisResultsEvent.FinishDiagnosis -> {
                                 viewModel.replace(Screen.DiagnosisDetails(event.diagnosisId))
                             }
-
+                            is DiagnosisResultsEvent.ReturnToDiagnose -> {
+                                viewModel.replace(Screen.DiagnosePlant(plantId = event.input.plantId, initialInput = event.input))
+                            }
                         }
-
                     }
                 )
             }
@@ -207,7 +206,7 @@ fun MainNavigation(
                     onNavigate = { event ->
                         when(event) {
                             is RoutinesEvent.NavigateToDetails -> {
-                                viewModel.navigate(Screen.RoutineDetails(event.routineId))
+                                viewModel.navigate(Screen.Routines)
                             }
                             is RoutinesEvent.NavigateToAdd -> {
                                 viewModel.navigate(Screen.RoutineAdd)

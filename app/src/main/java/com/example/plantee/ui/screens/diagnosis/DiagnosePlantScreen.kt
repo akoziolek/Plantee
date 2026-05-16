@@ -1,11 +1,7 @@
 package com.example.plantee.ui.screens.diagnosis
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -16,9 +12,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,6 +24,7 @@ import com.example.plantee.ui.components.base.InputSlider
 import com.example.plantee.ui.components.base.InputTextField
 import com.example.plantee.ui.components.base.PhotoPicker
 import com.example.plantee.ui.components.base.PrimaryButtonFullWidth
+import com.example.plantee.ui.nav.DiagnosisInput
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.viewmodels.diagnosis.DiagnosePlantEvent
 import com.example.plantee.ui.viewmodels.diagnosis.DiagnosePlantViewModel
@@ -39,8 +33,9 @@ import com.example.plantee.ui.viewmodels.diagnosis.DiagnosePlantViewModel
 @Composable
 fun DiagnosePlantScreen(
     plantId: Long,
+    initialInput: DiagnosisInput? = null,
     viewModel: DiagnosePlantViewModel = hiltViewModel<DiagnosePlantViewModel, DiagnosePlantViewModel.Factory> { factory ->
-        factory.create(plantId)
+        factory.create(plantId, initialInput)
     },
     onNavigate: (DiagnosePlantEvent) -> Unit
 ) {
