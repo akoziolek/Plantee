@@ -4,12 +4,8 @@ import androidx.room.withTransaction
 import com.example.plantee.data.local.AppDatabase
 import com.example.plantee.data.local.dao.MediaDao
 import com.example.plantee.data.local.dao.PlantsDao
-import com.example.plantee.data.local.entities.MediaEntity
 import com.example.plantee.data.mappers.toDomain
-import com.example.plantee.data.mappers.toDomainList
-import com.example.plantee.data.mappers.toSummaryDomainList
 import com.example.plantee.data.mappers.toEntity
-import com.example.plantee.data.mappers.toSummaryDomain
 import com.example.plantee.data.mappers.toSummaryDomainListWithMedia
 import com.example.plantee.domain.model.Media
 import com.example.plantee.domain.model.Plant
@@ -26,26 +22,8 @@ class PlantsRepository @Inject constructor(
     private val plantsDao: PlantsDao,
     private val mediaDao: MediaDao
 ) : IPlantsRepository {
-    override fun getAllPlants(): Flow<List<Plant>> {
-        return plantsDao.getAllFullPlants().map { it.toDomainList() }
-    }
-
-    override fun getPlants(ids: List<Long>): Flow<List<Plant>> {
-        return plantsDao.getPlantsByIds(ids).map { it.toDomainList() }
-    }
-
     override fun getPlant(id: Long): Flow<Plant?> {
         return plantsDao.getFullPlant(id).map { it.toDomain() }
-    }
-
-    override fun getPlantSummary(id: Long): Flow<PlantSummary?> {
-        return plantsDao.getPlant(id).map { it.toSummaryDomain() }
-    }
-
-
-    // FIXME isn't this ineffective? loading all the data from db just to map it
-    override fun getAllPlantsSummary(): Flow<List<PlantSummary>> {
-        return plantsDao.getAllPlants().map { it.toSummaryDomainList() }
     }
 
     override fun getSearchedPlantsSummaryWithSort(
@@ -64,13 +42,6 @@ class PlantsRepository @Inject constructor(
             }
         }
     }
-
-    override suspend fun createPlant(plant: Plant): Long {
-        val entity = plant.toEntity() ?: return -1L
-        val newId = plantsDao.insert(entity)
-        return newId
-    }
-
 
     override suspend fun createPlantWithMedia(plant: Plant, media: Media?): Long {
         return database.withTransaction {
@@ -110,7 +81,6 @@ class PlantsRepository @Inject constructor(
             plantsDao.updateMediaId(id, newMediaId)
         }
     }
-
 
     override suspend fun togglePlantFavourite(id: Long) {
         plantsDao.updateFavouriteStatus(id)
