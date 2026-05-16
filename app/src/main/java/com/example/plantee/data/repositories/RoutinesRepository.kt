@@ -54,17 +54,9 @@ class RoutinesRepository @Inject constructor(
     }
 
     override fun getRoutinesForWeekdaySummary(weekday: Int): Flow<List<Routine>> {
-        val dayBitmap = when (weekday) {
-            1 -> 1
-            2 -> 2
-            3 -> 4
-            4 -> 8
-            5 -> 16
-            6 -> 32
-            7 -> 64
-            else -> 0
-        }
-        return routinesDao.getRoutinesForWeekday(dayBitmap).map { it.toDomainListSimple() }
+        val dayBitmap = 1 shl (weekday - 1)
+        val today = LocalDate.now()
+        return routinesDao.getRoutinesForWeekday(dayBitmap, today).map { it.toDomainListSimple() }
     }
 
 

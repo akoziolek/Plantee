@@ -67,9 +67,14 @@ interface RoutinesDao {
     @Query("""
         SELECT *
         FROM routines
-        WHERE (active_days & :dayBitmap) > 0
+        WHERE 
+            (start_date IS NULL OR start_date <= :today)
+            AND
+            (end_date IS NULL OR :today <= end_date)
+            AND
+            (active_days & :dayBitmap) > 0
     """)
-    fun getRoutinesForWeekday(dayBitmap: Int): Flow<List<RoutineEntity>>
+    fun getRoutinesForWeekday(dayBitmap: Int, today: LocalDate): Flow<List<RoutineEntity>>
 
     @Query("""SELECT * FROM routines 
         WHERE 
