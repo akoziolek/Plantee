@@ -7,6 +7,7 @@ import com.example.plantee.domain.model.Diagnosis
 import com.example.plantee.domain.model.Media
 import com.example.plantee.domain.model.RoutineSummary
 import com.example.plantee.domain.repositories.IDiagnosesRepository
+import com.example.plantee.domain.repositories.IRoutinesRepository
 import com.example.plantee.domain.use_cases.SavePlantImageUseCase
 import com.example.plantee.ui.nav.DiagnosisInput
 import dagger.assisted.Assisted
@@ -33,7 +34,8 @@ sealed interface DiagnosisResultsUiState {
     data class Success(
         val diagnosis: Diagnosis,
         val proposedRoutines: List<RoutineSummary>,
-        val selectedRoutines: Set<Long> = emptySet()
+        val selectedRoutines: Set<Long> = emptySet(),
+        val removeFromAssociatedRoutines: Boolean = false
     ) : DiagnosisResultsUiState
     data class Error(val message: String) : DiagnosisResultsUiState
 }
@@ -41,6 +43,7 @@ sealed interface DiagnosisResultsUiState {
 @HiltViewModel(assistedFactory = DiagnosisResultsViewModel.Factory::class)
 class DiagnosisResultsViewModel @AssistedInject constructor(
     private val diagnosesRepository: IDiagnosesRepository,
+    private val routinesRepository: IRoutinesRepository,
     private val savePlantImageUseCase: SavePlantImageUseCase,
     @Assisted private val input: DiagnosisInput
 ) : ViewModel() {
@@ -97,6 +100,14 @@ class DiagnosisResultsViewModel @AssistedInject constructor(
         }
     }
 
+    fun onRemoveFromRoutinesClick() {
+        _state.update {
+            if (it is DiagnosisResultsUiState.Success) {
+                it.copy(removeFromAssociatedRoutines = !it.removeFromAssociatedRoutines)
+            } else it
+        }
+    }
+
     fun onBackClick() {
         viewModelScope.launch {
             _events.send(DiagnosisResultsEvent.ReturnToDiagnose(input))
@@ -114,6 +125,10 @@ class DiagnosisResultsViewModel @AssistedInject constructor(
         if (currentState !is DiagnosisResultsUiState.Success) return
 
         viewModelScope.launch {
+            if (currentState.removeFromAssociatedRoutines) {
+                routinesRepository.removePlantFromAllRoutines(input.plantId)
+            }
+
             val selectedRoutines = currentState.proposedRoutines.filter { 
                 _selectedRoutines.value.contains(it.id) 
             }

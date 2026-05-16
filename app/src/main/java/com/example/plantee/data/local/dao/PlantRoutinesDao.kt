@@ -43,4 +43,13 @@ interface PlantRoutinesDao {
 
     @Query("SELECT * FROM plant_routines WHERE id_plant = :plantId ORDER BY id DESC")
     fun getPlantsRoutinesForPlant(plantId: Long): Flow<List<PlantRoutineEntity>>
+
+    @Query("SELECT id_routine FROM plant_routines WHERE id_plant = :plantId")
+    suspend fun getRoutineIdsForPlant(plantId: Long): List<Long>
+
+    @Query("DELETE FROM plant_routines WHERE id_routine = :routineId AND id_plant = :plantId")
+    suspend fun deleteAssociation(routineId: Long, plantId: Long)
+
+    @Query("SELECT COUNT(*) FROM plant_routines WHERE id_routine = :routineId")
+    suspend fun getPlantCountForRoutine(routineId: Long): Int
 }

@@ -20,13 +20,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
 import com.example.plantee.ui.components.base.InfoSection
@@ -119,8 +117,8 @@ fun DiagnosisResultsScreen(
 
                         LabeledSwitch(
                             label = stringResource(R.string.diagnosis_results_label_remove_from_routines),
-                            checked = false, // TODO logic for removal
-                            onCheckedChange = {}
+                            checked = currentState.removeFromAssociatedRoutines,
+                            onCheckedChange = { viewModel.onRemoveFromRoutinesClick() }
                         )
                     }
                 }

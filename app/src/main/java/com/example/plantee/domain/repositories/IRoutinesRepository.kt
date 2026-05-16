@@ -17,4 +17,5 @@ interface IRoutinesRepository {
     suspend fun updateRoutine(routine: Routine)
     suspend fun toggleRoutineDone(id: Long, date: LocalDate?)
     suspend fun deleteRoutine(id: Long)
+    suspend fun removePlantFromAllRoutines(plantId: Long)
 }
