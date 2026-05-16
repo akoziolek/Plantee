@@ -60,12 +60,6 @@ class DiagnosesRepository @Inject constructor(
         return newId
     }
 
-    override suspend fun updateDiagnosis(diagnosis: Diagnosis) {
-        // TODO("Do we need to update diagnosis? What can be updated?")
-        val entity = diagnosis.toEntity() ?: return
-
-        diagnosisDao.update(entity)
-    }
 
     override suspend fun deleteDiagnosis(id: Long) {
         diagnosisDao.deleteById(id)
