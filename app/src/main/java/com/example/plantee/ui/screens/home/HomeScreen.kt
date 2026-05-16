@@ -1,35 +1,29 @@
 package com.example.plantee.ui.screens.home
 
-import androidx.appcompat.app.AppCompatDelegate
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.NotificationsNone
+import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.NotificationsOff
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -55,7 +49,6 @@ import com.example.plantee.ui.components.base.OverflowAction
 import com.example.plantee.ui.components.base.OverflowMenu
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.base.StreakWidget
-import com.example.plantee.ui.components.shared.CelebrationWrapper
 import com.example.plantee.ui.components.shared.FilterSectionHeader
 import com.example.plantee.ui.components.shared.LinkHeader
 import com.example.plantee.ui.components.shared.plantListItems
@@ -63,7 +56,6 @@ import com.example.plantee.ui.components.shared.todayRoutinesSection
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.viewmodels.home.HomeEvent
 import com.example.plantee.ui.viewmodels.home.HomeViewModel
-import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -190,16 +182,6 @@ fun HomeScreen(
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                // TODO Delete debug info when not needed
-                item {
-                    Text(
-                        text = "DEBUG: LogicEnabled=${state.isNotificationsEnabled}, SysPermission=$hasNotificationPermission",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier.padding(bottom = 4.dp)
-                    )
-                }
-
                     item {
                         StreakWidget(
                             streakDays = state.streakDays,
@@ -214,7 +196,6 @@ fun HomeScreen(
                         )
                     }
 
-                    // FIXME - routines that are out of date range should not be displayed!!!!
                     todayRoutinesSection(
                         routines = state.todayRoutines,
                         onCheckboxClick = { viewModel.onCheckboxClick(it) },

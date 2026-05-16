@@ -90,15 +90,6 @@ fun PlantsScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = Modifier.weight(1f)
                 ) {
-                    item {
-                        Text(
-                            text = "DEBUG: hasMedia=${state.plants[0].media != null} plantMedia=${state.plants[0].media?.filePath}",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.secondary,
-                            modifier = Modifier.padding(bottom = 4.dp)
-                        )
-                    }
-
                     plantListItems(
                         plants = state.plants,
                         onPlantClick = { viewModel.onPlantClick(it) },

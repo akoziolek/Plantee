@@ -193,7 +193,6 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onNotificationIconClick(hasPermission: Boolean) {
-        Log.d("HomeViewModel", "Icon clicked. hasPermission: $hasPermission")
         if (!hasPermission) {
             viewModelScope.launch {
                 _events.send(HomeEvent.RequestNotificationPermission)
@@ -202,14 +201,12 @@ class HomeViewModel @Inject constructor(
             viewModelScope.launch {
                 val current = settingsRepository.getNotificationsEnabled().first()
                 settingsRepository.setNotificationsEnabled(!current)
-                Log.d("HomeViewModel", "Notifications toggled to: ${!current}")
             }
         }
     }
 
     fun setNotificationsEnabled(enabled: Boolean) {
         viewModelScope.launch {
-            Log.d("HomeViewModel", "Explicitly setting notifications enabled: $enabled")
             settingsRepository.setNotificationsEnabled(enabled)
         }
     }
