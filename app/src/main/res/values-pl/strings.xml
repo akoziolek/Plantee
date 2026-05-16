@@ -97,4 +97,5 @@
     <string name="navbar_label_routines">Rutyny</string>
     <string name="home_menu_change_mode_dark">Włącz tryb ciemny</string>
     <string name="home_menu_change_mode_light">Włącz tryb jasny</string>
+    <string name="your_routines_streak">Streak twoich rutyn</string>
 </resources>

@@ -9,6 +9,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.example.plantee.R
+import com.example.plantee.utils.rememberSoundEffect
 import kotlinx.coroutines.delay
 import nl.dionsegijn.konfetti.compose.KonfettiView
 import nl.dionsegijn.konfetti.core.Party
@@ -41,10 +43,12 @@ fun CelebrationWrapper(
 ) {
     var showCelebration by remember { mutableStateOf(false) }
     var wasAlreadyDone by remember { mutableStateOf(isAllDone) }
+    val playConfettiSound = rememberSoundEffect(R.raw.confetti)
 
     LaunchedEffect(isAllDone) {
         if(isAllDone && !wasAlreadyDone) {
             showCelebration = true
+            playConfettiSound()
             delay(4000)
             showCelebration = false
         } else if (!isAllDone) {
@@ -56,6 +60,5 @@ fun CelebrationWrapper(
     Box {
         content()
         if(showCelebration) ConfettiCelebration()
-        // TODO sound notification
     }
 }

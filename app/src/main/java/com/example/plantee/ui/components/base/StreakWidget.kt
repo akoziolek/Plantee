@@ -22,10 +22,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.plantee.R
 import com.example.plantee.ui.theme.PlanteeTheme
 
 // FIXME colors
@@ -72,7 +74,7 @@ fun StreakWidget(
             )
 
             Text(
-                text = "Your routines streak",
+                text = stringResource(R.string.your_routines_streak),
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
