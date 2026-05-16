@@ -7,9 +7,9 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import com.example.plantee.data.local.dto.PlantSummaryDto
 import com.example.plantee.data.local.relations.PlantWithDetails
 import com.example.plantee.data.local.entities.PlantEntity
-import com.example.plantee.data.local.relations.PlantWithMedia
 import kotlinx.coroutines.flow.Flow
 
 
@@ -44,14 +44,29 @@ interface PlantsDao {
     @Query("SELECT * FROM plants WHERE id IN (:ids) ORDER BY id DESC")
     fun getPlantsByIds(ids: List<Long>): Flow<List<PlantWithDetails>>
 
-    @Query("SELECT * FROM plants WHERE name LIKE '%' || :searchQuery || '%'")
-    fun searchPlants(searchQuery: String): Flow<List<PlantWithMedia>>
+    @Query("""
+        SELECT p.id, p.name, p.description, p.is_favourite, m.id AS media_id, m.file_path AS media_file_path
+        FROM plants p
+        LEFT JOIN media m ON m.id = p.id_media
+        WHERE p.name LIKE '%' || :searchQuery || '%'
+        """)
+    fun searchPlants(searchQuery: String): Flow<List<PlantSummaryDto>>
 
-    @Query("SELECT * FROM plants WHERE name LIKE '%' || :searchQuery || '%' ORDER BY name ASC")
-    fun searchPlantsAsc(searchQuery: String): Flow<List<PlantWithMedia>>
+    @Query("""
+        SELECT p.id, p.name, p.description, p.is_favourite, m.id AS media_id, m.file_path AS media_file_path
+        FROM plants p
+        LEFT JOIN media m ON m.id = p.id_media
+        WHERE p.name LIKE '%' || :searchQuery || '%'
+        ORDER BY p.name ASC""")
+    fun searchPlantsAsc(searchQuery: String): Flow<List<PlantSummaryDto>>
 
-    @Query("SELECT * FROM plants WHERE name LIKE '%' || :searchQuery || '%' ORDER BY name DESC")
-    fun searchPlantsDesc(searchQuery: String): Flow<List<PlantWithMedia>>
+    @Query("""
+        SELECT p.id, p.name, p.description, p.is_favourite, m.id AS media_id, m.file_path AS media_file_path
+        FROM plants p
+        LEFT JOIN media m ON m.id = p.id_media
+        WHERE p.name LIKE '%' || :searchQuery || '%'
+        ORDER BY p.name DESC""")
+    fun searchPlantsDesc(searchQuery: String): Flow<List<PlantSummaryDto>>
 
     @Query("SELECT * FROM plants WHERE id = :id")
     fun getPlant(id: Long): Flow<PlantEntity?>

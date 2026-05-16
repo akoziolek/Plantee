@@ -1,9 +1,9 @@
 package com.example.plantee.data.mappers
 
+import com.example.plantee.data.local.dto.PlantSummaryDto
 import com.example.plantee.data.local.entities.MediaEntity
 import com.example.plantee.data.local.entities.PlantEntity
 import com.example.plantee.data.local.relations.PlantWithDetails
-import com.example.plantee.data.local.relations.PlantWithMedia
 import com.example.plantee.domain.model.DiagnosisSummary
 import com.example.plantee.domain.model.Media
 import com.example.plantee.domain.model.Plant
@@ -65,14 +65,14 @@ fun List<PlantEntity>.toSummaryDomainList(): List<PlantSummary> {
     }
 }
 
-fun List<PlantWithMedia>.toSummaryDomainListWithMedia(): List<PlantSummary> {
-    return this.map { entity ->
+fun List<PlantSummaryDto>.toSummaryDomainListWithMedia(): List<PlantSummary> {
+    return this.map { dto ->
         PlantSummary(
-            id = entity.plant.id,
-            name = entity.plant.name,
-            description = entity.plant.description,
-            isFavourite = entity.plant.isFavourite,
-            media = entity.media.toDomain()
+            id = dto.id,
+            name = dto.name,
+            description = dto.description,
+            isFavourite = dto.isFavourite,
+            media = dto.media.toDomain()
         )
     }
 }
