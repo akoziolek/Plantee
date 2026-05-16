@@ -168,7 +168,7 @@ fun NavBar(
     val items = listOf(NavItem.Home, NavItem.Plants, NavItem.Routines)
 
     NavigationBar(
-        containerColor = extendedLight.dimNeutral.colorContainer,
+        containerColor = MaterialTheme.colorScheme.inversePrimary,
         tonalElevation = 3.dp
     ) {
         items.forEach { item ->
