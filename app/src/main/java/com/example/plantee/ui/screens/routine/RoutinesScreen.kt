@@ -34,7 +34,6 @@ import com.example.plantee.ui.components.shared.todayRoutinesSection
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.viewmodels.routine.RoutinesEvent
 import com.example.plantee.ui.viewmodels.routine.RoutinesViewModel
-import java.time.LocalDate
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,7 +65,8 @@ fun RoutinesScreen(
                 onSearch = { },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 8.dp),
             )
         },
         floatingActionButton = {
@@ -87,7 +87,6 @@ fun RoutinesScreen(
                     item {
                         SectionHeader(stringResource(R.string.routines_label_for_today))
                     }
-                    // TODO ewentualnie bardziej odsunac od gory
                     todayRoutinesSection(
                         routines = state.todayRoutines,
                         onCheckboxClick = { viewModel.onCheckboxClick(it) },
