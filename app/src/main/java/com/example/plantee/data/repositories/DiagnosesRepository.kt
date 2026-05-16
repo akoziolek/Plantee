@@ -10,7 +10,6 @@ import com.example.plantee.data.local.entities.DiagnosisMediaEntity
 import com.example.plantee.data.local.entities.PlantRoutineEntity
 import com.example.plantee.data.local.entities.RoutineSourceEntity
 import com.example.plantee.data.mappers.toDomain
-import com.example.plantee.data.mappers.toDomainList
 import com.example.plantee.data.mappers.toEntity
 import com.example.plantee.domain.model.Diagnosis
 import com.example.plantee.domain.repositories.IDiagnosesRepository

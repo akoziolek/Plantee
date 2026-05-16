@@ -2,7 +2,6 @@ package com.example.plantee.ui.viewmodels.routine
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.plantee.domain.model.Routine
 import com.example.plantee.domain.model.RoutineSummary
 import com.example.plantee.domain.repositories.IRoutinesRepository
 import com.example.plantee.utils.DayBitmaskHelper
@@ -24,9 +23,12 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
+import java.time.Duration
 import java.time.LocalDate
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 sealed class RoutinesEvent {
@@ -37,7 +39,7 @@ sealed class RoutinesEvent {
 
 data class RoutinesUiState(
     val routines: List<RoutineSummary> = emptyList(),
-    val todayRoutines: List<Routine> = emptyList(),
+    val todayRoutines: List<RoutineSummary> = emptyList(),
     val isLoading: Boolean = true,
     val searchQuery: String = ""
 )
@@ -51,17 +53,19 @@ data class FilterState(
 class RoutinesViewModel @Inject constructor(
     private val routinesRepository: IRoutinesRepository
 ) : ViewModel() {
-    private val _currentDay = MutableStateFlow<DayOfWeek>(LocalDate.now().dayOfWeek)
+    private val _currentDay = MutableStateFlow<LocalDate>(LocalDate.now())
     val currentDay = _currentDay.asStateFlow()
 
     init {
         viewModelScope.launch {
-            while (true) {
-                val now = LocalDate.now().dayOfWeek
-                if (_currentDay.value != now) {
-                    _currentDay.value = now
-                }
-                delay(60_000)
+            while (isActive) {
+                val now = LocalDateTime.now()
+                val nextMidnight = now.toLocalDate()
+                    .plusDays(1)
+                    .atStartOfDay()
+                delay(Duration.between(now, nextMidnight).toMillis())
+                _currentDay.value = LocalDate.now()
+
             }
         }
     }
@@ -88,7 +92,7 @@ class RoutinesViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     private val todayFlow = _currentDay.flatMapLatest { day ->
-        routinesRepository.getRoutinesForWeekdaySummary(day.value)
+        routinesRepository.getRoutinesForDay(day)
     }
 
     val state: StateFlow<RoutinesUiState> = combine(
@@ -164,8 +168,6 @@ class RoutinesViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            // TODO Why unused variable?
-            val currentState = state.value
             routinesRepository.toggleRoutineDone(routineId, date)
         }
     }

@@ -1,5 +1,6 @@
 package com.example.plantee.data.mappers
 
+import com.example.plantee.data.local.dto.RoutineSummaryDto
 import com.example.plantee.data.local.entities.RoutineEntity
 import com.example.plantee.data.local.relations.RoutineWithDetails
 import com.example.plantee.domain.model.Routine
@@ -20,41 +21,13 @@ fun RoutineWithDetails?.toDomain(): Routine? {
     )
 }
 
-fun List<RoutineWithDetails>.toDomainList(): List<Routine> {
-    return this.map { entity ->
-        Routine(
-            id = entity.routine.id,
-            name = entity.routine.name,
-            description = entity.routine.description,
-            startDate = entity.routine.startDate,
-            endDate = entity.routine.endDate,
-            activeDays = entity.routine.activeDays,
-            lastlyDoneAt = entity.routine.lastlyDoneAt,
-            plants = entity.plants.toSummaryDomainList()
-        )
-    }
-}
-
-fun List<RoutineEntity>.toDomainListSimple(): List<Routine> {
-    return this.map { entity ->
-        Routine(
-            id = entity.id,
-            name = entity.name,
-            description = entity.description,
-            startDate = entity.startDate,
-            endDate = entity.endDate,
-            activeDays = entity.activeDays,
-            lastlyDoneAt = entity.lastlyDoneAt
-        )
-    }
-}
-
-fun List<RoutineEntity>.toSummaryDomainList(): List<RoutineSummary> {
-    return this.map { entity ->
+fun List<RoutineSummaryDto>.toSummaryDomainList(): List<RoutineSummary> {
+    return this.map { dto ->
         RoutineSummary(
-            id = entity.id,
-            name = entity.name,
-            description = entity.description
+            id = dto.id,
+            name = dto.name,
+            description = dto.description,
+            lastlyDoneAt = dto.lastlyDoneAt
         )
     }
 }

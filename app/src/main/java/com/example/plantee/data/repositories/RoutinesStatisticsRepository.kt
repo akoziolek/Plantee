@@ -3,11 +3,12 @@ package com.example.plantee.data.repositories
 import com.example.plantee.data.local.dao.RoutinesDao
 import com.example.plantee.data.local.dao.RoutinesStatisticsDao
 import com.example.plantee.data.mappers.toDomain
-import com.example.plantee.data.mappers.toDomainList
 import com.example.plantee.data.mappers.toEntity
-import com.example.plantee.domain.model.Routine
+import com.example.plantee.data.mappers.toSummaryDomainList
 import com.example.plantee.domain.model.RoutineStatistic
+import com.example.plantee.domain.model.RoutineSummary
 import com.example.plantee.domain.repositories.IRoutinesStatisticsRepository
+import com.example.plantee.utils.toDayBitMask
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -27,7 +28,7 @@ class RoutinesStatisticsRepository @Inject constructor(
 
         if (!lastUpdate.isBefore(LocalDate.now())) return
 
-        val yesterdayRoutines = routinesDao.getRoutinesWithDate(yesterday).first().toDomainList()
+        val yesterdayRoutines = routinesDao.getRoutinesForWeekday(yesterday.toDayBitMask(), yesterday).first().toSummaryDomainList()
         val allDoneYesterday = yesterdayRoutines.areAllCompletedOn(yesterday)
 
         if (allDoneYesterday) {
@@ -44,10 +45,10 @@ class RoutinesStatisticsRepository @Inject constructor(
 
         return combine(
             routinesStatisticsDao.getRoutinesStatisticsFlow(),
-            routinesDao.getRoutinesRequiredForDate(today, today.toDayMask())
+            routinesDao.getRoutinesForWeekday(today.toDayBitMask(), today)
         ) { statEntity, todayEntities ->
             val stat = statEntity?.toDomain() ?: return@combine 0
-            val todayRoutines = todayEntities.toDomainList()
+            val todayRoutines = todayEntities.toSummaryDomainList()
 
             val isDoneToday = todayRoutines.areAllCompletedOn(today)
             val lastUpdate = stat.lastStreakUpdate ?: return@combine 0
@@ -80,7 +81,7 @@ class RoutinesStatisticsRepository @Inject constructor(
 
         var currentDay = startDate
         while (!currentDay.isAfter(endDate)) {
-            val dayMask = currentDay.toDayMask()
+            val dayMask = currentDay.toDayBitMask()
 
             val taskRequiredThatDay = allRoutines.any { routine ->
                 val isActive = (routine.startDate == null || !currentDay.isBefore(routine.startDate)) &&
@@ -97,9 +98,7 @@ class RoutinesStatisticsRepository @Inject constructor(
         return false
     }
 
-    private fun LocalDate.toDayMask(): Int = 1 shl (this.dayOfWeek.value - 1)
-
-    private fun List<Routine>.areAllCompletedOn(date: LocalDate): Boolean {
+    private fun List<RoutineSummary>.areAllCompletedOn(date: LocalDate): Boolean {
         return this.isNotEmpty() && this.all { it.lastlyDoneAt == date }
     }
 }

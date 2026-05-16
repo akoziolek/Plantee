@@ -47,8 +47,7 @@ class ReminderWorker(context: Context, params: WorkerParameters) : Worker(contex
 
         if (isEnabled) {
             val today = LocalDate.now()
-            val dayOfWeek = today.dayOfWeek.value
-            val todayRoutines = routinesRepository.getRoutinesForWeekdaySummary(dayOfWeek).first()
+            val todayRoutines = routinesRepository.getRoutinesForDay(today).first()
             
             val pendingRoutines = todayRoutines.filter { it.lastlyDoneAt != today }
 

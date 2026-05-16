@@ -2,11 +2,10 @@ package com.example.plantee.ui.viewmodels.home
 
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.plantee.domain.model.PlantSummary
-import com.example.plantee.domain.model.Routine
+import com.example.plantee.domain.model.RoutineSummary
 import com.example.plantee.domain.repositories.IPlantsRepository
 import com.example.plantee.domain.repositories.IRoutinesRepository
 import com.example.plantee.domain.repositories.IRoutinesStatisticsRepository
@@ -27,10 +26,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.LocalDateTime
 import javax.inject.Inject
+import java.time.Duration
 
 sealed class HomeEvent {
     data class NavigateToPlant(val plantId: Long) : HomeEvent()
@@ -42,7 +43,7 @@ sealed class HomeEvent {
 
 data class HomeUiState(
     val plants: List<PlantSummary> = emptyList(),
-    val todayRoutines: List<Routine> = emptyList(),
+    val todayRoutines: List<RoutineSummary> = emptyList(),
     val isLoading: Boolean = true,
     val streakProgress: Float? = null,
     val streakDays: Int? = null,
@@ -57,11 +58,8 @@ class HomeViewModel @Inject constructor(
     private val routinesStatisticsRepository: IRoutinesStatisticsRepository,
     private val settingsRepository: ISettingsRepository
 ) : ViewModel() {
-    private val _currentDay = MutableStateFlow<DayOfWeek>(LocalDate.now().dayOfWeek)
+    private val _currentDay = MutableStateFlow<LocalDate>(LocalDate.now())
     val currentDay = _currentDay.asStateFlow()
-
-    private val _isNotificationsEnabled = MutableStateFlow(false)
-
 
     val isDarkTheme = userPreferencesRepository.isDarkTheme
         .stateIn(
@@ -73,12 +71,14 @@ class HomeViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             routinesStatisticsRepository.syncStreak()
-            while (true) {
-                val now = LocalDate.now().dayOfWeek
-                if (_currentDay.value != now) {
-                    _currentDay.value = now
-                }
-                delay(60_000)
+            while (isActive) {
+                val now = LocalDateTime.now()
+                val nextMidnight = now.toLocalDate()
+                    .plusDays(1)
+                    .atStartOfDay()
+                delay(Duration.between(now, nextMidnight).toMillis())
+                _currentDay.value = LocalDate.now()
+
             }
         }
     }
@@ -97,7 +97,7 @@ class HomeViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     private val todayRoutinesFlow = _currentDay.flatMapLatest { day ->
-        routinesRepository.getRoutinesForWeekdaySummary(day.value)
+        routinesRepository.getRoutinesForDay(day)
     }
 
     val state: StateFlow<HomeUiState> = combine(

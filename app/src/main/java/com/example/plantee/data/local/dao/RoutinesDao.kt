@@ -1,15 +1,14 @@
 package com.example.plantee.data.local.dao
 
-import android.R
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import com.example.plantee.data.local.relations.RoutineWithDetails
+import com.example.plantee.data.local.dto.RoutineSummaryDto
 import com.example.plantee.data.local.entities.RoutineEntity
+import com.example.plantee.data.local.relations.RoutineWithDetails
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
@@ -24,59 +23,22 @@ interface RoutinesDao {
     @Query("UPDATE routines SET lastly_done_at = :date WHERE id = :id")
     suspend fun updateLastlyDoneAt(id: Long, date: LocalDate? = LocalDate.now())
 
-    @Delete
-    suspend fun delete(routine: RoutineEntity)
-
     @Query("DELETE FROM routines WHERE id = :id")
     suspend fun deleteById(id: Long)
 
-    @Query("SELECT * FROM routines ORDER BY id DESC")
-    fun getAllRoutines(): Flow<List<RoutineEntity>>
-
-    @Transaction
     @Query("""
-        SELECT r.*, rs.id_diagnosis AS id_diagnosis
-        FROM routines r
-        LEFT JOIN plant_routines pr ON pr.id_routine = r.id
-        LEFT JOIN routine_sources rs ON rs.id_plant_routine = pr.id
-    """)
-    fun getAllRoutinesWithDetails(): Flow<List<RoutineWithDetails>>
-
-    @Transaction
-    @Query("""
-        SELECT r.*, rs.id_diagnosis AS id_diagnosis
-        FROM routines r
-        LEFT JOIN plant_routines pr ON pr.id_routine = r.id
-        LEFT JOIN routine_sources rs ON rs.id_plant_routine = pr.id
-        WHERE lastly_done_at = :date
-    """)
-    fun getRoutinesWithDate(date: LocalDate): Flow<List<RoutineWithDetails>>
-
-    @Transaction
-    @Query("""
-    SELECT r.*, rs.id_diagnosis AS id_diagnosis
-    FROM routines r
-    LEFT JOIN plant_routines pr ON pr.id_routine = r.id
-    LEFT JOIN routine_sources rs ON rs.id_plant_routine = pr.id
-    WHERE (r.active_days & :dayMask) != 0
-    AND (r.start_date IS NULL OR r.start_date <= :date)
-    AND (r.end_date IS NULL OR r.end_date >= :date)
-""")
-    fun getRoutinesRequiredForDate(date: LocalDate, dayMask: Int): Flow<List<RoutineWithDetails>>
-
-    @Query("""
-        SELECT *
+        SELECT id, name, description, lastly_done_at
         FROM routines
         WHERE 
-            (start_date IS NULL OR start_date <= :today)
+            (start_date IS NULL OR start_date <= :date)
             AND
-            (end_date IS NULL OR :today <= end_date)
+            (end_date IS NULL OR :date <= end_date)
             AND
-            (active_days & :dayBitmap) > 0
+            (active_days & :dayMask) > 0
     """)
-    fun getRoutinesForWeekday(dayBitmap: Int, today: LocalDate): Flow<List<RoutineEntity>>
+    fun getRoutinesForWeekday(dayMask: Int, date: LocalDate): Flow<List<RoutineSummaryDto>>
 
-    @Query("""SELECT * FROM routines 
+    @Query("""SELECT id, name, description, lastly_done_at FROM routines 
         WHERE 
             name LIKE '%' || :searchQuery || '%'
             AND
@@ -84,9 +46,9 @@ interface RoutinesDao {
             AND
             ((active_days & :selectedDays) != 0)
     """)
-    fun searchRoutines(searchQuery: String, filterActive: Int, today: LocalDate, selectedDays: Int): Flow<List<RoutineEntity>>
+    fun searchRoutines(searchQuery: String, filterActive: Int, today: LocalDate, selectedDays: Int): Flow<List<RoutineSummaryDto>>
 
-    @Query("""SELECT * FROM routines 
+    @Query("""SELECT id, name, description, lastly_done_at FROM routines 
         WHERE 
             name LIKE '%' || :searchQuery || '%'
             AND
@@ -95,9 +57,9 @@ interface RoutinesDao {
             ((active_days & :selectedDays) != 0)
         ORDER BY name ASC
     """)
-    fun searchRoutinesAsc(searchQuery: String, filterActive: Int, today: LocalDate, selectedDays: Int): Flow<List<RoutineEntity>>
+    fun searchRoutinesAsc(searchQuery: String, filterActive: Int, today: LocalDate, selectedDays: Int): Flow<List<RoutineSummaryDto>>
 
-    @Query("""SELECT * FROM routines 
+    @Query("""SELECT id, name, description, lastly_done_at FROM routines 
         WHERE 
             name LIKE '%' || :searchQuery || '%'
             AND
@@ -106,20 +68,16 @@ interface RoutinesDao {
             ((active_days & :selectedDays) != 0)
         ORDER BY name DESC
     """)
-    fun searchRoutinesDesc(searchQuery: String, filterActive: Int, today: LocalDate, selectedDays: Int): Flow<List<RoutineEntity>>
+    fun searchRoutinesDesc(searchQuery: String, filterActive: Int, today: LocalDate, selectedDays: Int): Flow<List<RoutineSummaryDto>>
 
     @Transaction
     @Query("""
-        SELECT r.*, rs.id_diagnosis AS id_diagnosis
+        SELECT r.*
         FROM routines r
         LEFT JOIN plant_routines pr ON pr.id_routine = r.id
-        LEFT JOIN routine_sources rs ON rs.id_plant_routine = pr.id
         WHERE r.id = :id
     """)
     fun getRoutineWithDetails(id: Long): Flow<RoutineWithDetails?>
-
-    @Query("SELECT * FROM routines WHERE id = :id")
-    fun getRoutine(id: Long): Flow<RoutineEntity?>
 
     @Query("""
     SELECT * FROM routines 

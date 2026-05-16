@@ -14,7 +14,7 @@ import com.example.plantee.ui.components.base.RoutinesListItem
 import java.time.LocalDate
 
 fun LazyListScope.todayRoutinesSection(
-    routines: List<Routine>,
+    routines: List<RoutineSummary>,
     onItemClick: (Long) -> Unit,
     onCheckboxClick: (Long) -> Unit,
     modifier: Modifier = Modifier

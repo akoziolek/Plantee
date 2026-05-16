@@ -4,8 +4,6 @@ import com.example.plantee.data.local.dao.PlantRoutinesDao
 import com.example.plantee.data.local.dao.RoutinesDao
 import com.example.plantee.data.local.entities.PlantRoutineEntity
 import com.example.plantee.data.mappers.toDomain
-import com.example.plantee.data.mappers.toDomainList
-import com.example.plantee.data.mappers.toDomainListSimple
 import com.example.plantee.data.mappers.toEntity
 import com.example.plantee.data.mappers.toSummaryDomainList
 import com.example.plantee.domain.model.Routine
@@ -14,6 +12,7 @@ import com.example.plantee.domain.repositories.IRoutinesRepository
 import com.example.plantee.ui.viewmodels.routine.FilterState
 import com.example.plantee.utils.RoutineStatus
 import com.example.plantee.utils.SortOrder
+import com.example.plantee.utils.toDayBitMask
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate
@@ -23,13 +22,8 @@ class RoutinesRepository @Inject constructor(
     private val routinesDao: RoutinesDao,
     private val plantRoutinesDao: PlantRoutinesDao
 ) : IRoutinesRepository {
-    override fun getAllRoutines(): Flow<List<Routine>> {
-        return routinesDao.getAllRoutinesWithDetails().map { it.toDomainList() }
-    }
-
-    override fun getTodayRoutines(): Flow<List<Routine>> {
-        val today = LocalDate.now()
-        return routinesDao.getRoutinesWithDate(today).map { it.toDomainList() }
+    override fun getRoutinesForDay(date: LocalDate): Flow<List<RoutineSummary>> {
+        return routinesDao.getRoutinesForWeekday(date.toDayBitMask(), date).map { it.toSummaryDomainList() }
     }
 
     override fun getSearchedRoutinesWithSortAndFilterSummary(
@@ -52,13 +46,6 @@ class RoutinesRepository @Inject constructor(
             }
         }
     }
-
-    override fun getRoutinesForWeekdaySummary(weekday: Int): Flow<List<Routine>> {
-        val dayBitmap = 1 shl (weekday - 1)
-        val today = LocalDate.now()
-        return routinesDao.getRoutinesForWeekday(dayBitmap, today).map { it.toDomainListSimple() }
-    }
-
 
     override fun getRoutine(id: Long): Flow<Routine?> {
         return routinesDao.getRoutineWithDetails(id).map { it.toDomain() }
@@ -87,7 +74,6 @@ class RoutinesRepository @Inject constructor(
     override suspend fun toggleRoutineDone(id: Long, date: LocalDate?) {
         routinesDao.updateLastlyDoneAt(id, date)
     }
-
 
     override suspend fun deleteRoutine(id: Long) {
         routinesDao.deleteById(id)

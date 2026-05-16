@@ -3,7 +3,6 @@ package com.example.plantee.data.repositories
 import com.example.plantee.data.local.dao.DiagnosisMediaDao
 import com.example.plantee.data.local.dao.MediaDao
 import com.example.plantee.data.mappers.toDomain
-import com.example.plantee.data.mappers.toDomainList
 import com.example.plantee.data.mappers.toEntity
 import com.example.plantee.domain.model.Media
 import com.example.plantee.domain.repositories.IMediaRepository
