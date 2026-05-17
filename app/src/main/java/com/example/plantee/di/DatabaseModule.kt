@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import com.example.plantee.data.local.AppDatabase
 import com.example.plantee.data.local.dao.DiagnosisDao
-import com.example.plantee.data.local.dao.DiagnosisMediaDao
 import com.example.plantee.data.local.dao.MediaDao
 import com.example.plantee.data.local.dao.PlantRoutinesDao
 import com.example.plantee.data.local.dao.PlantsDao
@@ -42,11 +41,6 @@ object DatabaseModule {
     @Provides
     fun provideDiagnosisDao(database: AppDatabase): DiagnosisDao {
         return database.diagnosisDao()
-    }
-
-    @Provides
-    fun provideDiagnosisMediaDao(database: AppDatabase): DiagnosisMediaDao {
-        return database.diagnosisMediaDao()
     }
 
     @Provides

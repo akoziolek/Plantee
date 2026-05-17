@@ -3,14 +3,13 @@ package com.example.plantee.data.repositories
 import androidx.room.withTransaction
 import com.example.plantee.data.local.AppDatabase
 import com.example.plantee.data.local.dao.DiagnosisDao
-import com.example.plantee.data.local.dao.DiagnosisMediaDao
+import com.example.plantee.data.local.dao.MediaDao
 import com.example.plantee.data.local.dao.PlantRoutinesDao
 import com.example.plantee.data.local.dao.RoutineSourcesDao
-import com.example.plantee.data.local.entities.DiagnosisMediaEntity
+import com.example.plantee.data.local.entities.MediaEntity
 import com.example.plantee.data.local.entities.PlantRoutineEntity
 import com.example.plantee.data.local.entities.RoutineSourceEntity
 import com.example.plantee.data.mappers.toDomain
-import com.example.plantee.data.mappers.toDomainList
 import com.example.plantee.data.mappers.toEntity
 import com.example.plantee.domain.model.Diagnosis
 import com.example.plantee.domain.repositories.IDiagnosesRepository
@@ -21,7 +20,7 @@ import javax.inject.Inject
 class DiagnosesRepository @Inject constructor(
     private val db: AppDatabase,
     private val diagnosisDao: DiagnosisDao,
-    private val diagnosisMediaDao: DiagnosisMediaDao,
+    private val mediaDao: MediaDao,
     private val plantRoutinesDao: PlantRoutinesDao,
     private val routineSourcesDao: RoutineSourcesDao
 ) : IDiagnosesRepository {
@@ -47,8 +46,13 @@ class DiagnosesRepository @Inject constructor(
             }
 
             if (diagnosis.media != null) {
-                diagnosisMediaDao.insert(
-                    DiagnosisMediaEntity(idDiagnosis = newId, idMedia = diagnosis.media.id)
+                mediaDao.insert(
+                    MediaEntity(
+                        id = diagnosis.media.id,
+                        filePath = diagnosis.media.filePath,
+                        fileName = diagnosis.media.fileName,
+                        createdAt = diagnosis.media.createdAt
+                    )
                 )
             }
         }
