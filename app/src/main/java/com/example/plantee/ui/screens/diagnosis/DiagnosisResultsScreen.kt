@@ -29,6 +29,7 @@ import com.example.plantee.ui.components.base.LabeledSwitch
 import com.example.plantee.ui.components.base.PlainPlantImage
 import com.example.plantee.ui.components.base.PrimaryButtonFullWidth
 import com.example.plantee.ui.components.base.RoutinesListItem
+import com.example.plantee.ui.nav.DiagnosisInput
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.viewmodels.diagnosis.DiagnosisResultsEvent
 import com.example.plantee.ui.viewmodels.diagnosis.DiagnosisResultsUiState
@@ -38,9 +39,9 @@ import com.example.plantee.ui.viewmodels.diagnosis.DiagnosisResultsViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiagnosisResultsScreen(
-    diagnosisId: Long,
+    input: DiagnosisInput,
     viewModel: DiagnosisResultsViewModel = hiltViewModel<DiagnosisResultsViewModel, DiagnosisResultsViewModel.Factory> { factory ->
-        factory.create(diagnosisId)
+        factory.create(input)
     },
     onNavigate: (DiagnosisResultsEvent) -> Unit
 ) {
@@ -112,8 +113,8 @@ fun DiagnosisResultsScreen(
 
                         LabeledSwitch(
                             label = stringResource(R.string.diagnosis_results_label_remove_from_routines),
-                            checked = false, // TODO logic for removal
-                            onCheckedChange = {}
+                            checked = currentState.removeFromAssociatedRoutines,
+                            onCheckedChange = { viewModel.onRemoveFromRoutinesClick() }
                         )
                     }
                 }
@@ -132,7 +133,7 @@ fun DiagnosisResultsScreen(
 fun DiagnosisResultsPreview() {
     PlanteeTheme {
         DiagnosisResultsScreen(
-            diagnosisId = 1L,
+            input = DiagnosisInput(1L, 0.7f, 0.3f, "Test", null),
             onNavigate = {}
         )
     }

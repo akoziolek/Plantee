@@ -13,10 +13,10 @@ import com.example.plantee.domain.repositories.IUserPreferencesRepository
 import com.example.plantee.domain.repositories.ISettingsRepository
 import com.example.plantee.utils.SortOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -58,8 +58,7 @@ class HomeViewModel @Inject constructor(
     private val routinesStatisticsRepository: IRoutinesStatisticsRepository,
     private val settingsRepository: ISettingsRepository
 ) : ViewModel() {
-    private val _currentDay = MutableStateFlow<LocalDate>(LocalDate.now())
-    val currentDay = _currentDay.asStateFlow()
+    private val _currentDay = MutableStateFlow<DayOfWeek>(LocalDate.now().dayOfWeek)
 
     val isDarkTheme = userPreferencesRepository.isDarkTheme
         .stateIn(
@@ -67,21 +66,6 @@ class HomeViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = null
         )
-
-    init {
-        viewModelScope.launch {
-            routinesStatisticsRepository.syncStreak()
-            while (isActive) {
-                val now = LocalDateTime.now()
-                val nextMidnight = now.toLocalDate()
-                    .plusDays(1)
-                    .atStartOfDay()
-                delay(Duration.between(now, nextMidnight).toMillis())
-                _currentDay.value = LocalDate.now()
-
-            }
-        }
-    }
 
     private val _events = Channel<HomeEvent>()
     val events = _events.receiveAsFlow()
@@ -123,12 +107,17 @@ class HomeViewModel @Inject constructor(
             streakProgress = progress,
             streakDays = currentStreak
         )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = HomeUiState()
+    )
+
+    fun syncStreak() {
+        viewModelScope.launch(Dispatchers.IO) {
+            routinesStatisticsRepository.syncStreak()
+        }
     }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = HomeUiState()
-        )
 
 
     fun toggleSortOrder() {
@@ -208,6 +197,13 @@ class HomeViewModel @Inject constructor(
     fun setNotificationsEnabled(enabled: Boolean) {
         viewModelScope.launch {
             settingsRepository.setNotificationsEnabled(enabled)
+        }
+    }
+
+    fun checkIfAllRoutinesAreDone(): Boolean {
+        val currentState = state.value
+        return currentState.todayRoutines.isNotEmpty() && currentState.todayRoutines.all {
+            it.lastlyDoneAt == LocalDate.now()
         }
     }
 }

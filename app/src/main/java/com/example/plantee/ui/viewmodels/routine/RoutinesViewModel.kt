@@ -171,4 +171,11 @@ class RoutinesViewModel @Inject constructor(
             routinesRepository.toggleRoutineDone(routineId, date)
         }
     }
+
+    fun checkIfAllRoutinesAreDone(): Boolean {
+        val currentState = state.value
+        return currentState.todayRoutines.isNotEmpty() && currentState.todayRoutines.all {
+            it.lastlyDoneAt == LocalDate.now()
+        }
+    }
 }

@@ -78,4 +78,15 @@ class RoutinesRepository @Inject constructor(
     override suspend fun deleteRoutine(id: Long) {
         routinesDao.deleteById(id)
     }
+
+    override suspend fun removePlantFromAllRoutines(plantId: Long) {
+        val routineIds = plantRoutinesDao.getRoutineIdsForPlant(plantId)
+        routineIds.forEach { routineId ->
+            plantRoutinesDao.deleteAssociation(routineId, plantId)
+            val count = plantRoutinesDao.getPlantCountForRoutine(routineId)
+            if (count == 0) {
+                routinesDao.deleteById(routineId)
+            }
+        }
+    }
 }

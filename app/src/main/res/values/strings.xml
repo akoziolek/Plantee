@@ -102,4 +102,6 @@
     <string name="main_notification_title">Remember about your plants!</string>
     <string name="main_notification_text">You have remaining routines for today</string>
     <string name="diagnosis_photo_name">The photo of plant for diagnosis</string>
+    <string name="your_routines_streak">Your routines streak</string>
+    <string name="label_streak_days">days</string>
 </resources>

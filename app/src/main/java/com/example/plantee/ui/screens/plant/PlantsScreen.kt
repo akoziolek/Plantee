@@ -61,7 +61,8 @@ fun PlantsScreen(
                 onSearch = { },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 8.dp),
             )
         },
         floatingActionButton = {

@@ -103,4 +103,6 @@
     <string name="main_notification_title">Pamiętaj o swoich roślinach!</string>
     <string name="main_notification_text">Masz niewykonane rutyny na dziś</string>
     <string name="diagnosis_photo_name">Zdjęcie rośliny do diagnozy</string>
+    <string name="your_routines_streak">Streak twoich rutyn</string>
+    <string name="label_streak_days">dni</string>
 </resources>

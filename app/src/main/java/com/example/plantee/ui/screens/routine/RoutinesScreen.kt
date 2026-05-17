@@ -74,7 +74,8 @@ fun RoutinesScreen(
                 onSearch = { },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 8.dp),
             )
         },
         floatingActionButton = {
@@ -88,7 +89,7 @@ fun RoutinesScreen(
                 CircularProgressIndicator()
             }
         } else {
-            CelebrationWrapper(isAllDone = state.todayRoutines.all { it.lastlyDoneAt == LocalDate.now() }) {
+            CelebrationWrapper(isAllDone = viewModel.checkIfAllRoutinesAreDone()) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize().padding(innerPadding),
                     contentPadding = PaddingValues(16.dp),
@@ -97,7 +98,6 @@ fun RoutinesScreen(
                     item {
                         SectionHeader(stringResource(R.string.routines_label_for_today))
                     }
-                    // TODO ewentualnie bardziej odsunac od gory
                     todayRoutinesSection(
                         routines = state.todayRoutines,
                         onCheckboxClick = { viewModel.onCheckboxClick(it) },

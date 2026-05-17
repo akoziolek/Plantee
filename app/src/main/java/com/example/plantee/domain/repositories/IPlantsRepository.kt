@@ -10,7 +10,7 @@ interface IPlantsRepository {
     fun getPlant(id: Long): Flow<Plant?>
     fun getSearchedPlantsSummaryWithSort(query: String, sort: SortOrder): Flow<List<PlantSummary>>
     suspend fun createPlantWithMedia(plant: Plant, media: Media?): Long
-    suspend fun updatePlantMedia(id: Long, media: Media?) // TODO check if used
+    suspend fun updatePlantMedia(id: Long, media: Media?)
     suspend fun updatePlant(plant: Plant)
     suspend fun togglePlantFavourite(id: Long)
     suspend fun deletePlant(id: Long)

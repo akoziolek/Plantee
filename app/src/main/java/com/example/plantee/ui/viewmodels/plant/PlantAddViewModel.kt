@@ -3,11 +3,9 @@ package com.example.plantee.ui.viewmodels.plant
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.plantee.domain.model.Media
 import com.example.plantee.domain.model.Plant
-import com.example.plantee.domain.repositories.IMediaRepository
-import com.example.plantee.domain.repositories.IPhotosRepository
 import com.example.plantee.domain.repositories.IPlantsRepository
+import com.example.plantee.domain.use_cases.SavePlantImageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,7 +35,7 @@ data class PlantAddUiState(
 @HiltViewModel
 class PlantAddViewModel @Inject constructor(
     private val plantsRepository: IPlantsRepository,
-    private val photosRepository: IPhotosRepository
+    private val savePlantImageUseCase: SavePlantImageUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(PlantAddUiState())
     val state: StateFlow<PlantAddUiState> = _state.asStateFlow()
@@ -86,24 +84,19 @@ class PlantAddViewModel @Inject constructor(
 
         viewModelScope.launch {
             val currentState = _state.value
-            val internalImageUri = currentState.imageUri?.let {
-                photosRepository.saveImage(it)
-            }
-
-            val media = internalImageUri?.let {
-                Media(
-                    filePath = it,
-                    createdAt = java.time.LocalDateTime.now()
-                )
+            
+            val media = currentState.imageUri?.let {
+                savePlantImageUseCase(it)
             }
 
             val plant = Plant(
                 name = currentState.name,
                 species = currentState.species,
                 description = currentState.description,
-                isFavourite = currentState.isFavourite
+                isFavourite = currentState.isFavourite,
+                media = media
             )
-            val id = plantsRepository.createPlantWithMedia(plant, media)
+            val id = plantsRepository.createPlant(plant)
             val event = if (currentState.createFirstEntry) PlantAddEvent.NavigateToDiagnose(plantId = id)
                 else PlantAddEvent.NavigateToDetails(plantId = id)
             _events.send(event)

@@ -1,6 +1,5 @@
 package com.example.plantee.ui.nav
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -12,8 +11,6 @@ import com.example.plantee.ui.screens.diagnosis.DiagnosePlantScreen
 import com.example.plantee.ui.screens.diagnosis.DiagnosisDetailsScreen
 import com.example.plantee.ui.screens.diagnosis.DiagnosisResultsScreen
 import com.example.plantee.ui.screens.home.HomeScreen
-import com.example.plantee.ui.viewmodels.plant.PlantAddEvent
-import com.example.plantee.ui.viewmodels.plant.PlantDetailsEvent
 import com.example.plantee.ui.screens.plant.PlantAddScreen
 import com.example.plantee.ui.screens.plant.PlantDetailsScreen
 import com.example.plantee.ui.screens.plant.PlantEditScreen
@@ -26,6 +23,8 @@ import com.example.plantee.ui.viewmodels.diagnosis.DiagnosePlantEvent
 import com.example.plantee.ui.viewmodels.diagnosis.DiagnosisDetailsEvent
 import com.example.plantee.ui.viewmodels.diagnosis.DiagnosisResultsEvent
 import com.example.plantee.ui.viewmodels.home.HomeEvent
+import com.example.plantee.ui.viewmodels.plant.PlantAddEvent
+import com.example.plantee.ui.viewmodels.plant.PlantDetailsEvent
 import com.example.plantee.ui.viewmodels.plant.PlantEditEvent
 import com.example.plantee.ui.viewmodels.plant.PlantsEvent
 import com.example.plantee.ui.viewmodels.routine.RoutineAddEvent
@@ -75,10 +74,11 @@ fun MainNavigation(
             entry<Screen.DiagnosePlant> { route ->
                 DiagnosePlantScreen(
                     plantId = route.plantId,
+                    initialInput = route.initialInput,
                     onNavigate = { event ->
                         when(event) {
                             is DiagnosePlantEvent.NavigateToDiagnosis -> {
-                                viewModel.replace(Screen.DiagnosisResults(diagnosisId = event.diagnosisId))
+                                viewModel.replace(Screen.DiagnosisResults(input = event.input))
                             }
                             DiagnosePlantEvent.NavigateBack -> {
                                 viewModel.back()
@@ -106,21 +106,19 @@ fun MainNavigation(
 
             entry<Screen.DiagnosisResults> { route ->
                 DiagnosisResultsScreen(
-                    diagnosisId = route.diagnosisId,
+                    input = route.input,
                     onNavigate = { event ->
                         when(event) {
                             is DiagnosisResultsEvent.NavigateToRoutine -> {
                                 viewModel.navigate(Screen.RoutineDetails(event.routineId))
                             }
-                            is DiagnosisResultsEvent.NavigateBack -> {
-                                viewModel.back()
-                            }
                             is DiagnosisResultsEvent.FinishDiagnosis -> {
                                 viewModel.replace(Screen.DiagnosisDetails(event.diagnosisId))
                             }
-
+                            is DiagnosisResultsEvent.ReturnToDiagnose -> {
+                                viewModel.replace(Screen.DiagnosePlant(plantId = event.input.plantId, initialInput = event.input))
+                            }
                         }
-
                     }
                 )
             }
