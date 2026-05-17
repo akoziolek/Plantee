@@ -16,17 +16,6 @@ fun MediaEntity?.toDomain(): Media? {
     )
 }
 
-fun List<MediaEntity>.toDomainList(): List<Media> {
-    return this.map { entity ->
-        Media(
-            id = entity.id,
-            fileName = entity.fileName,
-            filePath = entity.filePath,
-            createdAt = entity.createdAt
-        )
-    }
-}
-
 fun Media?.toEntity(): MediaEntity? {
     if (this == null) return null
 
