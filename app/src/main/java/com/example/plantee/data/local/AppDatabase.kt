@@ -20,6 +20,7 @@ import com.example.plantee.data.local.entities.PlantRoutineEntity
 import com.example.plantee.data.local.entities.RoutineEntity
 import com.example.plantee.data.local.entities.RoutineSourceEntity
 import com.example.plantee.data.local.entities.RoutinesStatisticsEntity
+import com.example.plantee.data.local.views.DiagnosisSummaryView
 
 @Database(
     entities = [
@@ -32,7 +33,10 @@ import com.example.plantee.data.local.entities.RoutinesStatisticsEntity
         RoutineSourceEntity::class,
         RoutinesStatisticsEntity::class
     ],
-    version = 7
+    views = [
+        DiagnosisSummaryView::class
+            ],
+    version = 10
 )
 @TypeConverters(DateConverter::class)
 abstract class AppDatabase : RoomDatabase() {
