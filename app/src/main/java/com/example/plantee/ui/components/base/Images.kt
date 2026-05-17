@@ -141,7 +141,7 @@ fun PlantImage(
 }
 
 @Composable
-fun PlainPlantImage(
+fun PlainImage(
     imagePath: String?,
     name: String?,
     modifier: Modifier = Modifier
@@ -208,7 +208,7 @@ fun SmallPlantImage(
 
 @Composable
 @Preview
-fun PlantImagePreview() {
+fun ImagePreview() {
     PlanteeTheme {
         PlantImage(
             imagePath = null,
@@ -216,7 +216,7 @@ fun PlantImagePreview() {
             specie = "Philodendron",
             state = "Good"
         )
-        PlainPlantImage(
+        PlainImage(
             imagePath = null,
             name = "My Plant"
         )

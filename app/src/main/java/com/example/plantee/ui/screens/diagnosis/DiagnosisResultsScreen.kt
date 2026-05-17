@@ -26,7 +26,7 @@ import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
 import com.example.plantee.ui.components.base.InfoSection
 import com.example.plantee.ui.components.base.LabeledSwitch
-import com.example.plantee.ui.components.base.PlainPlantImage
+import com.example.plantee.ui.components.base.PlainImage
 import com.example.plantee.ui.components.base.PrimaryButtonFullWidth
 import com.example.plantee.ui.components.base.RoutinesListItem
 import com.example.plantee.ui.nav.DiagnosisInput
@@ -79,9 +79,8 @@ fun DiagnosisResultsScreen(
                         .padding(innerPadding)
                         .verticalScroll(rememberScrollState())
                 ) {
-                    val imagePath = currentState.diagnosis.media?.filePath
-                    PlainPlantImage(
-                        imagePath = imagePath,
+                    PlainImage(
+                        imagePath = input.imageUri,
                         name = stringResource(R.string.diagnosis_photo_name)
                     )
 

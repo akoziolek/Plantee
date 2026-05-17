@@ -25,7 +25,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
 import com.example.plantee.ui.components.base.InfoSection
-import com.example.plantee.ui.components.base.PlainPlantImage
+import com.example.plantee.ui.components.base.PlainImage
 import com.example.plantee.ui.components.base.RoutinesListItem
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.viewmodels.diagnosis.DiagnosisDetailsEvent
@@ -68,9 +68,8 @@ fun DiagnosisDetailsScreen(
                         .padding(innerPadding)
                         .verticalScroll(rememberScrollState())
                 ) {
-                    val imagePath = currentState.diagnosis.media?.filePath
-                    PlainPlantImage(
-                        imagePath = imagePath,
+                    PlainImage(
+                        imagePath = currentState.diagnosis.media?.filePath,
                         name = stringResource(R.string.diagnosis_photo_name)
                     )
 

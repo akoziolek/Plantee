@@ -78,7 +78,8 @@ class DiagnosisResultsViewModel @AssistedInject constructor(
             routines = listOf(
                 RoutineSummary(1L, "Consistent Watering", "Water every 2 days"),
                 RoutineSummary(2L, "Sun Exposure", "Ensure 4 hours of indirect sunlight")
-            )
+            ),
+            media = input.imageUri?.let { Media(filePath = it, createdAt = LocalDateTime.now()) }
         )
         
         _state.value = DiagnosisResultsUiState.Success(
@@ -133,19 +134,15 @@ class DiagnosisResultsViewModel @AssistedInject constructor(
                 _selectedRoutines.value.contains(it.id) 
             }
             
-            var mediaList = emptyList<Media>()
+            var savedMedia: Media? = null
             input.imageUri?.let { uriString ->
                 val uri = uriString.toUri()
-                val savedMedia = savePlantImageUseCase(uri)
-                if (savedMedia != null) {
-                    mediaList = listOf(savedMedia)
-                }
+                savedMedia = savePlantImageUseCase(uri)
             }
 
-            // TODO change to single media
             val diagnosisToSave = currentState.diagnosis.copy(
                 routines = selectedRoutines,
-                //media = mediaList,
+                media = savedMedia,
             )
             
             val diagnosisId = diagnosesRepository.createDiagnosis(diagnosisToSave)
