@@ -97,4 +97,5 @@
     <string name="home_menu_change_mode_dark">Change to dark mode</string>
     <string name="home_menu_change_mode_light">Change to light mode</string>
     <string name="your_routines_streak">Your routines streak</string>
+    <string name="label_streak_days">days</string>
 </resources>
