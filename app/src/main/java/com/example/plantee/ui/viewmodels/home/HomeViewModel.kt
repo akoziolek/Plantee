@@ -12,10 +12,10 @@ import com.example.plantee.domain.repositories.IRoutinesStatisticsRepository
 import com.example.plantee.domain.repositories.IUserPreferencesRepository
 import com.example.plantee.utils.SortOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -52,8 +52,6 @@ class HomeViewModel @Inject constructor(
     private val routinesStatisticsRepository: IRoutinesStatisticsRepository
 ) : ViewModel() {
     private val _currentDay = MutableStateFlow<DayOfWeek>(LocalDate.now().dayOfWeek)
-    val currentDay = _currentDay.asStateFlow()
-
 
     val isDarkTheme = userPreferencesRepository.isDarkTheme
         .stateIn(
@@ -62,18 +60,6 @@ class HomeViewModel @Inject constructor(
             initialValue = null
         )
 
-    init {
-        viewModelScope.launch {
-            routinesStatisticsRepository.syncStreak()
-            while (true) {
-                val now = LocalDate.now().dayOfWeek
-                if (_currentDay.value != now) {
-                    _currentDay.value = now
-                }
-                delay(60_000)
-            }
-        }
-    }
     private val _events = Channel<HomeEvent>()
     val events = _events.receiveAsFlow()
 
@@ -111,12 +97,17 @@ class HomeViewModel @Inject constructor(
             streakProgress = progress,
             streakDays = currentStreak
         )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = HomeUiState()
+    )
+
+    fun syncStreak() {
+        viewModelScope.launch(Dispatchers.IO) {
+            routinesStatisticsRepository.syncStreak()
+        }
     }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = HomeUiState()
-        )
 
 
     fun toggleSortOrder() {
@@ -159,7 +150,6 @@ class HomeViewModel @Inject constructor(
 
     fun onPlantBookmarkClick(plantId: Long) {
         viewModelScope.launch {
-            val currentState = state.value
             plantsRepository.togglePlantFavourite(plantId)
         }
     }
