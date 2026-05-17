@@ -27,28 +27,6 @@ fun DiagnosisWithDetails?.toDomain(): Diagnosis? {
     )
 }
 
-fun List<DiagnosisWithDetails>.toDomainList(): List<Diagnosis> {
-    return this.map { entity ->
-        Diagnosis(
-            id = entity.diagnosis.id,
-            problemDescription = entity.diagnosis.problemDescription,
-            response = entity.diagnosis.response,
-            sunLevel = entity.diagnosis.sunLevel,
-            moistureLevel = entity.diagnosis.moistureLevel,
-            diagnosedAt = entity.diagnosis.diagnosedAt,
-            plantId = entity.diagnosis.idPlant,
-            media = entity.media.toDomain(),
-            routines = entity.plantRoutines.map {
-                RoutineSummary(
-                    id = it.id,
-                    name = it.name,
-                    description = it.description
-                )
-            }
-        )
-    }
-}
-
 fun Diagnosis?.toEntity(): DiagnosisEntity? {
     if (this == null) return null
 

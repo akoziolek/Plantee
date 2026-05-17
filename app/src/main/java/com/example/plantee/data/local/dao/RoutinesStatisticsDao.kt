@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import com.example.plantee.data.local.entities.RoutinesStatisticsEntity
-import com.example.plantee.domain.model.RoutineStatistic
 import kotlinx.coroutines.flow.Flow
 
 @Dao
