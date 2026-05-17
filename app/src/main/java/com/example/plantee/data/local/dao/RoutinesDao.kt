@@ -42,7 +42,10 @@ interface RoutinesDao {
         WHERE 
             name LIKE '%' || :searchQuery || '%'
             AND
-            (:filterActive = 0 OR (start_date <= :today AND :today <= end_date))
+            (:filterActive = 0 OR (
+                (start_date IS NULL OR start_date <= :today) 
+                AND (end_date IS NULL OR :today <= end_date))
+            )
             AND
             ((active_days & :selectedDays) != 0)
     """)
@@ -52,7 +55,9 @@ interface RoutinesDao {
         WHERE 
             name LIKE '%' || :searchQuery || '%'
             AND
-            (:filterActive = 0 OR (start_date <= :today AND :today <= end_date))
+            (:filterActive = 0 OR (
+                (start_date IS NULL OR start_date <= :today) 
+                AND (end_date IS NULL OR :today <= end_date)))
             AND
             ((active_days & :selectedDays) != 0)
         ORDER BY name ASC
@@ -63,7 +68,10 @@ interface RoutinesDao {
         WHERE 
             name LIKE '%' || :searchQuery || '%'
             AND
-            (:filterActive = 0 OR (start_date <= :today AND :today <= end_date))
+            (:filterActive = 0 OR (
+                (start_date IS NULL OR start_date <= :today) 
+                AND (end_date IS NULL OR :today <= end_date))
+            )
             AND
             ((active_days & :selectedDays) != 0)
         ORDER BY name DESC
