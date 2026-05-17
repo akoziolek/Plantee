@@ -41,7 +41,6 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -51,6 +50,7 @@ import com.example.plantee.ui.components.base.OverflowAction
 import com.example.plantee.ui.components.base.OverflowMenu
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.base.StreakWidget
+import com.example.plantee.ui.components.shared.CelebrationWrapper
 import com.example.plantee.ui.components.shared.FilterSectionHeader
 import com.example.plantee.ui.components.shared.LinkHeader
 import com.example.plantee.ui.components.shared.plantListItems
@@ -88,14 +88,15 @@ fun HomeScreen(
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                hasNotificationPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    ContextCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.POST_NOTIFICATIONS
-                    ) == PackageManager.PERMISSION_GRANTED
-                } else {
-                    true
-                }
+                hasNotificationPermission =
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        ContextCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.POST_NOTIFICATIONS
+                        ) == PackageManager.PERMISSION_GRANTED
+                    } else {
+                        true
+                    }
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -127,6 +128,7 @@ fun HomeScreen(
                         viewModel.setNotificationsEnabled(true)
                     }
                 }
+
                 else -> onNavigate(event)
             }
         }
@@ -137,7 +139,11 @@ fun HomeScreen(
             MainTopBar(
                 title = stringResource(R.string.home_title),
                 actions = {
-                    IconButton(onClick = { viewModel.onNotificationIconClick(hasNotificationPermission) }) {
+                    IconButton(onClick = {
+                        viewModel.onNotificationIconClick(
+                            hasNotificationPermission
+                        )
+                    }) {
                         val icon = if (state.isNotificationsEnabled && hasNotificationPermission) {
                             Icons.Default.NotificationsActive
                         } else {
@@ -173,7 +179,9 @@ fun HomeScreen(
             )
         },
         floatingActionButton = {
-            PrimaryFloatingButton(text = stringResource(R.string.home_btn_add), onClick = { viewModel.onAddPlantClick() })
+            PrimaryFloatingButton(
+                text = stringResource(R.string.home_btn_add),
+                onClick = { viewModel.onAddPlantClick() })
         }
     ) { innerPadding ->
         if (state.isLoading) {

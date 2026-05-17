@@ -2,6 +2,7 @@ package com.example.plantee.data.repositories
 
 import com.example.plantee.data.local.dao.RoutinesDao
 import com.example.plantee.data.local.dao.RoutinesStatisticsDao
+import com.example.plantee.data.local.dto.RoutineSummaryDto
 import com.example.plantee.data.local.entities.RoutinesStatisticsEntity
 import com.example.plantee.data.mappers.toDomain
 import com.example.plantee.data.mappers.toEntity
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate
+import com.example.plantee.utils.toDayBitMask
 
 class RoutinesStatisticsRepository @Inject constructor(
     private val routinesStatisticsDao: RoutinesStatisticsDao,
@@ -46,10 +48,10 @@ class RoutinesStatisticsRepository @Inject constructor(
         var currentStreak = stats.currentStreak
 
         while (!currentCheckDate.isAfter(yesterday)) {
-            val requiredRoutines = routinesDao.getRoutinesRequiredForDate(
-                currentCheckDate,
-                currentCheckDate.toDayMask()
-            ).first().toDomainList()
+            val requiredRoutines = routinesDao.getRoutinesForWeekday(
+                dayMask =  currentCheckDate.toDayBitMask(),
+                date = currentCheckDate,
+            ).first().toSummaryDomainList()
 
             val allDone = requiredRoutines.areAllCompletedOn(currentCheckDate)
             if (allDone) {
@@ -70,8 +72,10 @@ class RoutinesStatisticsRepository @Inject constructor(
             val today = LocalDate.now()
             val stat = statEntity?.toDomain() ?: RoutineStatistic(currentStreak = 0, lastStreakUpdate = today.minusDays(1))
 
-            routinesDao.getRoutinesRequiredForDate(today, today.toDayMask()).map { todayEntities ->
-                val todayRoutines = todayEntities.toDomainList()
+            routinesDao.getRoutinesForWeekday(
+                dayMask = today.toDayBitMask(),
+                date = today ).map { todayEntities ->
+                val todayRoutines = todayEntities.toSummaryDomainList()
                 val isDoneToday = todayRoutines.areAllCompletedOn(today)
 
                 if (isDoneToday) stat.currentStreak + 1 else stat.currentStreak
@@ -84,7 +88,7 @@ class RoutinesStatisticsRepository @Inject constructor(
         routinesStatisticsDao.upsertRoutineStatistic(entity)
     }
 
-    private fun List<Routine>.areAllCompletedOn(date: LocalDate): Boolean {
+    private fun List<RoutineSummary>.areAllCompletedOn(date: LocalDate): Boolean {
         return this.isNotEmpty() && this.all { it.lastlyDoneAt == date }
     }
 }

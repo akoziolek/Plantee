@@ -60,8 +60,4 @@ class DiagnosesRepository @Inject constructor(
         return newId
     }
 
-
-    override suspend fun deleteDiagnosis(id: Long) {
-        diagnosisDao.deleteById(id)
-    }
 }

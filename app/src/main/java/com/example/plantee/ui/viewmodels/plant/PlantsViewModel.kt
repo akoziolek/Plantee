@@ -94,7 +94,6 @@ class PlantsViewModel @Inject constructor(
 
     fun onPlantBookmarkClick(plantId: Long) {
         viewModelScope.launch {
-            val currentState = state.value
             plantsRepository.togglePlantFavourite(plantId)
         }
     }

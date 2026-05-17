@@ -9,8 +9,8 @@ import com.example.plantee.domain.model.RoutineSummary
 import com.example.plantee.domain.repositories.IPlantsRepository
 import com.example.plantee.domain.repositories.IRoutinesRepository
 import com.example.plantee.domain.repositories.IRoutinesStatisticsRepository
-import com.example.plantee.domain.repositories.IUserPreferencesRepository
 import com.example.plantee.domain.repositories.ISettingsRepository
+import com.example.plantee.domain.repositories.IUserPreferencesRepository
 import com.example.plantee.utils.SortOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -26,12 +26,10 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.LocalDateTime
 import javax.inject.Inject
-import java.time.Duration
 
 sealed class HomeEvent {
     data class NavigateToPlant(val plantId: Long) : HomeEvent()
@@ -58,7 +56,7 @@ class HomeViewModel @Inject constructor(
     private val routinesStatisticsRepository: IRoutinesStatisticsRepository,
     private val settingsRepository: ISettingsRepository
 ) : ViewModel() {
-    private val _currentDay = MutableStateFlow<DayOfWeek>(LocalDate.now().dayOfWeek)
+    private val _currentDay = MutableStateFlow<LocalDate>(LocalDate.now())
 
     val isDarkTheme = userPreferencesRepository.isDarkTheme
         .stateIn(

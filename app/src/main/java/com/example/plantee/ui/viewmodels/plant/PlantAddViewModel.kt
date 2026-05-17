@@ -84,7 +84,6 @@ class PlantAddViewModel @Inject constructor(
 
         viewModelScope.launch {
             val currentState = _state.value
-            
             val media = currentState.imageUri?.let {
                 savePlantImageUseCase(it)
             }

@@ -142,9 +142,10 @@ class DiagnosisResultsViewModel @AssistedInject constructor(
                 }
             }
 
+            // TODO change to single media
             val diagnosisToSave = currentState.diagnosis.copy(
                 routines = selectedRoutines,
-                listOfMedia = mediaList
+                //media = mediaList,
             )
             
             val diagnosisId = diagnosesRepository.createDiagnosis(diagnosisToSave)
