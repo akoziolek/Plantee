@@ -12,16 +12,6 @@ import com.example.plantee.data.local.entities.RoutineSourceEntity
 data class DiagnosisWithDetails (
     @Embedded val diagnosis: DiagnosisEntity,
 
-//    @Relation(
-//        parentColumn = "id",
-//        entityColumn = "id",
-//        associateBy = Junction(
-//            value = DiagnosisMediaEntity::class,
-//            parentColumn = "id_diagnosis",
-//            entityColumn = "id_media"
-//        )
-//    )
-//    val listOfMedia: List<MediaEntity>,
     @Relation(
         parentColumn = "id_media",
         entityColumn = "id"

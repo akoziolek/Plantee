@@ -3,6 +3,7 @@ package com.example.plantee.data.local.relations
 import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
+import com.example.plantee.data.local.dto.RoutineSummaryDto
 import com.example.plantee.data.local.entities.DiagnosisEntity
 import com.example.plantee.data.local.entities.MediaEntity
 import com.example.plantee.data.local.entities.PlantEntity

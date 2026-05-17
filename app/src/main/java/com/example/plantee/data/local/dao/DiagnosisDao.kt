@@ -19,18 +19,8 @@ interface DiagnosisDao {
     @Update
     suspend fun update(diagnosis: DiagnosisEntity)
 
-    @Delete
-    suspend fun delete(diagnosis: DiagnosisEntity)
-
     @Query("DELETE FROM diagnosis WHERE id = :id")
     suspend fun deleteById(id: Long)
-
-    @Query("SELECT * FROM diagnosis WHERE id_plant = :plantId ORDER BY id DESC")
-    fun getDiagnosesForPlant(plantId: Long): Flow<List<DiagnosisEntity>>
-
-    @Transaction
-    @Query("SELECT * FROM diagnosis WHERE id_plant = :plantId ORDER BY id DESC")
-    fun getDiagnosesWithDetailsForPlant(plantId: Long): Flow<List<DiagnosisWithDetails>>
 
     @Transaction
     @Query("SELECT * FROM diagnosis WHERE id = :id")

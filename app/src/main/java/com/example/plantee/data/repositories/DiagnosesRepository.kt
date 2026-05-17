@@ -25,10 +25,6 @@ class DiagnosesRepository @Inject constructor(
     private val plantRoutinesDao: PlantRoutinesDao,
     private val routineSourcesDao: RoutineSourcesDao
 ) : IDiagnosesRepository {
-    override fun getDiagnoses(plantId: Long): Flow<List<Diagnosis>> {
-        return diagnosisDao.getDiagnosesWithDetailsForPlant(plantId).map { it.toDomainList() }
-    }
-
     override fun getDiagnosis(id: Long): Flow<Diagnosis?> {
         return diagnosisDao.getDiagnosisWithDetails(id).map { it.toDomain() }
     }
