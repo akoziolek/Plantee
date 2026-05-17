@@ -15,9 +15,16 @@ import java.time.LocalDateTime
             parentColumns = ["id"],
             childColumns = ["id_plant"],
             onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = MediaEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["id_media"],
+            onDelete = ForeignKey.RESTRICT
         )
     ],
     indices = [
+        Index(value = ["id_media"]),
         Index(value = ["id_plant"])
     ]
 )
@@ -28,5 +35,6 @@ data class DiagnosisEntity(
     @ColumnInfo(name = "sun_level") val sunLevel: Int,
     @ColumnInfo(name = "moisture_level") val moistureLevel: Int,
     @ColumnInfo(name = "diagnosed_at") val diagnosedAt: LocalDateTime,
-    @ColumnInfo(name = "id_plant") val idPlant: Long
+    @ColumnInfo(name = "id_plant") val idPlant: Long,
+    @ColumnInfo(name = "id_media") val idMedia: Long? = null
 )

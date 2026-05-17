@@ -16,7 +16,7 @@ fun DiagnosisWithDetails?.toDomain(): Diagnosis? {
         moistureLevel = diagnosis.moistureLevel,
         diagnosedAt = diagnosis.diagnosedAt,
         plantId = diagnosis.idPlant,
-        listOfMedia = listOfMedia.toDomainList(),
+        media = media.toDomain(),
         routines = plantRoutines.map {
             RoutineSummary(
                 id = it.id,
@@ -37,7 +37,7 @@ fun List<DiagnosisWithDetails>.toDomainList(): List<Diagnosis> {
             moistureLevel = entity.diagnosis.moistureLevel,
             diagnosedAt = entity.diagnosis.diagnosedAt,
             plantId = entity.diagnosis.idPlant,
-            listOfMedia = entity.listOfMedia.toDomainList(),
+            media = entity.media.toDomain(),
             routines = entity.plantRoutines.map {
                 RoutineSummary(
                     id = it.id,

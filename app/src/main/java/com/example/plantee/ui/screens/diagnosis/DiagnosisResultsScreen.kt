@@ -81,8 +81,7 @@ fun DiagnosisResultsScreen(
                         .padding(innerPadding)
                         .verticalScroll(rememberScrollState())
                 ) {
-                    // TODO change to currentState.diagnosis.media.filePath
-                    val imagePath = if (currentState.diagnosis.listOfMedia.isNotEmpty()) currentState.diagnosis.listOfMedia[0].filePath else null
+                    val imagePath = currentState.diagnosis.media?.filePath
                     PlainPlantImage(
                         imagePath = imagePath,
                         name = null // TODO change to sth

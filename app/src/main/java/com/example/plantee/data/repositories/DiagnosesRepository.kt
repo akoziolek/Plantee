@@ -50,10 +50,10 @@ class DiagnosesRepository @Inject constructor(
                 })
             }
 
-            if (diagnosis.listOfMedia.isNotEmpty()) {
-                diagnosisMediaDao.insertAll(diagnosis.listOfMedia.map { media ->
-                    DiagnosisMediaEntity(idDiagnosis = newId, idMedia = media.id)
-                })
+            if (diagnosis.media != null) {
+                diagnosisMediaDao.insert(
+                    DiagnosisMediaEntity(idDiagnosis = newId, idMedia = diagnosis.media.id)
+                )
             }
         }
 
