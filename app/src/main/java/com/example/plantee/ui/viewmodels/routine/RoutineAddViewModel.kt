@@ -157,5 +157,3 @@ class RoutineAddViewModel @Inject constructor(
         _searchQuery.value = ""
     }
 }
-
-// FIXME no start and end date used

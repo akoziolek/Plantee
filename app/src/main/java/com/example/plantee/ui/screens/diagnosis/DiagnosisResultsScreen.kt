@@ -81,7 +81,7 @@ fun DiagnosisResultsScreen(
                     val imagePath = currentState.diagnosis.media?.filePath
                     PlainPlantImage(
                         imagePath = imagePath,
-                        name = null // TODO change to sth
+                        name = stringResource(R.string.diagnosis_photo_name)
                     )
 
                     Column(

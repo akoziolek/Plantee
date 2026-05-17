@@ -26,9 +26,7 @@ object NotificationScheduler {
             set(Calendar.MILLISECOND, 0)
 
             while (timeInMillis <= currentDate.timeInMillis + 10_000) {
-                // 1-minute interval for debugging purposes
-                // TODO change to add(Calendar.DAY_OF_YEAR, 1)
-                add(Calendar.MINUTE, 1)
+                add(Calendar.DAY_OF_YEAR, 1)
             }
         }
 

@@ -241,7 +241,6 @@ fun FilterBar(
         }
 
         IconButton(
-            // TODO filter by days of the week (drop down list)
             onClick = onViewModeClick,
         ) {
             Icon(

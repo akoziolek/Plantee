@@ -101,4 +101,5 @@
     <string name="routine_weekdays_filter_all">Select all</string>
     <string name="main_notification_title">Remember about your plants!</string>
     <string name="main_notification_text">You have remaining routines for today</string>
+    <string name="diagnosis_photo_name">The photo of plant for diagnosis</string>
 </resources>
