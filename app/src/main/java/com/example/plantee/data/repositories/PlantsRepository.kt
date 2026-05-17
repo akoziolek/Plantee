@@ -6,7 +6,7 @@ import com.example.plantee.data.local.dao.MediaDao
 import com.example.plantee.data.local.dao.PlantsDao
 import com.example.plantee.data.mappers.toDomain
 import com.example.plantee.data.mappers.toEntity
-import com.example.plantee.data.mappers.toSummaryDomainListWithMedia
+import com.example.plantee.data.mappers.toSummaryDomainList
 import com.example.plantee.domain.model.Media
 import com.example.plantee.domain.model.Plant
 import com.example.plantee.domain.model.PlantSummary
@@ -32,13 +32,13 @@ class PlantsRepository @Inject constructor(
     ): Flow<List<PlantSummary>> {
         return when (sort) {
             SortOrder.NONE -> {
-                plantsDao.searchPlants(query).map { it.toSummaryDomainListWithMedia() }
+                plantsDao.searchPlants(query).map { it.toSummaryDomainList() }
             }
             SortOrder.ASCENDING -> {
-                plantsDao.searchPlantsAsc(query).map { it.toSummaryDomainListWithMedia() }
+                plantsDao.searchPlantsAsc(query).map { it.toSummaryDomainList() }
             }
             else -> {
-                plantsDao.searchPlantsDesc(query).map { it.toSummaryDomainListWithMedia() }
+                plantsDao.searchPlantsDesc(query).map { it.toSummaryDomainList() }
             }
         }
     }

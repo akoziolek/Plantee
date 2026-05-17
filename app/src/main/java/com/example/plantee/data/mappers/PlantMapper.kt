@@ -36,19 +36,7 @@ fun PlantWithDetails?.toDomain(): Plant? {
     )
 }
 
-fun List<PlantEntity>.toSummaryDomainList(): List<PlantSummary> {
-    return this.map { entity ->
-        PlantSummary(
-            id = entity.id,
-            name = entity.name,
-            description = entity.description,
-            isFavourite = entity.isFavourite,
-            // TODO loadMedia !!!
-        )
-    }
-}
-
-fun List<PlantSummaryDto>.toSummaryDomainListWithMedia(): List<PlantSummary> {
+fun List<PlantSummaryDto>.toSummaryDomainList(): List<PlantSummary> {
     return this.map { dto ->
         PlantSummary(
             id = dto.id,

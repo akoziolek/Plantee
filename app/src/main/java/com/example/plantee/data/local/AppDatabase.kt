@@ -19,6 +19,7 @@ import com.example.plantee.data.local.entities.RoutineEntity
 import com.example.plantee.data.local.entities.RoutineSourceEntity
 import com.example.plantee.data.local.entities.RoutinesStatisticsEntity
 import com.example.plantee.data.local.views.DiagnosisSummaryView
+import com.example.plantee.data.local.views.PlantSummaryView
 
 @Database(
     entities = [
@@ -31,9 +32,10 @@ import com.example.plantee.data.local.views.DiagnosisSummaryView
         RoutinesStatisticsEntity::class
     ],
     views = [
-        DiagnosisSummaryView::class
+        DiagnosisSummaryView::class,
+        PlantSummaryView::class
     ],
-    version = 11
+    version = 12
 )
 @TypeConverters(DateConverter::class)
 abstract class AppDatabase : RoomDatabase() {

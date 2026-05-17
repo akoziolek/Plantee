@@ -27,4 +27,5 @@ data class DiagnosisWithDetails (
         )
     )
     val plantRoutines: List<PlantEntity>
+    // FIXME shouldn't routines be here???
 )
