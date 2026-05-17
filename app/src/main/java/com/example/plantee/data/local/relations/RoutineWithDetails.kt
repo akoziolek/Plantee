@@ -20,4 +20,5 @@ data class RoutineWithDetails(
         )
     )
     val plants: List<PlantEntity>
+    // TODO list of plant summary with photos
 )

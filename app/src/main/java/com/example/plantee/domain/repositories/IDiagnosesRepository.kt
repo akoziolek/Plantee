@@ -7,8 +7,4 @@ interface IDiagnosesRepository {
     fun getDiagnosis(id: Long): Flow<Diagnosis?>
 
     suspend fun createDiagnosis(diagnosis: Diagnosis): Long
-
-    suspend fun updateDiagnosis(diagnosis: Diagnosis)
-
-    suspend fun deleteDiagnosis(id: Long)
 }
