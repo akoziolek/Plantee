@@ -30,7 +30,8 @@ class PhotosRepository @Inject constructor(
                     FileOutputStream(file).use { outputStream ->
                         inputStream.copyTo(outputStream)
                     }
-                }
+                } ?: return@withContext null
+
                 file.absolutePath
             } catch (e: Exception) {
                 null
