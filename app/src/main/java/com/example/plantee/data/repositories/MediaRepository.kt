@@ -8,8 +8,7 @@ import com.example.plantee.domain.repositories.IMediaRepository
 import javax.inject.Inject
 
 class MediaRepository @Inject constructor(
-    private val mediaDao: MediaDao,
-    private val diagnosisDao: DiagnosisDao
+    private val mediaDao: MediaDao
 ) : IMediaRepository {
 
     override suspend fun createMedia(media: Media): Long {
