@@ -1,11 +1,9 @@
 package com.example.plantee.utils
 
-import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.Date
 import java.util.Locale
 
 fun LocalDate.toMillis(): Long {
@@ -16,11 +14,6 @@ fun Long.toLocalDate(): LocalDate {
     return Instant.ofEpochMilli(this)
         .atZone(ZoneId.systemDefault())
         .toLocalDate()
-}
-
-fun convertMillisToDateString(millis: Long): String {
-    val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    return formatter.format(Date(millis))
 }
 
 fun convertLocalDateToDateString(date: LocalDate): String {
