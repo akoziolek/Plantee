@@ -20,20 +20,20 @@
         @ApplicationContext private val context: Context
     ) : IUserPreferencesRepository {
 
-        private object PreferencesKeys {
-            val IS_DARK_THEME = booleanPreferencesKey("is_dark_theme")
+        companion object PreferencesKeys {
+            private val IS_DARK_THEME = booleanPreferencesKey("is_dark_theme")
         }
 
         override val isDarkTheme: Flow<Boolean?> = context.dataStore.data.map { preferences ->
-            preferences[PreferencesKeys.IS_DARK_THEME]
+            preferences[IS_DARK_THEME]
         }
 
         override suspend fun setDarkTheme(isDark: Boolean?) {
             context.dataStore.edit { preferences ->
                 if (isDark == null) {
-                    preferences.remove(PreferencesKeys.IS_DARK_THEME)
+                    preferences.remove(IS_DARK_THEME)
                 } else {
-                    preferences[PreferencesKeys.IS_DARK_THEME] = isDark
+                    preferences[IS_DARK_THEME] = isDark
                 }
             }
         }
