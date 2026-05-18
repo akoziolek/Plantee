@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface IPlantsRepository {
     fun getPlant(id: Long): Flow<Plant?>
+    suspend fun getPlantOnce(id: Long): Plant?
     fun getSearchedPlantsSummaryWithSort(query: String, sort: SortOrder): Flow<List<PlantSummary>>
     suspend fun createPlant(plant: Plant): Long
     suspend fun updatePlantMedia(id: Long, media: Media?)

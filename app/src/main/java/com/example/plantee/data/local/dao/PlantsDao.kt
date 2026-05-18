@@ -56,4 +56,8 @@ interface PlantsDao {
     @Transaction
     @Query("SELECT * FROM plants WHERE id = :id")
     fun getFullPlant(id: Long): Flow<PlantWithDetails?>
+
+    @Transaction
+    @Query("SELECT * FROM plants WHERE id = :id")
+    suspend fun getFullPlantOnce(id: Long): PlantWithDetails?
 }

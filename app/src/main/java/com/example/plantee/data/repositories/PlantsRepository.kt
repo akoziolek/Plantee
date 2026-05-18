@@ -26,6 +26,10 @@ class PlantsRepository @Inject constructor(
         return plantsDao.getFullPlant(id).map { it.toDomain() }
     }
 
+    override suspend fun getPlantOnce(id: Long): Plant? {
+        return plantsDao.getFullPlantOnce(id).toDomain()
+    }
+
     override fun getSearchedPlantsSummaryWithSort(
         query: String,
         sort: SortOrder
@@ -57,8 +61,7 @@ class PlantsRepository @Inject constructor(
 
     override suspend fun updatePlantMedia(id: Long, media: Media?) {
         database.withTransaction {
-            // FIXME firstOrNull??
-            val plant = getPlant(id).firstOrNull() ?: return@withTransaction
+            val plant = getPlantOnce(id) ?: return@withTransaction
 
             val oldMediaId = plant.media?.id
             if (oldMediaId != null) {
