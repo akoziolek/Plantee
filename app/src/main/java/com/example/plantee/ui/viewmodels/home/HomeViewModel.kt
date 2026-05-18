@@ -58,6 +58,7 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
     private val _currentDay = MutableStateFlow<LocalDate>(LocalDate.now())
 
+    // TODO - proper display when null value? (system theme)
     val isDarkTheme = userPreferencesRepository.isDarkTheme
         .stateIn(
             scope = viewModelScope,
@@ -163,6 +164,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun toggleTheme(currentlyDark: Boolean) {
+        // TODO enable system theme?
         viewModelScope.launch {
             userPreferencesRepository.setDarkTheme(!currentlyDark)
         }

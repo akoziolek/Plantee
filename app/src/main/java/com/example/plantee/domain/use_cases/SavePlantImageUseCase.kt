@@ -11,6 +11,7 @@ class SavePlantImageUseCase @Inject constructor(
     private val photosRepository: IPhotosRepository,
     private val mediaRepository: IMediaRepository
 ) {
+    // TODO - transaction?
     suspend operator fun invoke(newImageUri: Uri, oldMedia: Media? = null): Media? {
         val newFilePath = photosRepository.saveImage(newImageUri) ?: return null
         val media = Media(

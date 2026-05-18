@@ -21,6 +21,7 @@ object DayBitmaskHelper {
     fun selectedDaysCount(mask: Int): Int = Integer.bitCount(mask)
 }
 
+// FIXME move to DayBitmaskHelper
 fun LocalDate.toDayBitMask(): Int {
     return 1 shl (this.dayOfWeek.value - 1)
 }

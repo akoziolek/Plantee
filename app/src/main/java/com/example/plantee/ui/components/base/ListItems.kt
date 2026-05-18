@@ -156,20 +156,6 @@ fun PlantListItem(
                 imagePath = imagePath,
                 name = title
             )
-//            Box(
-//                modifier = Modifier
-//                    .size(100.dp)
-//                    .background(MaterialTheme.colorScheme.outlineVariant),
-//                contentAlignment = Alignment.Center
-//            ) {
-//                Icon(
-//                    imageVector = Icons.Default.Image,
-//                    contentDescription = null,
-//                    modifier = Modifier.size(40.dp),
-//                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-//                )
-//            }
-
             Column(
                 modifier = Modifier
                     .weight(1f)

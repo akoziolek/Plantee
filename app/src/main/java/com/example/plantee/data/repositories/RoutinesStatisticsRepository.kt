@@ -2,7 +2,6 @@ package com.example.plantee.data.repositories
 
 import com.example.plantee.data.local.dao.RoutinesDao
 import com.example.plantee.data.local.dao.RoutinesStatisticsDao
-import com.example.plantee.data.local.dto.RoutineSummaryDto
 import com.example.plantee.data.local.entities.RoutinesStatisticsEntity
 import com.example.plantee.data.mappers.toDomain
 import com.example.plantee.data.mappers.toEntity
@@ -19,7 +18,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate
-import com.example.plantee.utils.toDayBitMask
 
 class RoutinesStatisticsRepository @Inject constructor(
     private val routinesStatisticsDao: RoutinesStatisticsDao,
@@ -68,13 +66,12 @@ class RoutinesStatisticsRepository @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getEffectiveStreak(): Flow<Int> {
+        // TODO - remove the flatMapLatest and distinctUntilChanged, use combine?
         return routinesStatisticsDao.getRoutinesStatisticsFlow().flatMapLatest { statEntity ->
             val today = LocalDate.now()
             val stat = statEntity?.toDomain() ?: RoutineStatistic(currentStreak = 0, lastStreakUpdate = today.minusDays(1))
 
-            routinesDao.getRoutinesForWeekday(
-                dayMask = today.toDayBitMask(),
-                date = today ).map { todayEntities ->
+            routinesDao.getRoutinesForWeekday(dayMask = today.toDayBitMask(), date = today ).map { todayEntities ->
                 val todayRoutines = todayEntities.toSummaryDomainList()
                 val isDoneToday = todayRoutines.areAllCompletedOn(today)
 

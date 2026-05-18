@@ -36,6 +36,7 @@ fun LabeledSwitch(
         modifier = modifier
             .fillMaxWidth()
             .heightIn(min = 56.dp)
+            // TODO move to the switch component so that the whole row isn't clickable
             .toggleable(
                 value = checked,
                 enabled = enabled,
@@ -55,7 +56,7 @@ fun LabeledSwitch(
 
         Switch(
             checked = checked,
-            onCheckedChange = null,
+            onCheckedChange = onCheckedChange,
             thumbContent = if (checked) {
                 {
                     Icon(

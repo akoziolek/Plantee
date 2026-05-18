@@ -59,6 +59,7 @@ class PlantEditViewModel @AssistedInject constructor(
         loadPlant()
     }
 
+    // TODO - move to _state init?
     private fun loadPlant() {
         viewModelScope.launch {
             plantsRepository.getPlant(plantId).collect { plant ->
@@ -121,6 +122,8 @@ class PlantEditViewModel @AssistedInject constructor(
                     oldMedia = currentState.media
                 )
             }
+
+            // TODO what if app crashes here, then Plant has a connection to media but it doesnt exist
 
             val plant = Plant(
                 id = currentState.id,
