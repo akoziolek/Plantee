@@ -34,6 +34,7 @@ data class PlantEditUiState(
     val description: String = "",
     val isFavourite: Boolean = false,
     val isLoading: Boolean = true,
+    val isSaving: Boolean = false,
     val imageUri: Uri? = null,
     val media: Media? = null
 )
@@ -62,6 +63,7 @@ class PlantEditViewModel @AssistedInject constructor(
 
     // TODO - move to _state init?
     private fun loadPlant() {
+        if(_state.value.isSaving) return
         viewModelScope.launch {
             val plant = plantsRepository.getPlant(plantId).first()
             plant?.let { p ->
@@ -115,6 +117,8 @@ class PlantEditViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val currentState = _state.value
             var currentMedia = currentState.media
+
+            _state.update { it.copy(isSaving = true) }
 
             if (currentState.imageUri != null) {
                 currentMedia = savePlantImageUseCase(

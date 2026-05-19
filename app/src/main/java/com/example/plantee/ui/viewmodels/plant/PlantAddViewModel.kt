@@ -55,10 +55,6 @@ class PlantAddViewModel @Inject constructor(
         _state.update { it.copy(description = newDescription) }
     }
 
-    fun onFavouriteChange(newFavourite: Boolean) {
-        _state.update { it.copy(isFavourite = newFavourite) }
-    }
-
     fun onUriChange(newUri: Uri?) {
         _state.update { it.copy(imageUri = newUri) }
     }
@@ -99,11 +95,6 @@ class PlantAddViewModel @Inject constructor(
             val event = if (currentState.createFirstEntry) PlantAddEvent.NavigateToDiagnose(plantId = id)
                 else PlantAddEvent.NavigateToDetails(plantId = id)
             _events.send(event)
-            resetState()
         }
-    }
-
-    fun resetState() {
-        _state.value = PlantAddUiState()
     }
 }
