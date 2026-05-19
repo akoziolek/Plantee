@@ -32,8 +32,8 @@ data class DiagnosisEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0L,
     @ColumnInfo(name = "problem_description") val problemDescription: String? = null,
     val response: String? = null,
-    @ColumnInfo(name = "sun_level") val sunLevel: Int,
-    @ColumnInfo(name = "moisture_level") val moistureLevel: Int,
+    @ColumnInfo(name = "sun_level") val sunLevel: Float,
+    @ColumnInfo(name = "moisture_level") val moistureLevel: Float,
     @ColumnInfo(name = "diagnosed_at") val diagnosedAt: LocalDateTime,
     @ColumnInfo(name = "id_plant") val idPlant: Long,
     @ColumnInfo(name = "id_media") val idMedia: Long? = null
