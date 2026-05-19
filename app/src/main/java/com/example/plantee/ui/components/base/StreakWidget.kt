@@ -59,8 +59,7 @@ fun StreakWidget(
         Column(
             modifier = Modifier
                 .weight(1f)
-                .fillMaxHeight()
-                .padding(vertical = 16.dp),
+                .fillMaxHeight(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.Start
         ) {
@@ -68,8 +67,7 @@ fun StreakWidget(
                 text = "$streakDays " + stringResource(R.string.label_streak_days),
                 style = MaterialTheme.typography.displayMedium.copy(
                     fontWeight = FontWeight.ExtraBold,
-                    fontSize = 52.sp,
-                    lineHeight = 52.sp
+                    fontSize = 52.sp
                 ),
                 color = MaterialTheme.colorScheme.onSurface,
             )
