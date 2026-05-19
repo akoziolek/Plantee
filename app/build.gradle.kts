@@ -76,4 +76,9 @@ dependencies {
     ksp(libs.room.compiler)
     coreLibraryDesugaring(libs.android.desugarJdkLibs)
     implementation("nl.dionsegijn:konfetti-compose:2.0.5")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+    implementation("io.ktor:ktor-client-core:3.0.0")
+    implementation("io.ktor:ktor-client-cio:3.0.0")
+    implementation("io.ktor:ktor-client-content-negotiation:3.0.0")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:3.0.0")
 }
