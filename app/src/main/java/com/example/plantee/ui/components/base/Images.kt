@@ -20,6 +20,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -71,6 +74,8 @@ fun PlantImage(
     state: String?,
     modifier: Modifier = Modifier
 ) {
+   // TODO full screen display = merge with Photos.PhotoViewer
+
     Box(
         modifier = modifier
             .background(MaterialTheme.colorScheme.outlineVariant)
