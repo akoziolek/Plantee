@@ -5,4 +5,5 @@ plugins {
     kotlin("plugin.serialization") version "1.9.22" apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.hilt) apply false
+    alias(libs.plugins.secretsPlugin) apply false
 }
