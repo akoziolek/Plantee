@@ -69,7 +69,9 @@ fun RoutineAddScreen(
                     title = stringResource(R.string.routine_add_label_name),
                     value = state.name,
                     onValueChange = { viewModel.onNameChange(it) },
-                    supportingText = stringResource(R.string.routine_add_support_name)
+                    supportingText = stringResource(R.string.routine_add_support_name),
+                    isError = state.nameError,
+                    errorText = stringResource(R.string.routine_form_error_name)
                 )
             }
 

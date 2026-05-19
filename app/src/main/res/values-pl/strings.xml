@@ -105,4 +105,5 @@
     <string name="diagnosis_photo_name">Zdjęcie rośliny do diagnozy</string>
     <string name="your_routines_streak">Streak twoich rutyn</string>
     <string name="label_streak_days">dni</string>
+    <string name="routine_form_error_name">Nazwa jest wymagana</string>
 </resources>
