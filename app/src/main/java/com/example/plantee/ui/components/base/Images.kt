@@ -207,6 +207,37 @@ fun SmallPlantImage(
 }
 
 @Composable
+fun SmallDiagnosisImage(
+    imagePath: String?,
+    name: String?,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = Modifier
+            .size(60.dp)
+            .background(MaterialTheme.colorScheme.outlineVariant),
+//            .fillMaxWidth(),
+        contentAlignment = Alignment.Center
+    ) {
+        if (!imagePath.isNullOrEmpty()) {
+            AsyncImage(
+                model = imagePath,
+                contentDescription = name,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+        } else {
+            Icon(
+                imageVector = Icons.Default.Image,
+                contentDescription = null,
+                modifier = Modifier.size(40.dp),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
 @Preview
 fun ImagePreview() {
     PlanteeTheme {

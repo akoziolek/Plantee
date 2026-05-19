@@ -39,6 +39,7 @@ fun LazyListScope.diagnosisListItems(
                 headlineText = diagnosis.diagnosedAt.format(formatter),
                 modifier = modifier,
                 supportingText = diagnosis.description ?: "",
+                imagePath = null, // FIXME photo
                 onClick = { onDiagnosisClick(diagnosis.id) }
             )
             if (diagnoses.last() != diagnosis) {

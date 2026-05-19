@@ -42,10 +42,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.plantee.R
 import com.example.plantee.ui.theme.PlanteeTheme
 import kotlinx.coroutines.launch
 
@@ -156,19 +158,6 @@ fun PlantListItem(
                 imagePath = imagePath,
                 name = title
             )
-//            Box(
-//                modifier = Modifier
-//                    .size(100.dp)
-//                    .background(MaterialTheme.colorScheme.outlineVariant),
-//                contentAlignment = Alignment.Center
-//            ) {
-//                Icon(
-//                    imageVector = Icons.Default.Image,
-//                    contentDescription = null,
-//                    modifier = Modifier.size(40.dp),
-//                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-//                )
-//            }
 
             Column(
                 modifier = Modifier
@@ -211,8 +200,9 @@ fun PlantListItem(
 @Composable
 fun DiagnosisListItem(
     headlineText: String,
+    supportingText: String,
+    imagePath: String?,
     modifier: Modifier = Modifier,
-    supportingText: String = "",
     onClick: () -> Unit = {}
 ) {
     Row(
@@ -223,19 +213,10 @@ fun DiagnosisListItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .size(60.dp)
-                .background(MaterialTheme.colorScheme.outlineVariant),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Icons.Default.Image,
-                contentDescription = null,
-                modifier = Modifier.size(40.dp),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
+        SmallDiagnosisImage(
+            imagePath = imagePath,
+            name = stringResource(R.string.diagnosis_photo_name)
+        )
 
         Column(
             modifier = Modifier.weight(1f),
@@ -246,14 +227,12 @@ fun DiagnosisListItem(
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
-            if (supportingText.isNotEmpty()) {
-                Text(
-                    text = supportingText,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1
-                )
-            }
+            Text(
+                text = supportingText,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1
+            )
         }
 
         Icon(
@@ -293,7 +272,8 @@ fun ListItemsPreview() {
 
             DiagnosisListItem(
                 headlineText = "28.03.2026",
-                supportingText = "Supporting line text lorem ipsum dolor sit amet, consectetur."
+                supportingText = "Supporting line text lorem ipsum dolor sit amet, consectetur.",
+                imagePath = null
             )
         }
 
