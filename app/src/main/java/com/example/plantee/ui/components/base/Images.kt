@@ -213,10 +213,9 @@ fun SmallDiagnosisImage(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .size(60.dp)
             .background(MaterialTheme.colorScheme.outlineVariant),
-//            .fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
         if (!imagePath.isNullOrEmpty()) {
