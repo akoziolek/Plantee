@@ -44,7 +44,8 @@ fun InputTextField(
     isError: Boolean = false,
     errorText: String? = null,
     singleLine: Boolean = true,
-    minLines: Int = 1
+    minLines: Int = 1,
+    maxLength: Int? = null
 ) {
     Column(modifier = modifier) {
         SectionHeader(
@@ -53,7 +54,9 @@ fun InputTextField(
         )
         OutlinedTextField(
             value = value,
-            onValueChange = onValueChange,
+            onValueChange = { newValue ->
+                if(maxLength == null || newValue.length <= maxLength) {
+                    onValueChange(newValue) }},
             modifier = Modifier.fillMaxWidth(),
             isError = isError,
             supportingText = {

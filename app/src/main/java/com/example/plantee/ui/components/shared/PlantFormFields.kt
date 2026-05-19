@@ -46,7 +46,8 @@ fun PlantFormFields(
             onValueChange = onDescriptionChange,
             supportingText = stringResource(R.string.plant_form_support_description),
             singleLine = false,
-            minLines = 3
+            minLines = 3,
+            maxLength = 400
         )
     }
 }
