@@ -172,6 +172,10 @@ fun HomeScreen(
                                 text = "Polski",
                                 icon = if (currentLang == "pl") Icons.Default.Check else null,
                                 onClick = { viewModel.changeLanguage("pl") }
+                            ),
+                            OverflowAction(
+                                text = stringResource(R.string.home_menu_show_tutorial),
+                                onClick = {  } // TODO add action
                             )
                         )
                     )
