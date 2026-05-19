@@ -183,9 +183,8 @@ fun SmallPlantImage(
 ) {
     Box(
         modifier = modifier
-            .size(100.dp)
-            .background(MaterialTheme.colorScheme.outlineVariant)
-            .fillMaxWidth(),
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.outlineVariant),
         contentAlignment = Alignment.Center
     ) {
         if (!imagePath.isNullOrEmpty()) {

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowRight
@@ -153,7 +154,8 @@ fun PlantListItem(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(10.dp))
-            .clickable { onClick() },
+            .clickable { onClick() }
+            .heightIn(max = 110.dp),
         color = containerColor
     ) {
         Row(
@@ -161,7 +163,8 @@ fun PlantListItem(
         ) {
             SmallPlantImage(
                 imagePath = imagePath,
-                name = title
+                name = title,
+                modifier = Modifier.width(100.dp)
             )
             Column(
                 modifier = Modifier
