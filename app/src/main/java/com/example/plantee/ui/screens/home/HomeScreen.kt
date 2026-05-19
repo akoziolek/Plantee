@@ -243,13 +243,13 @@ fun HomeScreen(
                     )
                 }
             }
-        }
 
-        if (showVideo) {
-            VideoPlayer(
-                videoId = R.raw.tutorial,
-                onDismiss = { showVideo = false }
-            )
+            if (showVideo) {
+                VideoPlayer(
+                    videoId = R.raw.tutorial,
+                    onDismiss = { showVideo = false }
+                )
+            }
         }
     }
 

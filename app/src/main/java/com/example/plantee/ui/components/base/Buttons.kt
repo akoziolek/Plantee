@@ -5,15 +5,22 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -94,6 +101,31 @@ fun PrimaryFloatingButton(
     }
 }
 
+@Composable
+fun PrimaryIconButton(
+    text: String,
+    icon: ImageVector,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    FilledIconButton(
+        onClick = onClick,
+        modifier = modifier
+            .padding(horizontal = 8.dp, vertical = 16.dp)
+            .size(48.dp),
+        colors = IconButtonDefaults.filledIconButtonColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary
+        )
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = text,
+            modifier = Modifier.size(24.dp)
+        )
+    }
+}
+
 
 @Composable
 @Preview(showBackground = true)
@@ -108,6 +140,7 @@ fun ButtonsPreview() {
             PrimaryFloatingButton(text = stringResource(R.string.entry_nav_add), onClick = {})
             PrimaryFloatingButton(text = stringResource(R.string.routine_nav_add), onClick = {})
             PrimaryFloatingButton(text = stringResource(R.string.routine_edit_btn_save), onClick = {})
+            PrimaryIconButton(text = stringResource(com.example.plantee.R.string.video_close), icon = Icons.AutoMirrored.Filled.ArrowBack, onClick = {})
         }
     }
 }

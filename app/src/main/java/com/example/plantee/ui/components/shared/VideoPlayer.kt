@@ -26,6 +26,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
+import com.example.plantee.ui.components.base.PrimaryIconButton
 import com.example.plantee.utils.getUri
 
 @Composable
@@ -76,24 +77,12 @@ fun VideoPlayer(
                 modifier = Modifier.fillMaxSize()
             )
 
-            // TODO as separate button in components
-            FilledIconButton(
+            PrimaryIconButton(
+                text = stringResource(com.example.plantee.R.string.video_close),
+                icon = Icons.AutoMirrored.Filled.ArrowBack,
                 onClick = onDismiss,
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(16.dp)
-                    .size(48.dp),
-                colors = IconButtonDefaults.filledIconButtonColors(
-                    containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                )
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = stringResource(com.example.plantee.R.string.video_close),
-                    modifier = Modifier.size(24.dp)
-                )
-            }
+                modifier = Modifier.align(Alignment.TopStart)
+            )
         }
     }
 }
