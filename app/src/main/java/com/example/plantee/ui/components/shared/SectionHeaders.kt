@@ -67,7 +67,7 @@ fun LinkHeader(
         title = title,
         trailingContent = {
             IconButton(onClick = onClick) {
-                Icon(Icons.AutoMirrored.Filled.ArrowForward, "Go back")
+                Icon(Icons.AutoMirrored.Filled.ArrowForward, "View more")
             }
         },
         modifier = modifier
