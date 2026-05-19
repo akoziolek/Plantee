@@ -1,18 +1,15 @@
 package com.example.plantee.ui.screens.plant
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -60,7 +57,7 @@ fun PlantEditScreen(
             PrimaryButtonFullWidth(
                 text = stringResource(R.string.plant_edit_btn_save),
                 onClick = { viewModel.updatePlant() },
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(10.dp).imePadding()
             )
         }
     ) { innerPadding ->

@@ -2,6 +2,7 @@ package com.example.plantee.ui.screens.plant
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -52,7 +53,7 @@ fun PlantAddScreen(
             PrimaryButtonFullWidth(
                 text = stringResource(R.string.plant_add_btn_add),
                 onClick = { viewModel.savePlant() },
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(10.dp).imePadding()
             )
         }
     ) { innerPadding ->
