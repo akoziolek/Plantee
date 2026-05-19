@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.plantee.R
-import com.example.plantee.domain.model.Routine
 import com.example.plantee.domain.model.RoutineSummary
 import com.example.plantee.ui.components.base.EmptySectionPlaceholder
 import com.example.plantee.ui.components.base.RoutinesListItem
