@@ -88,9 +88,18 @@ interface RoutinesDao {
     fun getRoutineWithDetails(id: Long): Flow<RoutineWithDetails?>
 
     @Query("""
-    SELECT * FROM routines 
-    WHERE (start_date IS NULL OR start_date <= :endDate) 
-    AND (end_date IS NULL OR end_date >= :startDate)
-""")
+        SELECT * FROM routines 
+        WHERE (start_date IS NULL OR start_date <= :endDate) 
+        AND (end_date IS NULL OR end_date >= :startDate)
+    """)
     suspend fun getRoutinesActiveInPeriod(startDate: LocalDate, endDate: LocalDate): List<RoutineEntity>
+
+    @Transaction
+    @Query("""
+        SELECT r.* 
+        FROM routines r 
+        JOIN plant_routines pr ON r.id = pr.id_routine 
+        WHERE pr.id_plant = :plantId
+    """)
+    suspend fun getRoutinesForPlant(plantId: Long): List<RoutineWithDetails>
 }

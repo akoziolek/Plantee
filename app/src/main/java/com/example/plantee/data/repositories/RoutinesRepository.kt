@@ -51,6 +51,10 @@ class RoutinesRepository @Inject constructor(
         return routinesDao.getRoutineWithDetails(id).map { it.toDomain() }
     }
 
+    override suspend fun getRoutinesForPlant(id: Long): List<Routine?> {
+       return routinesDao.getRoutinesForPlant(id).map { it.toDomain() }
+    }
+
     override suspend fun addRoutine(routine: Routine): Long {
         val entity = routine.toEntity() ?: return -1L
 

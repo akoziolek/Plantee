@@ -11,6 +11,7 @@ interface IRoutinesRepository {
     fun getRoutinesForDay(date: LocalDate = LocalDate.now()): Flow<List<RoutineSummary>>
     fun getSearchedRoutinesWithSortAndFilterSummary(query: String, sort: SortOrder, filter: FilterState): Flow<List<RoutineSummary>>
     fun getRoutine(id: Long): Flow<Routine?>
+    suspend fun getRoutinesForPlant(id: Long): List<Routine?>
     suspend fun addRoutine(routine: Routine): Long
     suspend fun updateRoutine(routine: Routine)
     suspend fun toggleRoutineDone(id: Long, date: LocalDate?)
