@@ -105,4 +105,5 @@
     <string name="your_routines_streak">Your routines streak</string>
     <string name="label_streak_days">days</string>
     <string name="routine_form_error_name">Name is required</string>
+    <string name="diagnosis_form_error_desc">Description is required</string>
 </resources>
