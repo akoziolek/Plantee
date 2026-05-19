@@ -1,30 +1,32 @@
 package com.example.plantee.ui.components.shared
 
 import androidx.annotation.RawRes
-import androidx.appcompat.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.net.toUri
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
+import com.example.plantee.utils.getUri
 
 @Composable
 fun VideoPlayer(
@@ -34,7 +36,7 @@ fun VideoPlayer(
     val context = LocalContext.current
 
     val videoUri = remember(videoId) {
-        "android.resource://${context.packageName}/$videoId".toUri()
+        context.getUri(videoId)
     }
 
     val exoPlayer = remember {
@@ -51,33 +53,47 @@ fun VideoPlayer(
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black)
-    ) {
-        AndroidView(
-            factory = { ctx ->
-                PlayerView(ctx).apply {
-                    player = exoPlayer
-                    useController = true
-                }
-            },
-            modifier = Modifier.fillMaxSize()
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(
+            dismissOnBackPress = true,
+            dismissOnClickOutside = false,
+            usePlatformDefaultWidth = false
         )
-
-        // TODO to change, different color, new button component
-        IconButton(
-            onClick = onDismiss,
+    ) {
+        Box(
             modifier = Modifier
-                .align(Alignment.TopStart)
-                .padding(16.dp)
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
         ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = stringResource(com.example.plantee.R.string.video_close),
-                tint = Color.White
+            AndroidView(
+                factory = { ctx ->
+                    PlayerView(ctx).apply {
+                        player = exoPlayer
+                        useController = true
+                    }
+                },
+                modifier = Modifier.fillMaxSize()
             )
+
+            // TODO as separate button in components
+            FilledIconButton(
+                onClick = onDismiss,
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(16.dp)
+                    .size(48.dp),
+                colors = IconButtonDefaults.filledIconButtonColors(
+                    containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = stringResource(com.example.plantee.R.string.video_close),
+                    modifier = Modifier.size(24.dp)
+                )
+            }
         }
     }
 }
