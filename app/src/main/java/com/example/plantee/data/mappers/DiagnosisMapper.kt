@@ -36,6 +36,7 @@ fun Diagnosis?.toEntity(): DiagnosisEntity? {
         sunLevel = this.sunLevel,
         moistureLevel = this.moistureLevel,
         diagnosedAt = this.diagnosedAt,
-        idPlant = this.plantId
+        idPlant = this.plantId,
+        idMedia = this.media?.id
     )
 }
