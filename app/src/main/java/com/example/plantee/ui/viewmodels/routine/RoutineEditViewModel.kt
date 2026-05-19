@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -93,21 +94,20 @@ class RoutineEditViewModel @AssistedInject constructor(
 
     private fun loadRoutine() {
         viewModelScope.launch {
-            routinesRepository.getRoutine(routineId).collect { routine ->
-                routine?.let { r ->
-                    _state.update {
-                        it.copy(
-                            id = r.id,
-                            name = r.name,
-                            description = r.description ?: "",
-                            activeDays = r.activeDays ?: 0,
-                            startDate = r.startDate,
-                            endDate = r.endDate,
-                            lastlyDoneAt = r.lastlyDoneAt,
-                            selectedPlants = r.plants.map { plant -> plant.id },
-                            isLoading = false
-                        )
-                    }
+            val routine = routinesRepository.getRoutine(routineId).first()
+            routine?.let { r ->
+                _state.update {
+                    it.copy(
+                        id = r.id,
+                        name = r.name,
+                        description = r.description ?: "",
+                        activeDays = r.activeDays ?: 0,
+                        startDate = r.startDate,
+                        endDate = r.endDate,
+                        lastlyDoneAt = r.lastlyDoneAt,
+                        selectedPlants = r.plants.map { plant -> plant.id },
+                        isLoading = false
+                    )
                 }
             }
         }

@@ -15,6 +15,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -62,20 +63,19 @@ class PlantEditViewModel @AssistedInject constructor(
     // TODO - move to _state init?
     private fun loadPlant() {
         viewModelScope.launch {
-            plantsRepository.getPlant(plantId).collect { plant ->
-                plant?.let { p ->
-                    _state.update {
-                        it.copy(
-                            id = p.id,
-                            name = p.name,
-                            species = p.species ?: "",
-                            description = p.description ?: "",
-                            isFavourite = p.isFavourite,
-                            imageUri = if (p.media != null) Uri.fromFile(File(p.media.filePath)) else null,
-                            isLoading = false,
-                            media = p.media
-                        )
-                    }
+            val plant = plantsRepository.getPlant(plantId).first()
+            plant?.let { p ->
+                _state.update {
+                    it.copy(
+                        id = p.id,
+                        name = p.name,
+                        species = p.species ?: "",
+                        description = p.description ?: "",
+                        isFavourite = p.isFavourite,
+                        imageUri = if (p.media != null) Uri.fromFile(File(p.media.filePath)) else null,
+                        isLoading = false,
+                        media = p.media
+                    )
                 }
             }
         }
