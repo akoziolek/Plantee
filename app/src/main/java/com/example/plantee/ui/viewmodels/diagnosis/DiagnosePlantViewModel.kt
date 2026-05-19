@@ -22,7 +22,6 @@ sealed class DiagnosePlantEvent {
     object NavigateBack : DiagnosePlantEvent()
 }
 
-// TODO image
 data class DiagnosePlantUiState(
     val plantId: Long = 0L,
     val moistureLevel: Float = 0.7f,
@@ -82,7 +81,6 @@ class DiagnosePlantViewModel @AssistedInject constructor(
     }
 
     private fun validate(): Boolean {
-        // TODO do we validate picture presence?
         val descriptionIsBlank = _state.value.problemDescription.isBlank()
         _state.update { it.copy(problemDescriptionError = descriptionIsBlank) }
         return !descriptionIsBlank
