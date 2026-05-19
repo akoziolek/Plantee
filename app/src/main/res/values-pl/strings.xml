@@ -108,4 +108,5 @@
     <string name="label_streak_days">dni</string>
     <string name="routine_form_error_name">Nazwa jest wymagana</string>
     <string name="diagnosis_form_error_desc">Opis jest wymagany</string>
+    <string name="video_close">Zamknij</string>
 </resources>

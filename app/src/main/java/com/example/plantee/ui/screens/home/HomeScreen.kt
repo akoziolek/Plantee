@@ -53,6 +53,7 @@ import com.example.plantee.ui.components.base.StreakWidget
 import com.example.plantee.ui.components.shared.CelebrationWrapper
 import com.example.plantee.ui.components.shared.FilterSectionHeader
 import com.example.plantee.ui.components.shared.LinkHeader
+import com.example.plantee.ui.components.shared.VideoPlayer
 import com.example.plantee.ui.components.shared.plantListItems
 import com.example.plantee.ui.components.shared.todayRoutinesSection
 import com.example.plantee.ui.theme.PlanteeTheme
@@ -71,6 +72,8 @@ fun HomeScreen(
     val isDark = isDarkThemePref ?: isSystemInDarkTheme()
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+
+    var showVideo by remember { mutableStateOf(false) }
 
     var hasNotificationPermission by remember {
         mutableStateOf(
@@ -175,7 +178,7 @@ fun HomeScreen(
                             ),
                             OverflowAction(
                                 text = stringResource(R.string.home_menu_show_tutorial),
-                                onClick = {  } // TODO add action
+                                onClick = { showVideo = true }
                             )
                         )
                     )
@@ -201,7 +204,6 @@ fun HomeScreen(
                     contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-
                     item {
                         StreakWidget(
                             streakDays = state.streakDays,
@@ -239,11 +241,19 @@ fun HomeScreen(
                         onPlantClick = { viewModel.onPlantClick(it) },
                         onPlantBookmarkClick = { viewModel.onPlantBookmarkClick(it) }
                     )
-
                 }
             }
         }
+
+        if (showVideo) {
+            VideoPlayer(
+                videoId = R.raw.tutorial,
+                onDismiss = { showVideo = false }
+            )
+        }
     }
+
+
 
 }
 
