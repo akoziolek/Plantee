@@ -1,6 +1,5 @@
 package com.example.plantee.ui.components.base
 
-import android.graphics.drawable.Icon
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
@@ -20,7 +19,6 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -140,7 +138,7 @@ fun ButtonsPreview() {
             PrimaryFloatingButton(text = stringResource(R.string.entry_nav_add), onClick = {})
             PrimaryFloatingButton(text = stringResource(R.string.routine_nav_add), onClick = {})
             PrimaryFloatingButton(text = stringResource(R.string.routine_edit_btn_save), onClick = {})
-            PrimaryIconButton(text = stringResource(com.example.plantee.R.string.video_close), icon = Icons.AutoMirrored.Filled.ArrowBack, onClick = {})
+            PrimaryIconButton(text = stringResource(R.string.video_close), icon = Icons.AutoMirrored.Filled.ArrowBack, onClick = {})
         }
     }
 }
