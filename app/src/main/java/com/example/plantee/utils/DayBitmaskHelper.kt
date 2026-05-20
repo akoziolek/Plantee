@@ -2,7 +2,6 @@ package com.example.plantee.utils
 
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.ZoneId
 
 object DayBitmaskHelper {
     private fun DayOfWeek.toBit(): Int = 1 shl (this.value - 1)
@@ -22,6 +21,10 @@ object DayBitmaskHelper {
 
     fun LocalDate.toDayBitMask(): Int {
         return 1 shl (this.dayOfWeek.value - 1)
+    }
+
+    fun Int.toDaysList(): List<DayOfWeek> {
+       return DayOfWeek.entries.filter { isSelected(this, it) }
     }
 }
 

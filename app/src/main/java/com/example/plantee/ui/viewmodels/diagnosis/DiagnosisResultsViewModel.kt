@@ -68,12 +68,16 @@ class DiagnosisResultsViewModel @AssistedInject constructor(
         viewModelScope.launch {
             _state.value = DiagnosisResultsUiState.Loading
             try {
-                val response = aiDiagnoseUseCase.mockResponse()//aiDiagnoseUseCase(input)
+                val response = aiDiagnoseUseCase(input)
                 if (response != null) {
-                    _state.value = DiagnosisResultsUiState.Success(
-                        aiDiagnosisResult = response,
-                        diagnosedAt = LocalDateTime.now()
-                    )
+                    if(response.isPlantRelated) {
+                        _state.value = DiagnosisResultsUiState.Success(
+                            aiDiagnosisResult = response,
+                            diagnosedAt = LocalDateTime.now()
+                        )
+                    } else {
+                        _state.value = DiagnosisResultsUiState.Error(response.diagnosisDescription)
+                    }
                 } else {
                     _state.value = DiagnosisResultsUiState.Error("Could not generate diagnosis. Please try again later.")
                 }
