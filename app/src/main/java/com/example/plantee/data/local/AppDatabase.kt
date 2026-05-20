@@ -35,7 +35,7 @@ import com.example.plantee.data.local.views.PlantSummaryView
         DiagnosisSummaryView::class,
         PlantSummaryView::class
     ],
-    version = 13
+    version = 14
 )
 @TypeConverters(DateConverter::class)
 abstract class AppDatabase : RoomDatabase() {
