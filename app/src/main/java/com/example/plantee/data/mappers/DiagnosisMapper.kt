@@ -33,9 +33,11 @@ fun Diagnosis?.toEntity(): DiagnosisEntity? {
     return DiagnosisEntity(
         id = this.id,
         problemDescription = this.problemDescription,
+        response = this.response,
         sunLevel = this.sunLevel,
         moistureLevel = this.moistureLevel,
         diagnosedAt = this.diagnosedAt,
-        idPlant = this.plantId
+        idPlant = this.plantId,
+        idMedia = this.media?.id
     )
 }
