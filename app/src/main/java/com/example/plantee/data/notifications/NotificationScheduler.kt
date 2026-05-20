@@ -25,7 +25,6 @@ object NotificationScheduler {
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
 
-            // TODO WHY NOT IF?
             while (timeInMillis <= currentDate.timeInMillis + 10_000) {
                 add(Calendar.DAY_OF_YEAR, 1)
             }
