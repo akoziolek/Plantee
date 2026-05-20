@@ -5,8 +5,10 @@
     import androidx.datastore.preferences.core.Preferences
     import androidx.datastore.preferences.core.booleanPreferencesKey
     import androidx.datastore.preferences.core.edit
+    import androidx.datastore.preferences.core.stringPreferencesKey
     import androidx.datastore.preferences.preferencesDataStore
     import com.example.plantee.domain.repositories.IUserPreferencesRepository
+    import com.example.plantee.utils.AppTheme
     import dagger.hilt.android.qualifiers.ApplicationContext
     import kotlinx.coroutines.flow.Flow
     import kotlinx.coroutines.flow.map
@@ -19,22 +21,18 @@
     class UserPreferencesRepository @Inject constructor(
         @ApplicationContext private val context: Context
     ) : IUserPreferencesRepository {
-
-        companion object PreferencesKeys {
-            private val IS_DARK_THEME = booleanPreferencesKey("is_dark_theme")
+        companion object {
+            private val THEME_KEY = stringPreferencesKey("theme_preference")
         }
 
-        override val isDarkTheme: Flow<Boolean?> = context.dataStore.data.map { preferences ->
-            preferences[IS_DARK_THEME]
+        override val theme: Flow<AppTheme> = context.dataStore.data.map { preferences ->
+            val themeName = preferences[THEME_KEY] ?: AppTheme.SYSTEM.name
+            AppTheme.valueOf(themeName)
         }
 
-        override suspend fun setDarkTheme(isDark: Boolean?) {
+        override suspend fun setTheme(theme: AppTheme) {
             context.dataStore.edit { preferences ->
-                if (isDark == null) {
-                    preferences.remove(IS_DARK_THEME)
-                } else {
-                    preferences[IS_DARK_THEME] = isDark
-                }
+                preferences[THEME_KEY] = theme.name
             }
         }
     }

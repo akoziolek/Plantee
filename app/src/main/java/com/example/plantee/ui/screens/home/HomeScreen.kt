@@ -59,6 +59,7 @@ import com.example.plantee.ui.components.shared.todayRoutinesSection
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.viewmodels.home.HomeEvent
 import com.example.plantee.ui.viewmodels.home.HomeViewModel
+import com.example.plantee.utils.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,8 +69,7 @@ fun HomeScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val sort by viewModel.sortOrder.collectAsStateWithLifecycle()
-    val isDarkThemePref by viewModel.isDarkTheme.collectAsStateWithLifecycle()
-    val isDark = isDarkThemePref ?: isSystemInDarkTheme()
+    val currentTheme by viewModel.theme.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -162,11 +162,12 @@ fun HomeScreen(
                     OverflowMenu(
                         actions = listOf(
                             OverflowAction(
-                                text =
-                                    if (isDark)
-                                        stringResource(R.string.home_menu_change_mode_light)
-                                    else stringResource(R.string.home_menu_change_mode_dark),
-                                onClick = { viewModel.toggleTheme(isDark) }
+                                text = when (currentTheme) {
+                                    AppTheme.LIGHT -> stringResource(R.string.home_menu_change_mode_dark)
+                                    AppTheme.DARK -> stringResource(R.string.home_menu_change_mode_system)
+                                    AppTheme.SYSTEM -> stringResource(R.string.home_menu_change_mode_light)
+                                },
+                                onClick = { viewModel.toggleTheme() }
                             ),
                             OverflowAction(
                                 text = "English",

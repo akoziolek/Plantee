@@ -11,12 +11,14 @@ import com.example.plantee.domain.repositories.IRoutinesRepository
 import com.example.plantee.domain.repositories.IRoutinesStatisticsRepository
 import com.example.plantee.domain.repositories.ISettingsRepository
 import com.example.plantee.domain.repositories.IUserPreferencesRepository
+import com.example.plantee.utils.AppTheme
 import com.example.plantee.utils.SortOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -26,9 +28,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
+import java.time.Duration
 import java.time.LocalDate
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 sealed class HomeEvent {
@@ -56,14 +61,31 @@ class HomeViewModel @Inject constructor(
     private val routinesStatisticsRepository: IRoutinesStatisticsRepository,
     private val settingsRepository: ISettingsRepository
 ) : ViewModel() {
+    // FIXME currentday
     private val _currentDay = MutableStateFlow<LocalDate>(LocalDate.now())
+    val currentDay: StateFlow<LocalDate> = _currentDay.asStateFlow()
 
-    // TODO - proper display when null value? (system theme)
-    val isDarkTheme = userPreferencesRepository.isDarkTheme
+    init {
+        viewModelScope.launch {
+            syncStreak()
+            while (isActive) {
+                val now = LocalDateTime.now()
+                val nextMidnight = now.toLocalDate()
+                    .plusDays(1)
+                    .atStartOfDay()
+
+                delay(Duration.between(now, nextMidnight).toMillis())
+                _currentDay.value = LocalDate.now()
+                syncStreak()
+            }
+        }
+    }
+
+    val theme = userPreferencesRepository.theme
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = null
+            initialValue = AppTheme.SYSTEM
         )
 
     private val _events = Channel<HomeEvent>()
@@ -79,18 +101,24 @@ class HomeViewModel @Inject constructor(
         }
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-    private val todayRoutinesFlow = _currentDay.flatMapLatest { day ->
+    private val todayRoutinesFlow = currentDay.flatMapLatest { day ->
         routinesRepository.getRoutinesForDay(day)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val streakFlow = currentDay.flatMapLatest { day ->
+        routinesStatisticsRepository.getEffectiveStreak(day)
     }
 
     val state: StateFlow<HomeUiState> = combine(
         plantsFlow,
         todayRoutinesFlow,
         settingsRepository.getNotificationsEnabled(),
-        routinesStatisticsRepository.getEffectiveStreak()
-    ) { sortResults, todayRoutines, notificationsEnabled, currentStreak ->
+        streakFlow,
+        currentDay
+    ) { sortResults, todayRoutines, notificationsEnabled, currentStreak, day ->
         val totalRoutines = todayRoutines.size
-        val completedRoutines = todayRoutines.count { it.lastlyDoneAt == LocalDate.now() }
+        val completedRoutines = todayRoutines.count { it.lastlyDoneAt == day }
 
         val progress = if (totalRoutines > 0) {
             completedRoutines.toFloat() / totalRoutines
@@ -144,7 +172,7 @@ class HomeViewModel @Inject constructor(
     fun onCheckboxClick(routineId: Long) {
         viewModelScope.launch {
             val routine = state.value.todayRoutines.find { it.id == routineId }
-            val today = LocalDate.now()
+            val today = currentDay.value
             val newDate = if (routine?.lastlyDoneAt == today) null else today
 
             routinesRepository.toggleRoutineDone(routineId, newDate)
@@ -163,14 +191,17 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun toggleTheme(currentlyDark: Boolean) {
-        // TODO enable system theme?
+    fun toggleTheme() {
         viewModelScope.launch {
-            userPreferencesRepository.setDarkTheme(!currentlyDark)
+            val nextTheme = when (theme.value) {
+                AppTheme.LIGHT -> AppTheme.DARK
+                AppTheme.DARK -> AppTheme.SYSTEM
+                AppTheme.SYSTEM -> AppTheme.LIGHT
+            }
+            userPreferencesRepository.setTheme(nextTheme)
         }
     }
 
-    // FIXME screen blink
     fun changeLanguage(langCode: String) {
         val currentLocales = AppCompatDelegate.getApplicationLocales()
         if (currentLocales.toLanguageTags() == langCode) {
@@ -203,7 +234,7 @@ class HomeViewModel @Inject constructor(
     fun checkIfAllRoutinesAreDone(): Boolean {
         val currentState = state.value
         return currentState.todayRoutines.isNotEmpty() && currentState.todayRoutines.all {
-            it.lastlyDoneAt == LocalDate.now()
+            it.lastlyDoneAt == currentDay.value
         }
     }
 }
