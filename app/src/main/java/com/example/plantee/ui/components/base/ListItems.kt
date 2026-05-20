@@ -296,9 +296,7 @@ fun ProposedRoutinesListItem(
         headlineContent = {
             Text(
                 text = routine.name,
-                style = MaterialTheme.typography.titleMedium.copy(
-                    textDecoration = if (checked) TextDecoration.LineThrough else TextDecoration.None
-                )
+                style = MaterialTheme.typography.titleMedium
             )
         },
         supportingContent = {
