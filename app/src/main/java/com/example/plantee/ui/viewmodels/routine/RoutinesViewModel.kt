@@ -45,7 +45,7 @@ data class RoutinesUiState(
 )
 
 data class FilterState(
-    val status: RoutineStatus = RoutineStatus.Active,
+    val status: RoutineStatus = RoutineStatus.All,
     val selectedDays: Int = DayBitmaskHelper.allDaysMask()
 )
 
@@ -54,7 +54,6 @@ class RoutinesViewModel @Inject constructor(
     private val routinesRepository: IRoutinesRepository
 ) : ViewModel() {
     private val _currentDay = MutableStateFlow<LocalDate>(LocalDate.now())
-    val currentDay = _currentDay.asStateFlow()
 
     init {
         viewModelScope.launch {
