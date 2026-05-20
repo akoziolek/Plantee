@@ -10,6 +10,7 @@ import com.example.plantee.domain.repositories.IDiagnosesRepository
 import com.example.plantee.domain.repositories.IRoutinesRepository
 import com.example.plantee.domain.use_cases.AIDiagnoseUseCase
 import com.example.plantee.domain.model.AiDiagnosisResult
+import com.example.plantee.domain.use_cases.DeleteMediaUseCase
 import com.example.plantee.domain.use_cases.SaveMediaUseCase
 import com.example.plantee.ui.nav.DiagnosisInput
 import dagger.assisted.Assisted
@@ -50,6 +51,7 @@ class DiagnosisResultsViewModel @AssistedInject constructor(
     private val diagnosesRepository: IDiagnosesRepository,
     private val routinesRepository: IRoutinesRepository,
     private val saveMediaUseCase: SaveMediaUseCase,
+    private val deleteMediaUseCase: DeleteMediaUseCase,
     @Assisted private val input: DiagnosisInput
 ) : ViewModel() {
 
@@ -150,29 +152,32 @@ class DiagnosisResultsViewModel @AssistedInject constructor(
             }
 
         viewModelScope.launch {
-            // TODO - transaction? or delete id association from plant than perform this, than update? or update than delete
             val savedMedia: Media? = input.imageUri?.let { uriString ->
                 saveMediaUseCase(uriString.toUri())
             }
 
-            if (currentState.removeFromAssociatedRoutines) {
-                routinesRepository.removePlantFromAllRoutines(input.plantId)
+            try {
+                if (currentState.removeFromAssociatedRoutines) {
+                    routinesRepository.removePlantFromAllRoutines(input.plantId)
+                }
+
+                val diagnosisId = diagnosesRepository.createDiagnosis(
+                    diagnosis = Diagnosis(
+                        plantId = input.plantId,
+                        problemDescription = input.problemDescription,
+                        sunLevel = input.sunLevel,
+                        moistureLevel = input.moistureLevel,
+                        diagnosedAt = currentState.diagnosedAt,
+                        response = currentState.aiDiagnosisResult.diagnosisDescription,
+                        media = savedMedia
+                    ),
+                    routines = routinesToSave
+                )
+                _events.send(DiagnosisResultsEvent.FinishDiagnosis(diagnosisId))
+            } catch (e: Exception) {
+                savedMedia?.let { deleteMediaUseCase(it) }
             }
 
-            val diagnosisId = diagnosesRepository.createDiagnosis(
-                diagnosis = Diagnosis(
-                    plantId = input.plantId,
-                    problemDescription = input.problemDescription,
-                    sunLevel = input.sunLevel,
-                    moistureLevel = input.moistureLevel,
-                    diagnosedAt = currentState.diagnosedAt,
-                    response = currentState.aiDiagnosisResult.diagnosisDescription,
-                    media = savedMedia
-                ),
-                routines = routinesToSave
-            )
-
-            _events.send(DiagnosisResultsEvent.FinishDiagnosis(diagnosisId))
         }
     }
 }
