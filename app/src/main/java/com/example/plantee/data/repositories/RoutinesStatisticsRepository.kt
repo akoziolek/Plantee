@@ -13,10 +13,8 @@ import com.example.plantee.utils.DayBitmaskHelper.toDayBitMask
 import jakarta.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 import java.time.LocalDate
 
 class RoutinesStatisticsRepository @Inject constructor(
@@ -65,19 +63,21 @@ class RoutinesStatisticsRepository @Inject constructor(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getEffectiveStreak(): Flow<Int> {
-        // TODO - remove the flatMapLatest and distinctUntilChanged, use combine?
-        return routinesStatisticsDao.getRoutinesStatisticsFlow().flatMapLatest { statEntity ->
-            val today = LocalDate.now()
-            val stat = statEntity?.toDomain() ?: RoutineStatistic(currentStreak = 0, lastStreakUpdate = today.minusDays(1))
+    override fun getEffectiveStreak(today: LocalDate): Flow<Int> {
+        val dayMask = today.toDayBitMask()
 
-            routinesDao.getRoutinesForWeekday(dayMask = today.toDayBitMask(), date = today ).map { todayEntities ->
-                val todayRoutines = todayEntities.toSummaryDomainList()
-                val isDoneToday = todayRoutines.areAllCompletedOn(today)
+        return combine(
+            routinesStatisticsDao.getRoutinesStatisticsFlow(),
+            routinesDao.getRoutinesForWeekday(dayMask = dayMask, date = today)
+        ) { statEntity, todayEntities ->
+            val stat = statEntity?.toDomain()
+                ?: RoutineStatistic(currentStreak = 0, lastStreakUpdate = today.minusDays(1))
 
-                if (isDoneToday) stat.currentStreak + 1 else stat.currentStreak
-            }
-        }.distinctUntilChanged()
+            val todayRoutines = todayEntities.toSummaryDomainList()
+            val isDoneToday = todayRoutines.areAllCompletedOn(today)
+
+            if (isDoneToday) stat.currentStreak + 1 else stat.currentStreak
+        }
     }
 
     private suspend fun updateStats(stats: RoutineStatistic) {

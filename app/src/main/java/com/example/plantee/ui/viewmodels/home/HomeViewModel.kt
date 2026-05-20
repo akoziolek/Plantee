@@ -57,6 +57,16 @@ class HomeViewModel @Inject constructor(
     private val settingsRepository: ISettingsRepository
 ) : ViewModel() {
     private val _currentDay = MutableStateFlow<LocalDate>(LocalDate.now())
+    val currentDay: StateFlow<LocalDate> = _currentDay.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            syncStreak()
+            while (isActive) {
+                val now = LocalDateTime.now()
+                val nextMidnight = now.toLocalDate()
+                    .plusDays(1)
+                    .atStartOfDay()
 
     // TODO - proper display when null value? (system theme)
     val isDarkTheme = userPreferencesRepository.isDarkTheme

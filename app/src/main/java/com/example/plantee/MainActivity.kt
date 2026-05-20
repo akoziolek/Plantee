@@ -18,6 +18,7 @@ import com.example.plantee.ui.MainViewModel
 import com.example.plantee.ui.ThemeState
 import com.example.plantee.ui.screens.MainAppScreen
 import com.example.plantee.ui.theme.PlanteeTheme
+import com.example.plantee.utils.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,8 +37,12 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val state by viewModel.themeState.collectAsStateWithLifecycle()
             if (state is ThemeState.Success) {
-                val isDarkThemePref = (state as ThemeState.Success).isDark
-                val darkTheme = isDarkThemePref ?: isSystemInDarkTheme()
+                val appTheme = (state as ThemeState.Success).theme
+                val darkTheme = when (appTheme) {
+                    AppTheme.LIGHT -> false
+                    AppTheme.DARK -> true
+                    AppTheme.SYSTEM -> isSystemInDarkTheme()
+                }
 
                 PlanteeTheme(darkTheme = darkTheme) {
                     Surface(
