@@ -11,21 +11,26 @@ class SavePlantImageUseCase @Inject constructor(
     private val photosRepository: IPhotosRepository,
     private val mediaRepository: IMediaRepository
 ) {
-    // TODO - transaction?
     suspend operator fun invoke(newImageUri: Uri, oldMedia: Media? = null): Media? {
         val newFilePath = photosRepository.saveImage(newImageUri) ?: return null
-        val media = Media(
-            filePath = newFilePath,
-            createdAt = LocalDateTime.now()
-        )
-        val mediaId = mediaRepository.createMedia(media)
-        val savedMedia = media.copy(id = mediaId)
 
-        oldMedia?.let { old ->
-            photosRepository.deleteImage(old.filePath)
-            mediaRepository.deleteMedia(old.id)
+        return try {
+            val media = Media(
+                filePath = newFilePath,
+                createdAt = LocalDateTime.now()
+            )
+            val mediaId = mediaRepository.createMedia(media)
+            val savedMedia = media.copy(id = mediaId)
+
+            oldMedia?.let { old ->
+                photosRepository.deleteImage(old.filePath)
+                mediaRepository.deleteMedia(old.id)
+            }
+
+            savedMedia
+        } catch (e: Exception) {
+            photosRepository.deleteImage(newFilePath)
+            null
         }
-
-        return savedMedia
     }
 }
