@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.plantee.domain.model.Plant
 import com.example.plantee.domain.repositories.IPlantsRepository
-import com.example.plantee.domain.use_cases.SavePlantImageUseCase
+import com.example.plantee.domain.use_cases.SaveMediaUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,7 +35,7 @@ data class PlantAddUiState(
 @HiltViewModel
 class PlantAddViewModel @Inject constructor(
     private val plantsRepository: IPlantsRepository,
-    private val savePlantImageUseCase: SavePlantImageUseCase
+    private val saveMediaUseCase: SaveMediaUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(PlantAddUiState())
     val state: StateFlow<PlantAddUiState> = _state.asStateFlow()
@@ -81,7 +81,7 @@ class PlantAddViewModel @Inject constructor(
         viewModelScope.launch {
             val currentState = _state.value
             val media = currentState.imageUri?.let {
-                savePlantImageUseCase(it)
+                saveMediaUseCase(it)
             }
 
             val plant = Plant(

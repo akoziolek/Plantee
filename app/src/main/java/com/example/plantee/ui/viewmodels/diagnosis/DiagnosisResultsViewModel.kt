@@ -10,7 +10,7 @@ import com.example.plantee.domain.repositories.IDiagnosesRepository
 import com.example.plantee.domain.repositories.IRoutinesRepository
 import com.example.plantee.domain.use_cases.AIDiagnoseUseCase
 import com.example.plantee.domain.model.AiDiagnosisResult
-import com.example.plantee.domain.use_cases.SavePlantImageUseCase
+import com.example.plantee.domain.use_cases.SaveMediaUseCase
 import com.example.plantee.ui.nav.DiagnosisInput
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -49,7 +49,7 @@ class DiagnosisResultsViewModel @AssistedInject constructor(
     private val aiDiagnoseUseCase: AIDiagnoseUseCase,
     private val diagnosesRepository: IDiagnosesRepository,
     private val routinesRepository: IRoutinesRepository,
-    private val savePlantImageUseCase: SavePlantImageUseCase,
+    private val saveMediaUseCase: SaveMediaUseCase,
     @Assisted private val input: DiagnosisInput
 ) : ViewModel() {
 
@@ -152,7 +152,7 @@ class DiagnosisResultsViewModel @AssistedInject constructor(
         viewModelScope.launch {
             // TODO - transaction? or delete id association from plant than perform this, than update? or update than delete
             val savedMedia: Media? = input.imageUri?.let { uriString ->
-                savePlantImageUseCase(uriString.toUri())
+                saveMediaUseCase(uriString.toUri())
             }
 
             if (currentState.removeFromAssociatedRoutines) {

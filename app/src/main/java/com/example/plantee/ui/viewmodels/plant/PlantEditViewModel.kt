@@ -6,7 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.plantee.domain.model.Media
 import com.example.plantee.domain.model.Plant
 import com.example.plantee.domain.repositories.IPlantsRepository
-import com.example.plantee.domain.use_cases.SavePlantImageUseCase
+import com.example.plantee.domain.use_cases.DeleteMediaUseCase
+import com.example.plantee.domain.use_cases.SaveMediaUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -42,7 +43,8 @@ data class PlantEditUiState(
 @HiltViewModel(assistedFactory = PlantEditViewModel.Factory::class)
 class PlantEditViewModel @AssistedInject constructor(
     private val plantsRepository: IPlantsRepository,
-    private val savePlantImageUseCase: SavePlantImageUseCase,
+    private val saveMediaUseCase: SaveMediaUseCase,
+    private val deleteMediaUseCase: DeleteMediaUseCase,
     @Assisted private val plantId: Long
 ) : ViewModel() {
 
@@ -115,18 +117,19 @@ class PlantEditViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             val currentState = _state.value
-            var currentMedia = currentState.media
-
             _state.update { it.copy(isSaving = true) }
 
-            if (currentState.imageUri != null) {
-                currentMedia = savePlantImageUseCase(
-                    newImageUri = currentState.imageUri,
-                    oldMedia = currentState.media
-                )
-            } else if (currentState.media != null) {
-                 // TODO deleting
-                currentMedia = null
+            val oldMediaUri = currentState.media?.let { Uri.fromFile(File(it.filePath)) }
+            val imageChanged = currentState.imageUri != oldMediaUri
+
+            var newMedia = currentState.media
+
+            if (imageChanged) {
+                newMedia = if (currentState.imageUri != null) {
+                    saveMediaUseCase(newImageUri = currentState.imageUri)
+                } else {
+                    null
+                }
             }
 
             val plant = Plant(
@@ -135,10 +138,14 @@ class PlantEditViewModel @AssistedInject constructor(
                 species = currentState.species,
                 description = currentState.description,
                 isFavourite = currentState.isFavourite,
-                media = currentMedia
+                media = newMedia
             )
 
             plantsRepository.updatePlant(plant)
+            if (imageChanged && currentState.media != null) {
+                deleteMediaUseCase(currentState.media)
+            }
+
             _events.send(PlantEditEvent.PlantUpdated)
         }
     }

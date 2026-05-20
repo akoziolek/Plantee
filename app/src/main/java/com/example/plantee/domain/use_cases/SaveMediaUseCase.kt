@@ -7,11 +7,11 @@ import com.example.plantee.domain.repositories.IPhotosRepository
 import java.time.LocalDateTime
 import javax.inject.Inject
 
-class SavePlantImageUseCase @Inject constructor(
+class SaveMediaUseCase @Inject constructor(
     private val photosRepository: IPhotosRepository,
     private val mediaRepository: IMediaRepository
 ) {
-    suspend operator fun invoke(newImageUri: Uri, oldMedia: Media? = null): Media? {
+    suspend operator fun invoke(newImageUri: Uri): Media? {
         val newFilePath = photosRepository.saveImage(newImageUri) ?: return null
 
         return try {
@@ -20,14 +20,7 @@ class SavePlantImageUseCase @Inject constructor(
                 createdAt = LocalDateTime.now()
             )
             val mediaId = mediaRepository.createMedia(media)
-            val savedMedia = media.copy(id = mediaId)
-
-            oldMedia?.let { old ->
-                photosRepository.deleteImage(old.filePath)
-                mediaRepository.deleteMedia(old.id)
-            }
-
-            savedMedia
+            media.copy(id = mediaId)
         } catch (e: Exception) {
             photosRepository.deleteImage(newFilePath)
             null
