@@ -120,6 +120,7 @@ class PlantEditViewModel @AssistedInject constructor(
 
             _state.update { it.copy(isSaving = true) }
 
+            // TODO - transaction? or delete id association from plant than perform this, than update? or update than delete
             if (currentState.imageUri != null) {
                 currentMedia = savePlantImageUseCase(
                     newImageUri = currentState.imageUri,
