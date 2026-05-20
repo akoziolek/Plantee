@@ -16,7 +16,7 @@ import com.example.plantee.utils.SortOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +30,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import java.time.DayOfWeek
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -61,20 +60,40 @@ class HomeViewModel @Inject constructor(
     private val routinesStatisticsRepository: IRoutinesStatisticsRepository,
     private val settingsRepository: ISettingsRepository
 ) : ViewModel() {
-    // FIXME currentday
     private val _currentDay = MutableStateFlow<LocalDate>(LocalDate.now())
     val currentDay: StateFlow<LocalDate> = _currentDay.asStateFlow()
 
+    private val _events = Channel<HomeEvent>()
+    val events = _events.receiveAsFlow()
+
+    private val _sortOrder = MutableStateFlow(SortOrder.NONE)
+    val sortOrder = _sortOrder.asStateFlow()
+
+    private var midnightJob: Job? = null
+
     init {
-        viewModelScope.launch {
+        startMidnightTimer()
+    }
+
+    fun onResume() {
+        val today = LocalDate.now()
+        if (_currentDay.value != today) {
+            _currentDay.value = today
             syncStreak()
+
+            startMidnightTimer()
+        }
+    }
+
+    private fun startMidnightTimer() {
+        midnightJob?.cancel()
+        midnightJob = viewModelScope.launch {
             while (isActive) {
                 val now = LocalDateTime.now()
-                val nextMidnight = now.toLocalDate()
-                    .plusDays(1)
-                    .atStartOfDay()
+                val nextMidnight = now.toLocalDate().plusDays(1).atStartOfDay()
 
                 delay(Duration.between(now, nextMidnight).toMillis())
+
                 _currentDay.value = LocalDate.now()
                 syncStreak()
             }
@@ -88,52 +107,34 @@ class HomeViewModel @Inject constructor(
             initialValue = AppTheme.SYSTEM
         )
 
-    private val _events = Channel<HomeEvent>()
-    val events = _events.receiveAsFlow()
-
-    private val _sortOrder = MutableStateFlow(SortOrder.NONE)
-    val sortOrder = _sortOrder.asStateFlow()
-
-    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-    private val plantsFlow = _sortOrder
-        .flatMapLatest { sort ->
-            plantsRepository.getSearchedPlantsSummaryWithSort("", sort)
-        }
-
-    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-    private val todayRoutinesFlow = currentDay.flatMapLatest { day ->
-        routinesRepository.getRoutinesForDay(day)
-    }
-
     @OptIn(ExperimentalCoroutinesApi::class)
-    private val streakFlow = currentDay.flatMapLatest { day ->
-        routinesStatisticsRepository.getEffectiveStreak(day)
-    }
+    val state: StateFlow<HomeUiState> = combine(currentDay, _sortOrder) { day, sort ->
+        Pair(day, sort)
+    }.flatMapLatest { (day, sort) ->
+        combine(
+            plantsRepository.getSearchedPlantsSummaryWithSort("", sort),
+            routinesRepository.getRoutinesForDay(day),
+            settingsRepository.getNotificationsEnabled(),
+            routinesStatisticsRepository.getEffectiveStreak(day)
+        ) { sortResults, todayRoutines, notificationsEnabled, currentStreak ->
+            val totalRoutines = todayRoutines.size
+            val completedRoutines = todayRoutines.count { it.lastlyDoneAt == day }
 
-    val state: StateFlow<HomeUiState> = combine(
-        plantsFlow,
-        todayRoutinesFlow,
-        settingsRepository.getNotificationsEnabled(),
-        streakFlow,
-        currentDay
-    ) { sortResults, todayRoutines, notificationsEnabled, currentStreak, day ->
-        val totalRoutines = todayRoutines.size
-        val completedRoutines = todayRoutines.count { it.lastlyDoneAt == day }
+            val progress = if (totalRoutines > 0) {
+                completedRoutines.toFloat() / totalRoutines
+            } else {
+                null
+            }
 
-        val progress = if (totalRoutines > 0) {
-            completedRoutines.toFloat() / totalRoutines
-        } else {
-            null
+            HomeUiState(
+                plants = sortResults,
+                todayRoutines = todayRoutines,
+                isLoading = false,
+                isNotificationsEnabled = notificationsEnabled,
+                streakProgress = progress,
+                streakDays = currentStreak
+            )
         }
-
-        HomeUiState(
-            plants = sortResults,
-            todayRoutines = todayRoutines,
-            isLoading = false,
-            isNotificationsEnabled = notificationsEnabled,
-            streakProgress = progress,
-            streakDays = currentStreak
-        )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
@@ -145,7 +146,6 @@ class HomeViewModel @Inject constructor(
             routinesStatisticsRepository.syncStreak()
         }
     }
-
 
     fun toggleSortOrder() {
         _sortOrder.value = _sortOrder.value.next()

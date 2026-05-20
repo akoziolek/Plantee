@@ -88,8 +88,6 @@ fun HomeScreen(
         )
     }
 
-    // TODO mutable date
-
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
@@ -120,7 +118,7 @@ fun HomeScreen(
     }
 
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        viewModel.syncStreak()
+        viewModel.onResume()
     }
 
     LaunchedEffect(Unit) {
