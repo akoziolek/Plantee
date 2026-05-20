@@ -50,7 +50,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.plantee.domain.use_cases.AiProposedRoutine
+import com.example.plantee.domain.model.AiProposedRoutine
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.utils.DayBitmaskHelper
 import kotlinx.coroutines.launch
