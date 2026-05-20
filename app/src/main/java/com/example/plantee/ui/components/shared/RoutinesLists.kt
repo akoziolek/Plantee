@@ -48,7 +48,7 @@ fun LazyListScope.todayRoutinesSection(
 fun LazyListScope.routinesSection(
     routines: List<RoutineSummary>,
     onRoutineClick: (Long) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     if(routines.isEmpty()) {
         item {
@@ -70,9 +70,6 @@ fun LazyListScope.routinesSection(
                 onClick = { onRoutineClick(routine.id) },
                 modifier = modifier
             )
-            if(routines.last() == routine) {
-                Spacer(modifier = Modifier.height(62.dp))
-            }
         }
     }
 }
