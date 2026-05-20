@@ -42,7 +42,7 @@ fun DiagnosePlantScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    LaunchedEffect(viewModel.events) {
+    LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             onNavigate(event)
         }

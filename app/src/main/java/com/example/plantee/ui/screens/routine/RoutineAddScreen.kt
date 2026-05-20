@@ -43,7 +43,7 @@ fun RoutineAddScreen(
     val text by viewModel.searchQuery.collectAsStateWithLifecycle()
     val searchBarState = rememberSearchBarState()
 
-    LaunchedEffect(viewModel.events) {
+    LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             onNavigate(event)
         }

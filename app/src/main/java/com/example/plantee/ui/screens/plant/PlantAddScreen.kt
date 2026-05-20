@@ -35,8 +35,7 @@ fun PlantAddScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    // FIXME change to Unit, like on other screens?
-    LaunchedEffect(viewModel.events) {
+    LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             onNavigate(event)
         }
