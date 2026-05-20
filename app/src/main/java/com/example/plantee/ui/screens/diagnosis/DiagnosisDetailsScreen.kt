@@ -78,6 +78,12 @@ fun DiagnosisDetailsScreen(
                             .padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(20.dp)
                     ) {
+                        if(currentState.diagnosis.problemDescription != null) {
+                            InfoSection(
+                                headerText = stringResource(R.string.diagnosis_details_label_plant_problem),
+                                bodyText = currentState.diagnosis.problemDescription
+                            )
+                        }
                         InfoSection(
                             headerText = stringResource(R.string.diagnosis_details_label_description),
                             bodyText = currentState.diagnosis.response
