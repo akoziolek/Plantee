@@ -19,6 +19,7 @@
     <string name="home_title">Plantee</string>
     <string name="plant_diagnosis_btn_diagnose">Diagnose</string>
     <string name="diagnosis_results_btn_finish">Finish diagnosis</string>
+    <string name="diagnosis_error_btn_close">Close</string>
     <string name="plant_nav_add">Add plant</string>
     <string name="entry_nav_add">Add entry</string>
     <string name="routine_nav_add">Add routine</string>

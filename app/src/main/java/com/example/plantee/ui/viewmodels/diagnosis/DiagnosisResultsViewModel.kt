@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.plantee.domain.model.Diagnosis
 import com.example.plantee.domain.model.Media
-import com.example.plantee.domain.model.RoutineSummary
+import com.example.plantee.domain.model.Routine
 import com.example.plantee.domain.repositories.IDiagnosesRepository
 import com.example.plantee.domain.repositories.IRoutinesRepository
+import com.example.plantee.domain.use_cases.AIDiagnoseUseCase
+import com.example.plantee.domain.model.AiDiagnosisResult
 import com.example.plantee.domain.use_cases.SavePlantImageUseCase
 import com.example.plantee.ui.nav.DiagnosisInput
 import dagger.assisted.Assisted
@@ -21,27 +23,30 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 sealed class DiagnosisResultsEvent {
     class NavigateToRoutine(val routineId: Long) : DiagnosisResultsEvent()
     class FinishDiagnosis(val diagnosisId: Long) : DiagnosisResultsEvent()
     class ReturnToDiagnose(val input: DiagnosisInput) : DiagnosisResultsEvent()
+    object Close : DiagnosisResultsEvent()
 }
 
 sealed interface DiagnosisResultsUiState {
     object Loading : DiagnosisResultsUiState
     data class Success(
-        val diagnosis: Diagnosis,
-        val proposedRoutines: List<RoutineSummary>,
+        val aiDiagnosisResult: AiDiagnosisResult,
         val selectedRoutines: Set<Long> = emptySet(),
-        val removeFromAssociatedRoutines: Boolean = false
+        val removeFromAssociatedRoutines: Boolean = false,
+        val diagnosedAt: LocalDateTime = LocalDateTime.now()
     ) : DiagnosisResultsUiState
     data class Error(val message: String) : DiagnosisResultsUiState
 }
 
 @HiltViewModel(assistedFactory = DiagnosisResultsViewModel.Factory::class)
 class DiagnosisResultsViewModel @AssistedInject constructor(
+    private val aiDiagnoseUseCase: AIDiagnoseUseCase,
     private val diagnosesRepository: IDiagnosesRepository,
     private val routinesRepository: IRoutinesRepository,
     private val savePlantImageUseCase: SavePlantImageUseCase,
@@ -56,56 +61,50 @@ class DiagnosisResultsViewModel @AssistedInject constructor(
     private val _state = MutableStateFlow<DiagnosisResultsUiState>(DiagnosisResultsUiState.Loading)
     val state: StateFlow<DiagnosisResultsUiState> = _state.asStateFlow()
 
-    private val _selectedRoutines = MutableStateFlow<Set<Long>>(emptySet())
-
     private val _events = Channel<DiagnosisResultsEvent>()
     val events = _events.receiveAsFlow()
 
     init {
-        loadMockDiagnosis()
-    }
-
-    private fun loadMockDiagnosis() {
-        // In a real app, you'd probably call an AI service here.
-        // For now, we create a temporary Diagnosis object to show in UI
-        val mockDiagnosis = Diagnosis(
-            plantId = input.plantId,
-            problemDescription = input.problemDescription,
-            sunLevel = input.sunLevel.toInt(),
-            moistureLevel = input.moistureLevel.toInt(),
-            diagnosedAt = LocalDateTime.now(),
-            response = "Based on the description and levels, your plant seems to be doing fine but could use more consistent watering.",
-            routines = listOf(
-                RoutineSummary(1L, "Consistent Watering", "Water every 2 days"),
-                RoutineSummary(2L, "Sun Exposure", "Ensure 4 hours of indirect sunlight")
-            ),
-            media = input.imageUri?.let { Media(filePath = it, createdAt = LocalDateTime.now()) }
-        )
-        
-        _state.value = DiagnosisResultsUiState.Success(
-            diagnosis = mockDiagnosis,
-            proposedRoutines = mockDiagnosis.routines,
-            selectedRoutines = emptySet()
-        )
+        viewModelScope.launch {
+            _state.value = DiagnosisResultsUiState.Loading
+            try {
+                val response = aiDiagnoseUseCase.mockResponse()//aiDiagnoseUseCase(input)
+                if (response != null) {
+                    _state.value = DiagnosisResultsUiState.Success(
+                        aiDiagnosisResult = response,
+                        diagnosedAt = LocalDateTime.now()
+                    )
+                } else {
+                    _state.value = DiagnosisResultsUiState.Error("Could not generate diagnosis. Please try again later.")
+                }
+            } catch (e: Exception) {
+                val errorMsg = e.message ?: "An unexpected error occurred"
+                _state.value = DiagnosisResultsUiState.Error(errorMsg)
+            }
+        }
     }
 
     fun onRoutineCheckedChange(routineId: Long, checked: Boolean) {
-        _selectedRoutines.update { current ->
-            val next = if (checked) current + routineId else current - routineId
-            if (_state.value is DiagnosisResultsUiState.Success) {
-                _state.update { 
-                    (it as DiagnosisResultsUiState.Success).copy(selectedRoutines = next)
+        _state.update { currentState ->
+            if (currentState is DiagnosisResultsUiState.Success) {
+                val currentRoutines = currentState.selectedRoutines
+                val nextRoutines = if (checked) {
+                    currentRoutines + routineId
+                } else {
+                    currentRoutines - routineId
                 }
+
+                currentState.copy(selectedRoutines = nextRoutines)
+            } else {
+                currentState
             }
-            next
         }
     }
 
     fun onRemoveFromRoutinesClick() {
-        _state.update {
-            if (it is DiagnosisResultsUiState.Success) {
-                it.copy(removeFromAssociatedRoutines = !it.removeFromAssociatedRoutines)
-            } else it
+        val currentState = _state.value
+        if (currentState is DiagnosisResultsUiState.Success) {
+            _state.value = currentState.copy(removeFromAssociatedRoutines = !currentState.removeFromAssociatedRoutines)
         }
     }
 
@@ -123,29 +122,52 @@ class DiagnosisResultsViewModel @AssistedInject constructor(
 
     fun onFinishClick() {
         val currentState = _state.value
+        if (currentState is DiagnosisResultsUiState.Error) {
+            viewModelScope.launch {
+                _events.send(DiagnosisResultsEvent.Close)
+            }
+            return
+        }
         if (currentState !is DiagnosisResultsUiState.Success) return
 
+        val routinesToSave = currentState.aiDiagnosisResult.proposedRoutines
+            .filter { currentState.selectedRoutines.contains(it.tempId) }
+            .map { proposed ->
+                val startDate = runCatching { LocalDate.parse(proposed.startDate) }.getOrDefault(LocalDate.now())
+                val endDate = runCatching { LocalDate.parse(proposed.endDate) }.getOrNull()
+
+                Routine(
+                    name = proposed.name,
+                    description = proposed.description,
+                    startDate = startDate,
+                    endDate = endDate,
+                    activeDays = proposed.activeDays
+                )
+            }
+
         viewModelScope.launch {
+            // TODO - transaction? or delete id association from plant than perform this, than update? or update than delete
+            val savedMedia: Media? = input.imageUri?.let { uriString ->
+                savePlantImageUseCase(uriString.toUri())
+            }
+
             if (currentState.removeFromAssociatedRoutines) {
                 routinesRepository.removePlantFromAllRoutines(input.plantId)
             }
 
-            val selectedRoutines = currentState.proposedRoutines.filter { 
-                _selectedRoutines.value.contains(it.id) 
-            }
-            
-            var savedMedia: Media? = null
-            input.imageUri?.let { uriString ->
-                val uri = uriString.toUri()
-                savedMedia = savePlantImageUseCase(uri)
-            }
-
-            val diagnosisToSave = currentState.diagnosis.copy(
-                routines = selectedRoutines,
-                media = savedMedia,
+            val diagnosisId = diagnosesRepository.createDiagnosis(
+                diagnosis = Diagnosis(
+                    plantId = input.plantId,
+                    problemDescription = input.problemDescription,
+                    sunLevel = input.sunLevel,
+                    moistureLevel = input.moistureLevel,
+                    diagnosedAt = currentState.diagnosedAt,
+                    response = currentState.aiDiagnosisResult.diagnosisDescription,
+                    media = savedMedia
+                ),
+                routines = routinesToSave
             )
-            
-            val diagnosisId = diagnosesRepository.createDiagnosis(diagnosisToSave)
+
             _events.send(DiagnosisResultsEvent.FinishDiagnosis(diagnosisId))
         }
     }

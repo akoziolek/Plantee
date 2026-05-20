@@ -20,6 +20,7 @@
     <string name="home_title">Plantee</string>
     <string name="plant_diagnosis_btn_diagnose">Diagnozuj</string>
     <string name="diagnosis_results_btn_finish">Zakończ diagnozę</string>
+    <string name="diagnosis_error_btn_close">Wyjdź</string>
     <string name="plant_nav_add">Dodaj roślinę</string>
     <string name="entry_nav_add">Dodaj wpis</string>
     <string name="routine_nav_add">Dodaj rutynę</string>

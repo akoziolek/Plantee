@@ -6,12 +6,13 @@ import com.example.plantee.data.local.dao.DiagnosisDao
 import com.example.plantee.data.local.dao.MediaDao
 import com.example.plantee.data.local.dao.PlantRoutinesDao
 import com.example.plantee.data.local.dao.RoutineSourcesDao
-import com.example.plantee.data.local.entities.MediaEntity
+import com.example.plantee.data.local.dao.RoutinesDao
 import com.example.plantee.data.local.entities.PlantRoutineEntity
 import com.example.plantee.data.local.entities.RoutineSourceEntity
 import com.example.plantee.data.mappers.toDomain
 import com.example.plantee.data.mappers.toEntity
 import com.example.plantee.domain.model.Diagnosis
+import com.example.plantee.domain.model.Routine
 import com.example.plantee.domain.repositories.IDiagnosesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -22,42 +23,62 @@ class DiagnosesRepository @Inject constructor(
     private val diagnosisDao: DiagnosisDao,
     private val mediaDao: MediaDao,
     private val plantRoutinesDao: PlantRoutinesDao,
-    private val routineSourcesDao: RoutineSourcesDao
+    private val routineSourcesDao: RoutineSourcesDao,
+    private val routinesDao: RoutinesDao
 ) : IDiagnosesRepository {
     override fun getDiagnosis(id: Long): Flow<Diagnosis?> {
         return diagnosisDao.getDiagnosisWithDetails(id).map { it.toDomain() }
     }
 
-    override suspend fun createDiagnosis(diagnosis: Diagnosis): Long {
-        var newId = -1L
-        val entity = diagnosis.toEntity() ?: return newId
+    override suspend fun createDiagnosis(
+        diagnosis: Diagnosis,
+        routines: List<Routine>
+    ): Long {
+        var diagnosisId = -1L
 
         db.withTransaction {
-            newId = diagnosisDao.insert(entity)
-
-            if (diagnosis.routines.isNotEmpty()) {
-                val ids = plantRoutinesDao.insertAll(diagnosis.routines.map { routine ->
-                    PlantRoutineEntity(idRoutine = routine.id, idPlant = diagnosis.plantId)
-                })
-
-                routineSourcesDao.insertAll(ids.map { id ->
-                    RoutineSourceEntity(idDiagnosis = newId, idPlantRoutine = id)
-                })
+            // 2. Zapis mediów, jeśli istnieją
+            diagnosis.media?.let { media ->
+                val mediaEntity = media.toEntity()
+                if(mediaEntity != null)  {
+                    mediaDao.insert(mediaEntity)
+                } // Zakładam istnienie mapowania extension function
             }
 
-            if (diagnosis.media != null) {
-                mediaDao.insert(
-                    MediaEntity(
-                        id = diagnosis.media.id,
-                        filePath = diagnosis.media.filePath,
-                        fileName = diagnosis.media.fileName,
-                        createdAt = diagnosis.media.createdAt
+            // 3. Zapis samej diagnozy
+            val diagnosisEntity = diagnosis.toEntity() ?: return@withTransaction
+            diagnosisId = diagnosisDao.insert(diagnosisEntity)
+
+            // 4. Zapis rutyn i tworzenie relacji
+            routines.forEach { routine ->
+                // Zapisujemy czysty obiekt rutyny i pobieramy jej nowe ID
+                val routineEntity = routine.toEntity() ?: return@withTransaction
+                val newRoutineId = routinesDao.insert(routineEntity)
+
+                if (newRoutineId != -1L) {
+                    // Łączymy rutynę z rośliną
+                    val plantRoutineId = plantRoutinesDao.insert(
+                        PlantRoutineEntity(idRoutine = newRoutineId, idPlant = diagnosis.plantId)
                     )
-                )
+
+                    // Łączymy relację roślina-rutyna z tą konkretną diagnozą
+                    routineSourcesDao.insert(
+                        RoutineSourceEntity(idDiagnosis = diagnosisId, idPlantRoutine = plantRoutineId)
+                    )
+                }
             }
         }
 
-        return newId
+        return diagnosisId
+    }
+
+    override suspend fun associateRoutineWithDiagnosis(diagnosisId: Long, routineId: Long) {
+        routineSourcesDao.insert(
+            RoutineSourceEntity(
+                idDiagnosis = diagnosisId,
+                idPlantRoutine = routineId
+            )
+        )
     }
 
 }

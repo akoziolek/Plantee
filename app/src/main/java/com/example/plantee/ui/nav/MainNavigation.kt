@@ -1,5 +1,8 @@
 package com.example.plantee.ui.nav
 
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -117,6 +120,9 @@ fun MainNavigation(
                             }
                             is DiagnosisResultsEvent.ReturnToDiagnose -> {
                                 viewModel.replace(Screen.DiagnosePlant(plantId = event.input.plantId, initialInput = event.input))
+                            }
+                            DiagnosisResultsEvent.Close -> {
+                                viewModel.back()
                             }
                         }
                     }

@@ -3,12 +3,18 @@ package com.example.plantee.ui.screens.diagnosis
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,7 +34,7 @@ import com.example.plantee.ui.components.base.InfoSection
 import com.example.plantee.ui.components.base.LabeledSwitch
 import com.example.plantee.ui.components.base.PlainImage
 import com.example.plantee.ui.components.base.PrimaryButtonFullWidth
-import com.example.plantee.ui.components.base.RoutinesListItem
+import com.example.plantee.ui.components.base.ProposedRoutinesListItem
 import com.example.plantee.ui.nav.DiagnosisInput
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.viewmodels.diagnosis.DiagnosisResultsEvent
@@ -60,8 +66,13 @@ fun DiagnosisResultsScreen(
                 onBackClick = { viewModel.onBackClick() })
         },
         bottomBar = {
+            val buttonText = when (state) {
+                is DiagnosisResultsUiState.Error -> stringResource(R.string.diagnosis_error_btn_close)
+                else -> stringResource(R.string.diagnosis_results_btn_finish)
+            }
+            
             PrimaryButtonFullWidth(
-                text = stringResource(R.string.diagnosis_results_btn_finish),
+                text = buttonText,
                 onClick = { viewModel.onFinishClick() },
                 modifier = Modifier.padding(10.dp)
             )
@@ -91,22 +102,20 @@ fun DiagnosisResultsScreen(
                     ) {
                         InfoSection(
                             headerText = stringResource(R.string.diagnosis_results_label_description),
-                            bodyText = currentState.diagnosis.response ?: "THERE WILL BE SOME AI RESPONSE"
+                            bodyText = currentState.aiDiagnosisResult.diagnosisDescription
                         )
                         InfoSection(
                             headerText = stringResource(R.string.diagnosis_results_label_proposed_routines),
                             bodyText = stringResource(R.string.diagnosis_results_text_proposed_routines)
                         )
 
-                        currentState.proposedRoutines.forEach { routine ->
-                            RoutinesListItem(
-                                headlineText = routine.name,
-                                supportingText = routine.description ?: "",
-                                checked = currentState.selectedRoutines.contains(routine.id),
+                        currentState.aiDiagnosisResult.proposedRoutines.forEach { routine ->
+                            ProposedRoutinesListItem(
+                                routine = routine,
+                                checked = currentState.selectedRoutines.contains(routine.tempId),
                                 onCheckedChange = { checked ->
-                                    viewModel.onRoutineCheckedChange(routine.id, checked)
+                                    viewModel.onRoutineCheckedChange(routine.tempId, checked)
                                 },
-                                onClick = { viewModel.onRoutineClick(routine.id) }
                             )
                         }
 
@@ -118,9 +127,34 @@ fun DiagnosisResultsScreen(
                     }
                 }
             }
+            // TODO special message when input is not associated with plant and separate for network errors
+            // refactor to remove the box??
             is DiagnosisResultsUiState.Error -> {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = currentState.message, color = MaterialTheme.colorScheme.error)
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.padding(16.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Warning,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.error.copy(alpha = 0.7f),
+                            modifier = Modifier.size(100.dp)
+                        )
+
+                        Spacer(modifier = Modifier.height(40.dp))
+
+                        Text(
+                            text = currentState.message,
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
                 }
             }
         }
