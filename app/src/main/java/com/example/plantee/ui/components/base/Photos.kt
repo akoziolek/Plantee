@@ -132,7 +132,6 @@ fun PhotoViewer(
     selectedUri: Uri?,
     canOpenFullScreen: Boolean = false
 ) {
-    // TODO - loading 8k photos
     var isFullScreenVisible by remember { mutableStateOf(false) }
 
     if(selectedUri != null) {
