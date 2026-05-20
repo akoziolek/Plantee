@@ -9,7 +9,7 @@ data class Diagnosis(
     val sunLevel: Float,
     val moistureLevel: Float,
     val diagnosedAt: LocalDateTime,
-    val response: String? = null,
+    val response: String,
     val media: Media? = null,
     val routines: List<RoutineSummary> = emptyList()
 )
