@@ -128,8 +128,6 @@ fun DiagnosisResultsScreen(
                     }
                 }
             }
-            // TODO special message when input is not associated with plant and separate for network errors
-            // refactor to remove the box??
             is DiagnosisResultsUiState.Error -> {
                 Box(
                     modifier = Modifier
