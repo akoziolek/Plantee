@@ -1,12 +1,15 @@
 package com.example.plantee.ui.components.base
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
@@ -26,13 +29,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.plantee.R
 import com.example.plantee.ui.theme.PlanteeTheme
+import com.example.plantee.utils.DayBitmaskHelper
 import com.example.plantee.utils.convertLocalDateToDateString
 import java.time.LocalDate
+import java.time.DayOfWeek
+import java.time.format.TextStyle
 
 @Composable
 fun InputTextField(
@@ -122,22 +129,23 @@ fun DaysOfWeek(
     title: String = stringResource(R.string.input_label_weekdays),
     onDayClick: ((Int) -> Unit)? = null
 ) {
-    val daysOfWeek = listOf("M", "T", "W", "T", "F", "S", "S")
-
     Column(modifier = modifier) {
         SectionHeader(title = title)
-        FlowRow(
-            modifier = Modifier.fillMaxWidth(),
+        Row(
+            modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            daysOfWeek.forEachIndexed { index, day ->
-                val isSelected = (selectedDays and (1 shl index)) != 0
+            DayOfWeek.entries.forEachIndexed { index, day ->
+                val isSelected = DayBitmaskHelper.isSelected(selectedDays, day)
 
                 FilterChip(
                     selected = isSelected,
                     onClick = { onDayClick?.invoke(index) },
                     enabled = onDayClick != null,
-                    label = { Text(day) },
+                    label = { Text(day.getDisplayName(
+                        TextStyle.NARROW_STANDALONE,
+                        LocalLocale.current.platformLocale
+                    ).replaceFirstChar { it.uppercase() }) },
                     shape = CircleShape
                 )
             }
