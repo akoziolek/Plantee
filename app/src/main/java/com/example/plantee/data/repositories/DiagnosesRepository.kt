@@ -30,10 +30,7 @@ class DiagnosesRepository @Inject constructor(
         return diagnosisDao.getDiagnosisWithDetails(id).map { it.toDomain() }
     }
 
-    override suspend fun createDiagnosis(
-        diagnosis: Diagnosis,
-        routines: List<Routine>
-    ): Long {
+    override suspend fun createDiagnosis(diagnosis: Diagnosis, routines: List<Routine>): Long {
         var diagnosisId = -1L
 
         db.withTransaction {

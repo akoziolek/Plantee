@@ -12,7 +12,7 @@ import com.example.plantee.domain.repositories.IRoutinesRepository
 import com.example.plantee.ui.viewmodels.routine.FilterState
 import com.example.plantee.utils.RoutineStatus
 import com.example.plantee.utils.SortOrder
-import com.example.plantee.utils.toDayBitMask
+import com.example.plantee.utils.DayBitmaskHelper.toDayBitMask
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate

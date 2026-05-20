@@ -9,7 +9,7 @@ import com.example.plantee.data.mappers.toSummaryDomainList
 import com.example.plantee.domain.model.RoutineStatistic
 import com.example.plantee.domain.model.RoutineSummary
 import com.example.plantee.domain.repositories.IRoutinesStatisticsRepository
-import com.example.plantee.utils.toDayBitMask
+import com.example.plantee.utils.DayBitmaskHelper.toDayBitMask
 import jakarta.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
