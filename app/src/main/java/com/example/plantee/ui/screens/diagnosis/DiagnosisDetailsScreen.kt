@@ -78,12 +78,10 @@ fun DiagnosisDetailsScreen(
                             .padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(20.dp)
                     ) {
-                        if(currentState.diagnosis.response != null) {
-                            InfoSection(
-                                headerText = stringResource(R.string.diagnosis_details_label_description),
-                                bodyText = currentState.diagnosis.response
-                            )
-                        }
+                        InfoSection(
+                            headerText = stringResource(R.string.diagnosis_details_label_description),
+                            bodyText = currentState.diagnosis.response
+                        )
                         if(currentState.diagnosis.routines.isNotEmpty()) {
                             InfoSection(
                                 headerText = stringResource(R.string.diagnosis_details_label_routines),
