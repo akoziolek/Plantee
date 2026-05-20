@@ -45,9 +45,8 @@ interface RoutinesDao {
             (:filterActive = 0 OR (
                 (start_date IS NULL OR start_date <= :today) 
                 AND (end_date IS NULL OR :today <= end_date))
+                AND ((active_days & :selectedDays) != 0)
             )
-            AND
-            ((active_days & :selectedDays) != 0)
     """)
     fun searchRoutines(searchQuery: String, filterActive: Int, today: LocalDate, selectedDays: Int): Flow<List<RoutineSummaryDto>>
 
@@ -57,9 +56,9 @@ interface RoutinesDao {
             AND
             (:filterActive = 0 OR (
                 (start_date IS NULL OR start_date <= :today) 
-                AND (end_date IS NULL OR :today <= end_date)))
-            AND
-            ((active_days & :selectedDays) != 0)
+                AND (end_date IS NULL OR :today <= end_date))
+                AND (active_days & :selectedDays) != 0
+            )
         ORDER BY name ASC
     """)
     fun searchRoutinesAsc(searchQuery: String, filterActive: Int, today: LocalDate, selectedDays: Int): Flow<List<RoutineSummaryDto>>
@@ -71,9 +70,7 @@ interface RoutinesDao {
             (:filterActive = 0 OR (
                 (start_date IS NULL OR start_date <= :today) 
                 AND (end_date IS NULL OR :today <= end_date))
-            )
-            AND
-            ((active_days & :selectedDays) != 0)
+                AND (active_days & :selectedDays) != 0)
         ORDER BY name DESC
     """)
     fun searchRoutinesDesc(searchQuery: String, filterActive: Int, today: LocalDate, selectedDays: Int): Flow<List<RoutineSummaryDto>>
