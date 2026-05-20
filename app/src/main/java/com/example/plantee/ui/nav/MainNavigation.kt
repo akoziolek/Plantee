@@ -94,7 +94,7 @@ fun MainNavigation(
                     onNavigate = { event ->
                         when (event) {
                             is DiagnosisDetailsEvent.NavigateToRoutine -> {
-                                viewModel.replace(Screen.RoutineDetails(event.routineId))
+                                viewModel.navigate(Screen.RoutineDetails(event.routineId))
                             }
                             DiagnosisDetailsEvent.NavigateBack -> {
                                 viewModel.back()
