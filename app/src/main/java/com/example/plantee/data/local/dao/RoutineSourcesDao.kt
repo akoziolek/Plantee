@@ -9,4 +9,7 @@ import com.example.plantee.data.local.entities.RoutineSourceEntity
 interface RoutineSourcesDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(routineSource: List<RoutineSourceEntity>): List<Long>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(routineSourceEntity: RoutineSourceEntity)
 }

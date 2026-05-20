@@ -13,6 +13,9 @@ interface PlantRoutinesDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(plantRoutines: List<PlantRoutineEntity>): List<Long>
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(plantRoutine: PlantRoutineEntity): Long
+
     @Transaction
     suspend fun clearAndInsertNewForRoutine(routineId: Long, newPlantIds: List<Long>) {
         deleteByRoutineId(routineId)
