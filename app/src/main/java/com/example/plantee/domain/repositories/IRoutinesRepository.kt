@@ -13,6 +13,7 @@ interface IRoutinesRepository {
     fun getRoutine(id: Long): Flow<Routine?>
     suspend fun getRoutinesForPlant(id: Long): List<Routine?>
     suspend fun addRoutine(routine: Routine): Long
+    suspend fun associatePlantWithRoutine(routineId: Long, plantId: Long)
     suspend fun updateRoutine(routine: Routine)
     suspend fun toggleRoutineDone(id: Long, date: LocalDate?)
     suspend fun deleteRoutine(id: Long)

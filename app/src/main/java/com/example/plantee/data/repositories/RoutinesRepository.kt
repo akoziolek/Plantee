@@ -68,6 +68,10 @@ class RoutinesRepository @Inject constructor(
         return newId
     }
 
+    override suspend fun associatePlantWithRoutine(routineId: Long, plantId: Long) {
+        plantRoutinesDao.insert(PlantRoutineEntity(idRoutine = routineId, idPlant = plantId))
+    }
+
     override suspend fun updateRoutine(routine: Routine) {
         val entity = routine.toEntity() ?: return
 
