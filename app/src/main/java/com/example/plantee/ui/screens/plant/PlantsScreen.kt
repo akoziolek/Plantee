@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
@@ -66,7 +67,7 @@ fun PlantsScreen(
             )
         },
         floatingActionButton = {
-            PrimaryFloatingButton(text = stringResource(R.string.plants_btn_add), onClick = { viewModel.onAddClick() })
+            PrimaryFloatingButton(text = stringResource(R.string.plants_btn_add), onClick = { viewModel.onAddClick() }, modifier = Modifier.imePadding())
         },
     ) { innerPadding ->
         if (state.isLoading) {
