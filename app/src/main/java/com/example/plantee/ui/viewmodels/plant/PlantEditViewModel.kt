@@ -61,7 +61,6 @@ class PlantEditViewModel @AssistedInject constructor(
         loadPlant()
     }
 
-    // TODO - move to _state init?
     private fun loadPlant() {
         if(_state.value.isSaving) return
         viewModelScope.launch {
@@ -120,15 +119,15 @@ class PlantEditViewModel @AssistedInject constructor(
 
             _state.update { it.copy(isSaving = true) }
 
-            // TODO - transaction? or delete id association from plant than perform this, than update? or update than delete
             if (currentState.imageUri != null) {
                 currentMedia = savePlantImageUseCase(
                     newImageUri = currentState.imageUri,
                     oldMedia = currentState.media
                 )
+            } else if (currentState.media != null) {
+                 // TODO deleting
+                currentMedia = null
             }
-
-            // TODO what if app crashes here, then Plant has a connection to media but it doesnt exist
 
             val plant = Plant(
                 id = currentState.id,
