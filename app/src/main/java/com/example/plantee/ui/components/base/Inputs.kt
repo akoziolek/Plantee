@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -146,7 +147,11 @@ fun DaysOfWeek(
                         TextStyle.NARROW_STANDALONE,
                         LocalLocale.current.platformLocale
                     ).replaceFirstChar { it.uppercase() }) },
-                    shape = CircleShape
+                    shape = CircleShape,
+                    colors = FilterChipDefaults.filterChipColors(
+                        disabledLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.80f),
+                        disabledSelectedContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.35f),
+                    )
                 )
             }
         }
