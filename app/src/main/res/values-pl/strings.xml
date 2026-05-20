@@ -98,6 +98,7 @@
     <string name="navbar_label_routines">Rutyny</string>
     <string name="home_menu_change_mode_dark">Włącz tryb ciemny</string>
     <string name="home_menu_change_mode_light">Włącz tryb jasny</string>
+    <string name="home_menu_show_tutorial">Samouczek wideo</string>
     <string name="routine_status_filter_label">Status</string>
     <string name="routine_weekdays_filter_label">Dni tygodnia</string>
     <string name="routine_weekdays_filter_all">Wybierz wszystkie</string>
@@ -106,5 +107,8 @@
     <string name="diagnosis_photo_name">Zdjęcie rośliny do diagnozy</string>
     <string name="your_routines_streak">Streak twoich rutyn</string>
     <string name="label_streak_days">dni</string>
+    <string name="routine_form_error_name">Nazwa jest wymagana</string>
+    <string name="diagnosis_form_error_desc">Opis jest wymagany</string>
+    <string name="video_close">Zamknij</string>
     <string name="diagnosis_details_description_routines">Zalecenia AI do poprawy stanu twojej rośliny:</string>
 </resources>

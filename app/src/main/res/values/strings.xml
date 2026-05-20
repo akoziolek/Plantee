@@ -97,6 +97,7 @@
     <string name="navbar_label_routines">Routines</string>
     <string name="home_menu_change_mode_dark">Change to dark mode</string>
     <string name="home_menu_change_mode_light">Change to light mode</string>
+    <string name="home_menu_show_tutorial">Video tutorial</string>
     <string name="routine_status_filter_label">Status</string>
     <string name="routine_weekdays_filter_label">Weekdays</string>
     <string name="routine_weekdays_filter_all">Select all</string>
@@ -106,4 +107,7 @@
     <string name="your_routines_streak">Your routines streak</string>
     <string name="label_streak_days">days</string>
     <string name="diagnosis_details_description_routines">AI recommendations to improve plants health:</string>
+    <string name="routine_form_error_name">Name is required</string>
+    <string name="diagnosis_form_error_desc">Description is required</string>
+    <string name="video_close">Close</string>
 </resources>

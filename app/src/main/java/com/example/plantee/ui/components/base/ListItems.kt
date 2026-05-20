@@ -4,10 +4,8 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
@@ -21,7 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowRight
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
-import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.FilterChip
@@ -46,11 +43,13 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalLocale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.plantee.domain.model.AiProposedRoutine
+import com.example.plantee.R
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.utils.DayBitmaskHelper
 import kotlinx.coroutines.launch
@@ -207,8 +206,9 @@ fun PlantListItem(
 @Composable
 fun DiagnosisListItem(
     headlineText: String,
+    supportingText: String,
+    imagePath: String?,
     modifier: Modifier = Modifier,
-    supportingText: String = "",
     onClick: () -> Unit = {}
 ) {
     Row(
@@ -219,19 +219,10 @@ fun DiagnosisListItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .size(60.dp)
-                .background(MaterialTheme.colorScheme.outlineVariant),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Icons.Default.Image,
-                contentDescription = null,
-                modifier = Modifier.size(40.dp),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
+        SmallDiagnosisImage(
+            imagePath = imagePath,
+            name = stringResource(R.string.diagnosis_photo_name)
+        )
 
         Column(
             modifier = Modifier.weight(1f),
@@ -242,14 +233,12 @@ fun DiagnosisListItem(
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
-            if (supportingText.isNotEmpty()) {
-                Text(
-                    text = supportingText,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1
-                )
-            }
+            Text(
+                text = supportingText,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1
+            )
         }
 
         Icon(
@@ -395,8 +384,7 @@ fun ListItemsPreview() {
 
             DiagnosisListItem(
                 headlineText = "28.03.2026",
-                supportingText = "Supporting line text lorem ipsum dolor sit amet, consectetur."
-            )
+                supportingText = "Supporting line text lorem ipsum dolor sit amet, consectetur.", imagePath = null)
              ProposedRoutinesListItem(
                 AiProposedRoutine(
                     1,

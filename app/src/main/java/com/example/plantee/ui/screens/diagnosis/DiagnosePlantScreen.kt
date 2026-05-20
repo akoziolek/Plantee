@@ -101,7 +101,7 @@ fun DiagnosePlantScreen(
                     singleLine = false,
                     minLines = 3,
                     isError = state.problemDescriptionError,
-                    errorText = "Description is required"
+                    errorText = stringResource(R.string.diagnosis_form_error_desc)
                 )
             }
         }
