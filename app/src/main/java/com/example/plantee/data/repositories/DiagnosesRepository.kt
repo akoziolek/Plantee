@@ -37,31 +37,25 @@ class DiagnosesRepository @Inject constructor(
         var diagnosisId = -1L
 
         db.withTransaction {
-            // 2. Zapis mediów, jeśli istnieją
             diagnosis.media?.let { media ->
                 val mediaEntity = media.toEntity()
                 if(mediaEntity != null)  {
                     mediaDao.insert(mediaEntity)
-                } // Zakładam istnienie mapowania extension function
+                }
             }
 
-            // 3. Zapis samej diagnozy
             val diagnosisEntity = diagnosis.toEntity() ?: return@withTransaction
             diagnosisId = diagnosisDao.insert(diagnosisEntity)
 
-            // 4. Zapis rutyn i tworzenie relacji
             routines.forEach { routine ->
-                // Zapisujemy czysty obiekt rutyny i pobieramy jej nowe ID
                 val routineEntity = routine.toEntity() ?: return@withTransaction
                 val newRoutineId = routinesDao.insert(routineEntity)
 
                 if (newRoutineId != -1L) {
-                    // Łączymy rutynę z rośliną
                     val plantRoutineId = plantRoutinesDao.insert(
                         PlantRoutineEntity(idRoutine = newRoutineId, idPlant = diagnosis.plantId)
                     )
 
-                    // Łączymy relację roślina-rutyna z tą konkretną diagnozą
                     routineSourcesDao.insert(
                         RoutineSourceEntity(idDiagnosis = diagnosisId, idPlantRoutine = plantRoutineId)
                     )
