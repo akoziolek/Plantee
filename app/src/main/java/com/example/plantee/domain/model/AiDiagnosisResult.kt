@@ -1,9 +1,11 @@
 package com.example.plantee.domain.model
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class AiProposedRoutine(
+    @SerialName("id")
     val tempId: Long,
     val name: String,
     val description: String,
