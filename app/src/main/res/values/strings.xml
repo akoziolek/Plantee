@@ -104,4 +104,5 @@
     <string name="diagnosis_photo_name">The photo of plant for diagnosis</string>
     <string name="your_routines_streak">Your routines streak</string>
     <string name="label_streak_days">days</string>
+    <string name="diagnosis_details_description_routines">AI recommendations to improve plants health:</string>
 </resources>

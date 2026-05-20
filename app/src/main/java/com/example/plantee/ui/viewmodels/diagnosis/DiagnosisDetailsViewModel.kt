@@ -3,7 +3,6 @@ package com.example.plantee.ui.viewmodels.diagnosis
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.plantee.domain.model.Diagnosis
-import com.example.plantee.domain.model.RoutineSummary
 import com.example.plantee.domain.repositories.IDiagnosesRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -26,8 +25,7 @@ sealed class DiagnosisDetailsEvent {
 sealed interface DiagnosisDetailsUiState {
     object Loading : DiagnosisDetailsUiState
     data class Success(
-        val diagnosis: Diagnosis,
-        val connectedRoutines: List<RoutineSummary>
+        val diagnosis: Diagnosis
     ) : DiagnosisDetailsUiState
     data class Error(val message: String) : DiagnosisDetailsUiState
 }
@@ -51,8 +49,7 @@ class DiagnosisDetailsViewModel @AssistedInject constructor(
                 DiagnosisDetailsUiState.Error("Diagnosis not found")
             } else {
                 DiagnosisDetailsUiState.Success(
-                    diagnosis = diagnosis,
-                    connectedRoutines = diagnosis.routines
+                    diagnosis = diagnosis
                 )
             }
         }

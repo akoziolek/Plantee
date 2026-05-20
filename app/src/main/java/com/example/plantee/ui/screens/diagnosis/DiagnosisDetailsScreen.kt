@@ -78,21 +78,25 @@ fun DiagnosisDetailsScreen(
                             .padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(20.dp)
                     ) {
-                        InfoSection(
-                            headerText = stringResource(R.string.diagnosis_details_label_description),
-                            bodyText = currentState.diagnosis.response ?: ""
-                        )
-                        InfoSection(
-                            headerText = stringResource(R.string.diagnosis_details_label_routines),
-                            bodyText = stringResource(R.string.diagnosis_details_text_routines)
-                        )
-
-                        currentState.connectedRoutines.forEach { routine ->
-                            RoutinesListItem(
-                                headlineText = routine.name,
-                                supportingText = routine.description ?: "",
-                                onClick = { viewModel.onRoutineClick(routine.id) }
+                        if(currentState.diagnosis.response != null) {
+                            InfoSection(
+                                headerText = stringResource(R.string.diagnosis_details_label_description),
+                                bodyText = currentState.diagnosis.response
                             )
+                        }
+                        if(currentState.diagnosis.routines.isNotEmpty()) {
+                            InfoSection(
+                                headerText = stringResource(R.string.diagnosis_details_label_routines),
+                                bodyText = stringResource(R.string.diagnosis_details_description_routines)
+                            )
+
+                            currentState.diagnosis.routines.forEach { routine ->
+                                RoutinesListItem(
+                                    headlineText = routine.name,
+                                    supportingText = routine.description ?: "",
+                                    onClick = { viewModel.onRoutineClick(routine.id) }
+                                )
+                            }
                         }
                     }
                 }
