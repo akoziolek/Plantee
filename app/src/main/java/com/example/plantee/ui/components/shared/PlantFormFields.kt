@@ -32,13 +32,15 @@ fun PlantFormFields(
             onValueChange = onNameChange,
             supportingText = stringResource(R.string.plant_form_support_plant),
             isError = nameError,
-            errorText = stringResource(R.string.plant_form_error_name)
+            errorText = stringResource(R.string.plant_form_error_name),
+            maxLength = 35
         )
         InputTextField(
             title = stringResource(R.string.plant_form_label_species),
             value = speciesValue,
             onValueChange = onSpeciesChange,
-            supportingText = stringResource(R.string.plant_form_support_species)
+            supportingText = stringResource(R.string.plant_form_support_species),
+            maxLength = 35
         )
         InputTextField(
             title = stringResource(R.string.plant_form_label_description),
