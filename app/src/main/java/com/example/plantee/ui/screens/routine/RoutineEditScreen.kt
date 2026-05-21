@@ -28,6 +28,8 @@ import com.example.plantee.ui.components.base.InputTextField
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.base.SectionHeader
 import com.example.plantee.ui.components.base.SimpleSearchBar
+import com.example.plantee.ui.components.shared.RoutineDateFields
+import com.example.plantee.ui.components.shared.RoutineFormFields
 import com.example.plantee.ui.components.shared.plantListItems
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.ui.viewmodels.routine.RoutineEditEvent
@@ -73,65 +75,39 @@ fun RoutineEditScreen(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // --- NAME ---
             item {
-                InputTextField(
-                    title = stringResource(R.string.routine_edit_label_name),
-                    value = state.name,
-                    onValueChange = { viewModel.onNameChange(it) },
-                    supportingText = stringResource(R.string.routine_edit_support_name),
-                    isError = state.nameError,
-                    errorText = stringResource(R.string.routine_form_error_name),
-                    maxLength = 35
+                RoutineFormFields(
+                    nameValue = state.name,
+                    onNameChange = { viewModel.onNameChange(it) },
+                    descriptionValue = state.description,
+                    onDescriptionChange = { viewModel.onDescriptionChange(it) }
                 )
             }
 
-            // --- DESCRIPTION ---
             item {
-                InputTextField(
-                    title = stringResource(R.string.routine_edit_label_description),
-                    value = state.description,
-                    onValueChange = { viewModel.onDescriptionChange(it) },
-                    supportingText = stringResource(R.string.routine_edit_support_description)
+                RoutineDateFields(
+                    startDateValue = state.startDate,
+                    endDateValue = state.endDate,
+                    onDateChange = { pair -> viewModel.onDateRangeSelected(pair.first, pair.second) },
+                    activeDaysValue = state.activeDays,
+                    onActiveDaysChange = { viewModel.onActiveDaysChange(it) }
                 )
             }
 
-            // --- DAYS OF THE WEEK ---
             item {
-                DaysOfWeek(
-                    selectedDays = state.activeDays,
-                    onDayClick = { viewModel.onActiveDaysChange(it) }
-                )
-            }
-
-            // --- START AND END DATE ---
-            item {
-                DateRangeField(
-                    startDate = state.startDate,
-                    endDate = state.endDate,
-                    onDateRangeSelected = { pair -> viewModel.onDateRangeSelected(pair.first, pair.second) }
-                )
-            }
-
-            // --- CHOOSE PLANTS ---
-            item {
-                SectionHeader(stringResource(R.string.routine_edit_label_plant_choice))
-            }
-
-            item {
+                SectionHeader(
+                    title = stringResource(R.string.routine_add_label_plant_choice),
+                    modifier = Modifier.padding(bottom = 8.dp))
                 SimpleSearchBar(
                     query = text,
                     onQueryChange = { viewModel.onSearchQueryChange(it) },
                     state = searchBarState,
-                    placeholder = stringResource(R.string.plants_search_bar_placeholder),
-                    expanded = false,
+                    placeholder = stringResource(R.string.routines_search_bar_placeholder),
                     onExpandedChange = { },
+                    expanded = false,
                     onSearch = { }
                 )
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(12.dp))
             }
 
             plantListItems(
