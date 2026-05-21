@@ -90,7 +90,10 @@ fun RoutinesListItem(
                 text = headlineText,
                 style = MaterialTheme.typography.titleMedium.copy(
                     textDecoration = if (checked) TextDecoration.LineThrough else TextDecoration.None
-                )
+                ),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.fillMaxWidth(0.75f)
             )
         },
         supportingContent = if (supportingText.isNotEmpty()) {
@@ -178,7 +181,10 @@ fun PlantListItem(
                 ) {
                     Text(
                         text = title,
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.fillMaxWidth(0.75f)
                     )
                     IconButton(
                         onClick = { onBookmarkClick?.invoke() },
@@ -231,13 +237,18 @@ fun DiagnosisListItem(
             Text(
                 text = headlineText,
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.fillMaxWidth(0.75f)
             )
             Text(
                 text = supportingText,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.fillMaxWidth(0.75f)
             )
         }
 
