@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
 
 object NotificationScheduler {
     const val MORNING_HOUR = 8
-    const val EVENING_HOUR = 20
+    const val EVENING_HOUR = 18
 
     const val TAG_MORNING = "morning_reminder"
     const val TAG_EVENING = "evening_reminder"
