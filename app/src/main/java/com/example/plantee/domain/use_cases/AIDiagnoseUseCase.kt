@@ -34,7 +34,7 @@ class AIDiagnoseUseCase @Inject constructor(
     private val plantsRepository: PlantsRepository,
     private val routinesRepository: IRoutinesRepository,
     private val httpClient: HttpClient,
-    @ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context
 ) {
 
     private val jsonFormatter: Json = Json { ignoreUnknownKeys = true }

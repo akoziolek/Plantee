@@ -12,7 +12,7 @@ import javax.inject.Inject
 import androidx.core.content.edit
 
 class SettingsRepository @Inject constructor(
-    @ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context
 ) : ISettingsRepository {
 
     private val sharedPreferences: SharedPreferences =

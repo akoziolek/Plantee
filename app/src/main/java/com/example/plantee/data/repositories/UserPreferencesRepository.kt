@@ -19,7 +19,7 @@
 
     @Singleton
     class UserPreferencesRepository @Inject constructor(
-        @ApplicationContext private val context: Context
+        @param:ApplicationContext private val context: Context
     ) : IUserPreferencesRepository {
         companion object {
             private val THEME_KEY = stringPreferencesKey("theme_preference")

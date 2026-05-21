@@ -155,7 +155,7 @@ fun SimpleSearchBar(
     )
 }
 
-sealed class NavItem(@StringRes val titleRes: Int, val icon: ImageVector, val screen: Screen) {
+sealed class NavItem(@param:StringRes val titleRes: Int, val icon: ImageVector, val screen: Screen) {
     object Home : NavItem(titleRes = R.string.navbar_label_home, Icons.Default.Home, screen = Screen.Home)
     object Plants : NavItem(titleRes = R.string.navbar_label_plants, Icons.Default.LocalFlorist, screen = Screen.Plants)
     object Routines : NavItem(titleRes = R.string.navbar_label_routines, Icons.Default.CalendarMonth, screen = Screen.Routines)
