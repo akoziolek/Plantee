@@ -22,9 +22,6 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.plantee.R
 import com.example.plantee.ui.components.base.BackTopBar
-import com.example.plantee.ui.components.base.DateRangeField
-import com.example.plantee.ui.components.base.DaysOfWeek
-import com.example.plantee.ui.components.base.InputTextField
 import com.example.plantee.ui.components.base.PrimaryFloatingButton
 import com.example.plantee.ui.components.base.SectionHeader
 import com.example.plantee.ui.components.base.SimpleSearchBar

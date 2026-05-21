@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -48,8 +47,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.plantee.domain.model.AiProposedRoutine
 import com.example.plantee.R
+import com.example.plantee.domain.model.AiProposedRoutine
 import com.example.plantee.ui.theme.PlanteeTheme
 import com.example.plantee.utils.DayBitmaskHelper
 import kotlinx.coroutines.launch
