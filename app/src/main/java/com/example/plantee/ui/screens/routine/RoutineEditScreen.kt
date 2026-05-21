@@ -79,7 +79,10 @@ fun RoutineEditScreen(
                     title = stringResource(R.string.routine_edit_label_name),
                     value = state.name,
                     onValueChange = { viewModel.onNameChange(it) },
-                    supportingText = stringResource(R.string.routine_edit_support_name)
+                    supportingText = stringResource(R.string.routine_edit_support_name),
+                    isError = state.nameError,
+                    errorText = stringResource(R.string.routine_form_error_name),
+                    maxLength = 35
                 )
             }
 

@@ -76,7 +76,8 @@ fun RoutineAddScreen(
                     onValueChange = { viewModel.onNameChange(it) },
                     supportingText = stringResource(R.string.routine_add_support_name),
                     isError = state.nameError,
-                    errorText = stringResource(R.string.routine_form_error_name)
+                    errorText = stringResource(R.string.routine_form_error_name),
+                    maxLength = 35
                 )
             }
 
