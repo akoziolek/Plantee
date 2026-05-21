@@ -15,7 +15,6 @@ import androidx.room.PrimaryKey
             parentColumns = ["id"],
             childColumns = ["id_diagnosis"],
             onDelete = ForeignKey.CASCADE
-            // TODO("Should routines be deleted when deleting diagnosis?")
         ),
         ForeignKey(
             entity = PlantRoutineEntity::class,

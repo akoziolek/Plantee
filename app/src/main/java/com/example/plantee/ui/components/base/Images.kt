@@ -105,7 +105,6 @@ fun PlantImage(
             }
         }
 
-        // TODO contrast gradient depending on the background picture?
         Box(
             modifier = Modifier
                 .fillMaxSize()
