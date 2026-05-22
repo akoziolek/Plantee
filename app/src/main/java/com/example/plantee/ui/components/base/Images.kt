@@ -73,8 +73,6 @@ fun PlantImage(
     state: String?,
     modifier: Modifier = Modifier
 ) {
-   // TODO full screen display = merge with Photos.PhotoViewer
-
     Box(
         modifier = modifier
             .background(MaterialTheme.colorScheme.outlineVariant)
@@ -121,7 +119,6 @@ fun PlantImage(
                 .align(Alignment.BottomStart)
                 .padding(16.dp)
         ) {
-            // TODO contrast color depending on the background picture
             if (name != null)
                 Text(
                     text = name,
@@ -135,7 +132,6 @@ fun PlantImage(
                     style = MaterialTheme.typography.bodySmall
                 )
             if(state != null)
-                // TODO different icons depending on the state
                 PlantTag(
                     text = state,
                     icon = Icons.Default.HeartBroken,
