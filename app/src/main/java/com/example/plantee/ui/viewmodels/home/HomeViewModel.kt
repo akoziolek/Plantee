@@ -69,6 +69,9 @@ class HomeViewModel @Inject constructor(
     private val _sortOrder = MutableStateFlow(SortOrder.NONE)
     val sortOrder = _sortOrder.asStateFlow()
 
+    private val _currentLang = MutableStateFlow(AppCompatDelegate.getApplicationLocales().toLanguageTags())
+    val currentLang: StateFlow<String> = _currentLang.asStateFlow()
+
     private var midnightJob: Job? = null
 
     init {
@@ -210,6 +213,7 @@ class HomeViewModel @Inject constructor(
 
         val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(langCode)
         AppCompatDelegate.setApplicationLocales(appLocale)
+        _currentLang.value = langCode
     }
 
     fun onNotificationIconClick(hasPermission: Boolean) {

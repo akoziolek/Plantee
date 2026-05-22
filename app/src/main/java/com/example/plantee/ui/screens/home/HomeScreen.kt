@@ -72,6 +72,7 @@ fun HomeScreen(
     val currentTheme by viewModel.theme.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    val currentLang by viewModel.currentLang.collectAsStateWithLifecycle()
 
     var showVideo by remember { mutableStateOf(false) }
 
@@ -154,9 +155,6 @@ fun HomeScreen(
                         }
                         Icon(icon, "Notifications")
                     }
-
-                    val currentLang = AppCompatDelegate.getApplicationLocales().toLanguageTags()
-
                     OverflowMenu(
                         actions = listOf(
                             OverflowAction(
