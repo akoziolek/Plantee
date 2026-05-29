@@ -12,6 +12,7 @@ import com.example.plantee.domain.model.RoutineSummary
 import com.example.plantee.domain.repositories.IRoutinesRepository
 import com.example.plantee.ui.viewmodels.routine.RoutinesViewModel
 import com.example.plantee.utils.DayBitmaskHelper
+import com.example.plantee.utils.RoutineStatus
 import com.example.plantee.utils.SortOrder
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -23,6 +24,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -111,7 +113,8 @@ class RoutinesViewModelTest {
 
             val updatedFilter = awaitItem()
 
-            assert(updatedFilter.selectedDays != initialMask)
+            assertTrue(updatedFilter.selectedDays != initialFilter.selectedDays)
+            assertTrue(updatedFilter.selectedDays == 126)
         }
     }
 
@@ -157,6 +160,38 @@ class RoutinesViewModelTest {
             viewModel.toggleSortOrder()
 
             assertEquals(SortOrder.DESCENDING, awaitItem())
+        }
+    }
+
+    @Test
+    fun `selectAllDays should change bitmask to max value`() = runTest {
+        viewModel.filterState.test {
+            val initialFilter = awaitItem()
+
+            viewModel.toggleFilterDay(DayOfWeek.MONDAY)
+
+            awaitItem()
+
+            viewModel.selectAllDays()
+
+            val updatedFilter = awaitItem()
+
+            assertTrue(updatedFilter.selectedDays == 127)
+        }
+    }
+
+    @Test
+    fun `updateFilterStatus should change status in FilterState`() = runTest {
+        viewModel.filterState.test {
+            assertEquals(awaitItem().status, RoutineStatus.All)
+
+            viewModel.updateFilterStatus(RoutineStatus.Active)
+
+            assertEquals(awaitItem().status, RoutineStatus.Active)
+
+            viewModel.updateFilterStatus(RoutineStatus.All)
+
+            assertEquals(awaitItem().status, RoutineStatus.All)
         }
     }
 }
