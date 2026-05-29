@@ -12,6 +12,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.plantee.utils.toMillis
 import java.time.LocalDate
@@ -92,7 +93,21 @@ fun DateRangePickerModal(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(500.dp)
-                .padding(16.dp)
+                //.padding(16.dp)
         )
     }
+}
+
+@Preview
+@Composable
+fun PreviewDateRangePickerModal() {
+    DateRangePickerModal(
+        startDate = LocalDate.now(),
+        endDate = LocalDate.now(),
+        onDateRangeSelected = { },
+        onDismiss = { },
+        message = "",
+        confirmText = "",
+        dismissText = ""
+    )
 }
