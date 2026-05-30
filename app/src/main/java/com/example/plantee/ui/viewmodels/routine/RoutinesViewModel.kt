@@ -8,6 +8,7 @@ import com.example.plantee.utils.DayBitmaskHelper
 import com.example.plantee.utils.RoutineStatus
 import com.example.plantee.utils.SortOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
@@ -56,7 +57,7 @@ class RoutinesViewModel @Inject constructor(
     private val _currentDay = MutableStateFlow<LocalDate>(LocalDate.now())
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             while (isActive) {
                 val now = LocalDateTime.now()
                 val nextMidnight = now.toLocalDate()
