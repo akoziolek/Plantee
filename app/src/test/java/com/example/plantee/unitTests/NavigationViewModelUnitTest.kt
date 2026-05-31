@@ -1,4 +1,4 @@
-package com.example.plantee
+package com.example.plantee.unitTests
 import com.example.plantee.ui.nav.NavigationViewModel
 import com.example.plantee.ui.nav.Screen
 import junit.framework.TestCase.assertEquals

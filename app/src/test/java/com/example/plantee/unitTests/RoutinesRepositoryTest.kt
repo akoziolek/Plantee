@@ -1,4 +1,4 @@
-package com.example.plantee
+package com.example.plantee.unitTests
 
 import app.cash.turbine.test
 import com.example.plantee.data.local.dao.PlantRoutinesDao

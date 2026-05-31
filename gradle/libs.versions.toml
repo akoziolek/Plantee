@@ -32,6 +32,7 @@ kotlinx-serialization = "1.6.3"
 ktor = "3.0.0"
 junitJupiter = "6.0.0"
 slf4j = "2.0.13"
+paparazzi-version = "2.0.0-alpha05"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -86,3 +87,4 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 secretsPlugin = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version = "2.0.1" }
+paparazzi = { id = "app.cash.paparazzi", version.ref = "paparazzi-version" }

@@ -1,4 +1,4 @@
-package com.example.plantee
+package com.example.plantee.unitTests
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.secretsPlugin)
+    alias(libs.plugins.paparazzi)
 }
 
 android {
