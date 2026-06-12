@@ -32,10 +32,9 @@ class DayBitmaskHelperUnitTest {
         Assert.assertFalse(DayBitmaskHelper.isSelected(mondayAndFridayMask, DayOfWeek.TUESDAY))
     }
 
-    // TODO what do we actually expect here?
     @Test
-    fun `isSelected should treat negative mask as THAT IS A GOOD QUESTION`() {
-        Assert.assertTrue(DayBitmaskHelper.isSelected(-1, DayOfWeek.MONDAY))
+    fun `isSelected should set valid mask for out of bounds mask before checking selection`() {
+        Assert.assertFalse(DayBitmaskHelper.isSelected(-1, DayOfWeek.MONDAY))
     }
 
     @Test
@@ -65,10 +64,9 @@ class DayBitmaskHelperUnitTest {
         )
     }
 
-    // TODO what do we expect here to happen?
     @Test
-    fun `toggleBit should clear out of bounds garbage bits before toggling`() {
-        Assert.assertEquals(1, DayBitmaskHelper.toggleBit(128, DayOfWeek.MONDAY))
+    fun `toggleBit should set valid mask for out of bounds mask before toggling`() {
+        Assert.assertEquals(126, DayBitmaskHelper.toggleBit(128, DayOfWeek.MONDAY))
     }
 
     @Test
@@ -87,10 +85,9 @@ class DayBitmaskHelperUnitTest {
         Assert.assertEquals(3, DayBitmaskHelper.selectedDaysCount(threeDaysMask))
     }
 
-    // TODO what do we expect here?
     @Test
-    fun `selectedDaysCount should ignore bits outside of day range`() {
-        Assert.assertEquals(6, DayBitmaskHelper.selectedDaysCount(1247))
+    fun `selectedDaysCount should cut the mask outside of day range`() {
+        Assert.assertEquals(7, DayBitmaskHelper.selectedDaysCount(1247))
     }
 
     @Test
